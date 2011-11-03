@@ -1,0 +1,9 @@
+grammar csep.CoffeeScript with org.eclipse.xtext.common.Terminals
+
+generate coffeeScript "http://www.CoffeeScript.csep"
+
+Model:
+	greetings+=Greeting*;
+	
+Greeting:
+	'Hello' name=ID '!';
