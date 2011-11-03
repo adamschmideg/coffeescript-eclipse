@@ -1,6 +1,6 @@
-
 .metadata
-csep/bin
-csep.tests/bin
-csep.ui/bin
-
+csep.*/bin
+csep.*/src-gen
+csep.*/plugin.xml.*
+csep/xtend-gen
+org.eclipse.xtext.example
