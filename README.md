@@ -49,3 +49,13 @@ Its parser is a [Jison, a javascript implementation of Bison][jison], processing
   [netbeans_lexer_parser]: https://github.com/dstepanov/coffeescript-netbeans/tree/master/src/coffeescript/nb
   [xtext]: http://www.xtext.org
 
+## First step: a custom lexer
+The main issue with coffeescript is that it uses significant whitespaces.
+It's not obvious how to handle it with Xtext, but there are a few attempts at resolving it.
+See [Pythonisque indent/dedent block structure for a Xtext DSL][indent_xtext]; a 
+ [Stackoverflow question about Xtext with significant/semantic whitespace][so_xtext_indent]
+ and the [todotext implementation][todotext] referred to in an answer.
+
+  [indent_xtext]: http://eclipsesnippets.blogspot.com/2009/08/pythonisque-indentdedent-block.html
+  [so_xtext_indent]: http://stackoverflow.com/questions/7167834/xtext-grammar-for-language-with-significant-semantic-whitespace
+  [todotext]: http://code.google.com/a/eclipselabs.org/p/todotext/
