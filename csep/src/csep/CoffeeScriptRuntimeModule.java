@@ -7,5 +7,16 @@ package csep;
  * Use this class to register components to be used at runtime / without the Equinox extension registry.
  */
 public class CoffeeScriptRuntimeModule extends csep.AbstractCoffeeScriptRuntimeModule {
+	/*
+	@Override
+	public Class<? extends org.eclipse.xtext.parser.antlr.Lexer> bindLexer() {
+		return csep.parser.Lexer.class;
+	}
+	*/
+	
+    @Override
+    public Class<? extends org.eclipse.xtext.parser.IParser> bindIParser() {
+         return csep.parser.Parser.class ;
+    }
 
 }
