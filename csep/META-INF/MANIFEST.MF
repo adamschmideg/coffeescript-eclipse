@@ -28,11 +28,12 @@ Import-Package: org.apache.log4j,
  org.eclipse.xtext.xtend2.lib
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Export-Package: csep,
- csep.services,
  csep.coffeeScript,
  csep.coffeeScript.impl,
  csep.coffeeScript.util,
+ csep.parser,
  csep.parseTreeConstruction,
  csep.parser.antlr,
  csep.parser.antlr.internal,
+ csep.services,
  csep.validation
