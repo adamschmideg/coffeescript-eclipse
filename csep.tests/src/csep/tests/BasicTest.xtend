@@ -18,13 +18,28 @@ class BasicTest {
 	ParseHelper<Model> parser
 	
 	@Test
-	def void testParsing() {
+	def void testSingleGreeting() {
 		val model = parser.parse('''
-		  Hello Baby
+		  Hello Baby!
 		''')
 		val tree = model.eContents
 		val greet = tree.get(0) as Greeting
-		Assert::assertEquals("Baby", greet.name)
+		Assert::assertEquals("<Baby>", greet.name)
+	}
+	
+	@Test
+	def void testMissingEnd() {
+		val model = parser.parse("Hello Mike?")
+	}
+	
+	@Test
+	def void testMoreGreetings() {
+		val model = parser.parse("Hello Jack! Hello Jill!")
+	}
+	
+	@Test
+	def void testComment() {
+		val model = parser.parse("Hello /* bye */ Baby!")
 	}
 
 }

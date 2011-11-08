@@ -19,7 +19,9 @@ public class Lexer extends csep.parser.antlr.internal.InternalCoffeeScriptLexer 
 	@Override
 	public Token nextToken() {
 		Token token = super.nextToken();
-		System.out.println("token: " + token);
+		if (token.getType() == this.RULE_ID)
+			token.setText("<" + token.getText() + ">");
+		System.out.println("token: " + token.getChannel() + ", " + token.getType() + ": " + token.getText());
 		return token;
 	}
 
