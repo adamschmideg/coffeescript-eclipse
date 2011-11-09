@@ -16,9 +16,6 @@ import csep.parser.Lexer
 @InjectWith(typeof(InjectorProviderCustom))
 class LexerTest {
 	
-	@Inject
-	ParseHelper<Model> parser
-	
 	@Test
 	def void testSimple() {
 		val lexer = new Lexer('''

@@ -7,18 +7,19 @@ generate coffeeScript "http://www.coffeescript.org/eclipse"
  * The <var>Root</var> is the top-level node in the syntax tree. Since we parse
  * bottom-up, all parsing must end here.
  */
-Root: {Root} '' | Body | Block TERMINATOR;
+//Root: Body | Block TERMINATOR;
+Root: Operation;
 
 /**
  * Any list of statements and expressions, separated by line breaks or
  * semicolons.
  */
-Body: lines+=Line (TERMINATOR Line)*;
+Body: Line (TERMINATOR lines+=Line)*;
 
 /**
  * Block and statements, which make up a line in a body.
  */
-Line: Expression | StatementRule;
+Line: Expression;
 
 /**
  * Pure statements which cannot be expressions.
@@ -42,7 +43,21 @@ Expression: Assign;
  */
 Block: {Block} INDENT Body? OUTDENT;
 
-Assign: IDENTIFIER EQUAL Expression;
+Assign: IDENTIFIER EQUAL Operation;
+
+Operation: Addition;
+ 
+Addition returns Operation:
+ Multiplication ({Addition.left=current} (PLUS | MINUS) right=Multiplication)*;
+
+Multiplication returns Operation:
+ Primary ({Multiplication.left=current} '*' right=Primary)*;
+
+Primary returns Operation:
+ NumberLiteral |
+ '(' Addition ')';
+ 
+NumberLiteral: value=NUMBER;
 
 // XXX: terminals could go to a separate file, but I dont know how to persuade Eclipse {{{
 terminal MINUS: 'dummy MINUS';

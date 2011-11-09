@@ -7,14 +7,14 @@ import com.google.inject.Inject
 import org.junit.Test
 import org.eclipse.xtext.junit4.util.ParseHelper
 import junit.framework.Assert
-import csep.coffeeScript.Model
+import csep.coffeeScript.Root
 
 @org.junit.runner.RunWith(typeof(XtextRunner))
 @InjectWith(typeof(InjectorProviderCustom))
 class BasicTest { 
 
 	@Inject
-	ParseHelper<Model> parser
+	ParseHelper<Root> parser
 	
 	@Test
 	def void testSimple() {
