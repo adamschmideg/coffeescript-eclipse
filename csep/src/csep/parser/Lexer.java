@@ -29,6 +29,10 @@ public class Lexer extends csep.parser.antlr.internal.InternalCoffeeScriptLexer 
 	public Lexer(String str) {
 		this(new ANTLRStringStream(str));
 	}
+	
+	public Lexer(org.eclipse.xtext.xtend2.lib.StringConcatenation str) {
+		this(str.toString());
+	}
 
 	@Override
 	public Token nextToken() {
@@ -39,20 +43,15 @@ public class Lexer extends csep.parser.antlr.internal.InternalCoffeeScriptLexer 
 				token = new CommonToken(CommonToken.EOF);
 			}
 			else {
-				String text = "" + symbol.getValue();
-				token = new CommonToken(symbol.getId(), text);
-				int packedStart = symbol.getStart();
-				int startLine = Symbol.getLine(packedStart);
-				int startPosition = Symbol.getColumn(packedStart);
-				token.setLine(startLine);
-				token.setCharPositionInLine(startPosition);
+				token = new BeaverToken(symbol);
 			} 
 		}
 		catch (Exception e) {
 			e.printStackTrace();
 			token = new CommonToken(CommonToken.INVALID_TOKEN); 
 		}
-		System.out.println("token: " + token + ", " + token.getType() + ": " + token.getText());
+		System.out.println("super: " + super.nextToken());
+		System.out.println("token: " + token);
 		return token;
 	}
 

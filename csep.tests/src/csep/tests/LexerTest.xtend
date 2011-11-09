@@ -21,9 +21,12 @@ class LexerTest {
 	
 	@Test
 	def void testSimple() {
-		val lexer = new Lexer("number = 42")
+		val lexer = new Lexer('''
+			number=42
+			answer=42
+		''')
 		val tokens = lexer.tokenize()
-		println("tokens: " + tokens)
+		//println("tokens: " + tokens)
 	}
 	
 }
