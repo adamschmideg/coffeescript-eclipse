@@ -1,16 +1,10 @@
 package csep.tests
 
-import org.junit.runner.RunWith
-import org.eclipse.xtext.junit4.XtextRunner
-import org.eclipse.xtext.junit4.InjectWith
-import com.google.inject.Inject
-import org.junit.Test
-import org.eclipse.xtext.junit4.util.ParseHelper
-import junit.framework.Assert
-import csep.coffeeScript.Model
-import csep.coffeeScript.Greeting
-import java.util.*
 import csep.parser.Lexer
+import org.eclipse.xtext.junit4.InjectWith
+import org.eclipse.xtext.junit4.XtextRunner
+import org.junit.Test
+import org.junit.runner.RunWith
 
 @org.junit.runner.RunWith(typeof(XtextRunner))
 @InjectWith(typeof(InjectorProviderCustom))

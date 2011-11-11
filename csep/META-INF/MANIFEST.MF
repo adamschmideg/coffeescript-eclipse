@@ -36,4 +36,7 @@ Export-Package: csep,
  csep.parser.antlr,
  csep.parser.antlr.internal,
  csep.services,
- csep.validation
+ csep.validation,
+ csep.scoping,
+ csep.generator,
+ csep.formatting
