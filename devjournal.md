@@ -14,6 +14,7 @@
   The parser seems to use only the first token when building the AST.
 	* There are some differences between the token returned by the internal lexer and the token by the aptana lexer.
 	  The differences include: whitespace handling; EOF; type/id of operators.
+	* The difference of whitespace and EOF handling seem to cause no problem.
 * Why is the type of operators different in BeaverToken?
 	* A literal '+' within a rule is not the same as using PLUS within the same rule.
 	  (Note: the aptana lexer returns a MATH token both for '*' and for '/')
