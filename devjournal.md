@@ -8,6 +8,13 @@
 * Display parse tree with structure
 	* I'll have to implement manually an AST displayer.
 	  The serializer approach doesn't work, because [it's supposed to output a parseable string][2]
+	* Done.  See `csep.parser.Helper.stringify`.
+
+* Overriding `nextToken()` in Lexer is not enough.
+  The parser seems to use only the first token when building the AST.
+	* There are some differences between the token returned by the internal lexer and the token by the aptana lexer.
+	  The differences include: whitespace handling; EOF; type/id of operators.
+* Why is the type of operators different in BeaverToken?
 
   [1]: http://jevopisdeveloperblog.blogspot.com/2011/03/implement-tostring-with-xtexts.html
   [2]: http://www.eclipse.org/Xtext/documentation/2_1_0/100-serialization.php#serializationcontract 

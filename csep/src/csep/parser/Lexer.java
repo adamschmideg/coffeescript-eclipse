@@ -33,7 +33,7 @@ public class Lexer extends csep.parser.antlr.internal.InternalCoffeeScriptLexer 
 	public Lexer(org.eclipse.xtext.xtend2.lib.StringConcatenation str) {
 		this(str.toString());
 	}
-
+	
 	@Override
 	public Token nextToken() {
 		Token token = null;
@@ -50,9 +50,12 @@ public class Lexer extends csep.parser.antlr.internal.InternalCoffeeScriptLexer 
 			e.printStackTrace();
 			token = new CommonToken(CommonToken.INVALID_TOKEN); 
 		}
-		System.out.println("super: " + super.nextToken());
+		Token superToken = super.nextToken();
+		System.out.println("super: " + superToken);
 		System.out.println("token: " + token);
-		return token;
+		System.out.println();
+		//return token;
+		return superToken;
 	}
 
 	public List<Token> tokenize() throws Exception {
