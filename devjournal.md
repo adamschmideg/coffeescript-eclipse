@@ -15,6 +15,8 @@
 	* There are some differences between the token returned by the internal lexer and the token by the aptana lexer.
 	  The differences include: whitespace handling; EOF; type/id of operators.
 * Why is the type of operators different in BeaverToken?
+	* A literal '+' within a rule is not the same as using PLUS within the same rule.
+	  (Note: the aptana lexer returns a MATH token both for '*' and for '/')
 
   [1]: http://jevopisdeveloperblog.blogspot.com/2011/03/implement-tostring-with-xtexts.html
   [2]: http://www.eclipse.org/Xtext/documentation/2_1_0/100-serialization.php#serializationcontract 

@@ -22,9 +22,8 @@ class ParserTest {
 	
 	@Test
 	def void testSimple() {
-		val root = parser.parse('4+3*2')
+		val root = parser.parse('4 * 3 - 2')
 		println("parsed:\n" + Helper::stringify(root))
-		//println(root)
 	}
 	
 }

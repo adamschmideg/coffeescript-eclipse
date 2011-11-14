@@ -15,7 +15,6 @@ import com.aptana.editor.coffee.parsing.Terminals;
 import com.aptana.editor.coffee.parsing.lexer.CoffeeScanner;
 import com.aptana.editor.coffee.parsing.lexer.CoffeeSymbol;
 
-//public class Lexer extends org.eclipse.xtext.parser.antlr.Lexer {
 public class Lexer extends csep.parser.antlr.internal.InternalCoffeeScriptLexer {
 	private CoffeeScanner aptanaScanner;
 
@@ -54,8 +53,8 @@ public class Lexer extends csep.parser.antlr.internal.InternalCoffeeScriptLexer 
 		System.out.println("super: " + superToken);
 		System.out.println("token: " + token);
 		System.out.println();
-		//return token;
-		return superToken;
+		return token;
+		//return superToken;
 	}
 
 	public List<Token> tokenize() throws Exception {
