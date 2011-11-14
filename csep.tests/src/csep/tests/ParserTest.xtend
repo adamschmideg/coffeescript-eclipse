@@ -11,6 +11,7 @@ import csep.coffeeScript.Root
 import csep.coffeeScript.Assign
 import java.util.*
 import csep.parser.Lexer
+import csep.parser.Helper
 
 @org.junit.runner.RunWith(typeof(XtextRunner))
 @InjectWith(typeof(InjectorProviderCustom))
@@ -22,9 +23,10 @@ class ParserTest {
 	@Test
 	def void testSimple() {
 		val root = parser.parse('''
-			4 + 3 * (4+5+6)
+			(4 + 3) * (4+5+6)
 		''')
-		println(root)
+		println("parsed: " + Helper::stringify(root))
+		//println(root)
 	}
 	
 }

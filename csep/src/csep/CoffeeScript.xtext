@@ -48,10 +48,10 @@ Assign: IDENTIFIER EQUAL Operation;
 Operation: Addition;
  
 Addition returns Operation:
- Multiplication ({Addition.left=current} (PLUS | MINUS) right=Multiplication)*;
+ Multiplication ({Addition.left=current} ('+' | '-') right=Multiplication)*;
 
 Multiplication returns Operation:
- Primary ({Multiplication.left=current} '*' right=Primary)*;
+ Primary ({Multiplication.left=current} ('*' | '/') right=Primary)*;
 
 Primary returns Operation:
  NumberLiteral |
