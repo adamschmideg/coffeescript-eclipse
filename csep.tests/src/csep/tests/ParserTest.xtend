@@ -23,16 +23,42 @@ class ParserTest {
 	@Test
 	def void testSimple() {
 		val root = parser.parse('4 * 3 - 2')
-		val expected = '''AdditionImpl
-  left: MultiplicationImpl
-    left: NumberLiteralImpl
+		val expected = '''AdditiveOp
+  left: MathOp
+    left: NumberLiteral
       value: 4
-    right: NumberLiteralImpl
+    operator: *
+    right: NumberLiteral
       value: 3
-  right: NumberLiteralImpl
+  operator: -
+  right: NumberLiteral
     value: 2
 '''.toString()
 		val got = Helper::stringify(root)
+		println("Got:\n" + got)
+		Assert::assertEquals(expected, got)	
+	}
+	
+	@Test
+	def void testCompare() {
+		val root = parser.parse('(2 == 3) + (2 < 4)')
+		val expected = '''AdditiveOp
+  left: CompareOp
+    left: NumberLiteral
+      value: 2
+    operator: ==
+    right: NumberLiteral
+      value: 3
+  operator: +
+  right: CompareOp
+    left: NumberLiteral
+      value: 2
+    operator: <
+    right: NumberLiteral
+      value: 4
+'''.toString()
+		val got = Helper::stringify(root)
+		println("Got:\n" + got)
 		Assert::assertEquals(expected, got)	
 	}
 	

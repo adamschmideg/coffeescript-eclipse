@@ -64,7 +64,7 @@ public class Helper {
 					}
 				}
 			}
-			return buf.toString();
+			return buf.toString().replace("Impl", "");
 		} catch (Exception ex) { // fall back:
 			ex.printStackTrace();
 			return eobj.getClass().getSimpleName() + '@' + eobj.hashCode();

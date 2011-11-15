@@ -45,17 +45,20 @@ Block: {Block} INDENT Body? OUTDENT;
 
 Assign: IDENTIFIER EQUAL Operation;
 
-Operation: Addition;
- 
-Addition returns Operation:
- Multiplication ({Addition.left=current} (PLUS | MINUS) right=Multiplication)*;
+Operation: CompareOp;
 
-Multiplication returns Operation:
- Primary ({Multiplication.left=current} MATH right=Primary)*;
+CompareOp returns Operation:
+  AdditiveOp ({CompareOp.left=current} operator=COMPARE right=AdditiveOp)*;
+
+AdditiveOp returns Operation:
+  MathOp ({AdditiveOp.left=current} operator=(PLUS | MINUS) right=MathOp)*;
+  
+MathOp returns Operation:
+ Primary ({MathOp.left=current} operator=MATH right=Primary)*;
 
 Primary returns Operation:
  NumberLiteral |
- '(' Addition ')';
+ LPAREN Operation RPAREN;
  
 NumberLiteral: value=NUMBER;
 
