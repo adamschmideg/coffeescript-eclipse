@@ -7,39 +7,18 @@ import com.google.inject.Inject
 import org.junit.Test
 import org.eclipse.xtext.junit4.util.ParseHelper
 import junit.framework.Assert
-import csep.coffeeScript.Model
-import csep.coffeeScript.Greeting
+import csep.coffeeScript.Root
 
 @org.junit.runner.RunWith(typeof(XtextRunner))
 @InjectWith(typeof(InjectorProviderCustom))
 class BasicTest { 
 
 	@Inject
-	ParseHelper<Model> parser
+	ParseHelper<Root> parser
 	
 	@Test
-	def void testSingleGreeting() {
-		val model = parser.parse('''
-		  Hello Baby!
-		''')
-		val tree = model.eContents
-		val greet = tree.get(0) as Greeting
-		Assert::assertEquals("<Baby>", greet.name)
+	def void testSimple() {
+		val model = parser.parse('number = 42')
 	}
 	
-	@Test
-	def void testMissingEnd() {
-		val model = parser.parse("Hello Mike?")
-	}
-	
-	@Test
-	def void testMoreGreetings() {
-		val model = parser.parse("Hello Jack! Hello Jill!")
-	}
-	
-	@Test
-	def void testComment() {
-		val model = parser.parse("Hello /* bye */ Baby!")
-	}
-
 }
