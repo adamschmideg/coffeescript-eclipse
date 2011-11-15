@@ -23,7 +23,17 @@ class ParserTest {
 	@Test
 	def void testSimple() {
 		val root = parser.parse('4 * 3 - 2')
-		println("parsed:\n" + Helper::stringify(root))
+		val expected = '''AdditionImpl
+  left: MultiplicationImpl
+    left: NumberLiteralImpl
+      value: 4
+    right: NumberLiteralImpl
+      value: 3
+  right: NumberLiteralImpl
+    value: 2
+'''.toString()
+		val got = Helper::stringify(root)
+		Assert::assertEquals(expected, got)	
 	}
 	
 }

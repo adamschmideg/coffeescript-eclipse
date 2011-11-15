@@ -60,8 +60,8 @@ Primary returns Operation:
 NumberLiteral: value=NUMBER;
 
 // XXX: terminals could go to a separate file, but I dont know how to persuade Eclipse {{{
-terminal MINUS: '-';
-terminal PLUS: '+';
+terminal MINUS: 'dummy MINUS';
+terminal PLUS: 'dummy PLUS';
 terminal WHILE: 'dummy WHILE';
 terminal UNTIL: 'dummy UNTIL';
 terminal FOR: 'dummy FOR';
@@ -93,7 +93,7 @@ terminal THROW: 'dummy THROW';
 terminal LOOP: 'dummy LOOP';
 terminal UNARY: 'dummy UNARY';
 terminal QUESTION: 'dummy QUESTION';
-terminal MATH: '*' | '/';
+terminal MATH: 'dummy MATH';
 terminal INDENT: 'dummy INDENT';
 terminal SHIFT: 'dummy SHIFT';
 terminal RELATION: 'dummy RELATION';
@@ -120,7 +120,7 @@ terminal ELSE: 'dummy ELSE';
 terminal EXTENDS: 'dummy EXTENDS';
 terminal DOT_DOT: 'dummy DOT_DOT';
 terminal RPAREN: 'dummy RPAREN';
-terminal EQUAL: '=';
+terminal EQUAL: 'dummy EQUAL';
 terminal BY: 'dummy BY';
 terminal CALL_END: 'dummy CALL_END';
 terminal FINALLY: 'dummy FINALLY';
