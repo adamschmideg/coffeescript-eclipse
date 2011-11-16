@@ -19,5 +19,12 @@
 	* A literal '+' within a rule is not the same as using PLUS within the same rule.
 	  (Note: the aptana lexer returns a MATH token both for '*' and for '/')
 
+* How to vizualize the LALR grammar of coffeescript?
+	* I asked about [visualizing LALR grammar] on Stackoverflow
+	* I found [GOLD parser][4] which has an IDE, but runs only on Windows.
+  	  But I may check it out.
+
   [1]: http://jevopisdeveloperblog.blogspot.com/2011/03/implement-tostring-with-xtexts.html
   [2]: http://www.eclipse.org/Xtext/documentation/2_1_0/100-serialization.php#serializationcontract 
+  [3]: http://stackoverflow.com/questions/8154790/visualize-lalr-grammar
+  [4]: http://goldparser.org/
