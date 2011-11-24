@@ -4,7 +4,7 @@ BUILD_CP=/usr/share/java/antlr3.jar
 RUN_CP=/usr/share/java/antlr3-runtime.jar
 
 test: out/Test.class out/CsParser.class
-	java -cp ${RUN_CP}:out Test <out/testcase
+	java -cp ${RUN_CP}:out Test <devel.testcase
 
 out/Test.java: Test.java
 	cp Test.java out/Test.java

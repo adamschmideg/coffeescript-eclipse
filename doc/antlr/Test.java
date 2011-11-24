@@ -5,6 +5,7 @@ import org.antlr.runtime.tree.Tree;
 public class Test {
     public static void main(String[] args) throws Exception {
         ANTLRInputStream input = new ANTLRInputStream(System.in);
+        System.out.println("Processing...");
         CsLexer lexer = new CsLexer(input);
         CommonTokenStream tokens = new CommonTokenStream(lexer);
         CsParser parser = new CsParser(tokens);
@@ -15,7 +16,8 @@ public class Test {
     }
 
 	public static void print(Tree node) {
-    print(node, "");
+    System.out.println(node.toStringTree());
+    //print(node, "");
 	}
 
 	public static void print(Tree node, String indent) {
