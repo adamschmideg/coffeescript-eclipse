@@ -1,0 +1,33 @@
+import java.io.StringReader;
+import org.antlr.runtime.*;
+import org.antlr.runtime.tree.Tree;
+
+public class Test {
+    public static void main(String[] args) throws Exception {
+        ANTLRReaderStream input = new ANTLRReaderStream(new StringReader("6*7\nx=(5)\n"));
+        CsLexer lexer = new CsLexer(input);
+        CommonTokenStream tokens = new CommonTokenStream(lexer);
+        CsParser parser = new CsParser(tokens);
+        CsParser.prog_return res = parser.prog();
+        
+        Tree tree = (Tree)res.getTree(); // The root node.
+        print(tree);
+    }
+
+	public static void print(Tree node) {
+    print(node, "");
+	}
+
+	public static void print(Tree node, String indent) {
+    System.out.println(indent + nodeString(node));
+		int count = node.getChildCount();
+		for (int i=0;i<count;i++) {
+			Tree child = node.getChild(i);
+			print(child, indent + "  ");
+		}
+	}
+
+  public static String nodeString(Tree node) {
+    return node.toString();
+  }
+}

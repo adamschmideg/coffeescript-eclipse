@@ -4,3 +4,5 @@ csep.*/src-gen
 csep.*/xtend-gen
 csep.*/plugin.xml.*
 org.eclipse.xtext.example
+.*out
+.*.swp
