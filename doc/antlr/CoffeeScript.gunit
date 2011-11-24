@@ -1,6 +1,7 @@
-gunit Cs;
+gunit CoffeeScript;
 
 value:
 "32" OK
 "\"some text\"" OK
 "somevar" OK
+"(42)" OK

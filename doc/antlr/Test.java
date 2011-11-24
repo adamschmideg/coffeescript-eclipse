@@ -6,10 +6,10 @@ public class Test {
     public static void main(String[] args) throws Exception {
         ANTLRInputStream input = new ANTLRInputStream(System.in);
         System.out.println("Processing...");
-        CsLexer lexer = new CsLexer(input);
+        CoffeeScriptLexer lexer = new CoffeeScriptLexer(input);
         CommonTokenStream tokens = new CommonTokenStream(lexer);
-        CsParser parser = new CsParser(tokens);
-        CsParser.root_return res = parser.root();
+        CoffeeScriptParser parser = new CoffeeScriptParser(tokens);
+        CoffeeScriptParser.root_return res = parser.root();
         
         Tree tree = (Tree)res.getTree(); // The root node.
         print(tree);
