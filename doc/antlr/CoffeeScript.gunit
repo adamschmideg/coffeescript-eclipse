@@ -6,3 +6,10 @@ value:
 "somevar" OK
 "(42)" OK
 " ( 3 ) " OK
+
+operation:
+"-4" OK
+"++foo" OK
+"bar++" OK
+"count += 1" OK
+"nullable?" FAIL

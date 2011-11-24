@@ -1,15 +1,37 @@
 
-root : body;
+root
+  : body
+  ///| block TERMINATOR
+  ;
 
-body	: value;
-//expression (TERMINATOR expression)*;
+body
+  : line
+  ;
+
+line
+  : expression
+  ///| statement
+  ;
 
 expression
   : value
+  | operation
   ;
-  
-value
+ 
+identifier
   : IDENTIFIER
+  ;
+
+simpleAssignable
+  : identifier
+  ;
+
+assignable
+  : simpleAssignable
+  ;
+
+value
+  : assignable
   | literal
   | parenthetical
   ;
@@ -23,5 +45,15 @@ alphaNumeric
  | 	STRING;
 
 parenthetical
-  : LPAREN expression RPAREN
+  : LPAREN body RPAREN
+  ;
+
+operation
+  : MINUS expression
+  | PLUS expression
+  | MINUS_MINUS simpleAssignable
+  | PLUS_PLUS simpleAssignable
+  | simpleAssignable PLUS_PLUS
+  | simpleAssignable MINUS_MINUS
+  | simpleAssignable COMPOUND_ASSIGN expression
   ;
