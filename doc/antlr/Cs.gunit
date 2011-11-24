@@ -1,0 +1,6 @@
+gunit Cs;
+
+value:
+"32" OK
+"\"some text\"" OK
+"somevar" OK

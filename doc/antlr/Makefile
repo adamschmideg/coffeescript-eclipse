@@ -1,7 +1,7 @@
 ANTLR3=antlr-3.2.jar
 
-test: init out/Test.class out/CsParser.class
-	java -cp devel/${ANTLR3}:out Test <devel/testcase
+test: init out/Test.class out/CsParser.class Cs.gunit
+	java -cp devel/${ANTLR3}:out org.antlr.gunit.Interp Cs.gunit
 
 init: devel out devel/${ANTLR3}
 
