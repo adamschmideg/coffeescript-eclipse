@@ -24,6 +24,12 @@
 	* I found [GOLD parser][4] which has an IDE, but runs only on Windows.
   	  But I may check it out.
 
+* Learning ANTLR
+  * Tried to use the generated python target, but it seemed difficult on
+   Ubuntu: there is no python binding for antlr3, the java version
+   doesn't match with the downloadable python bundles.
+   So I abandon this track, and go back to painful old java.
+
   [1]: http://jevopisdeveloperblog.blogspot.com/2011/03/implement-tostring-with-xtexts.html
   [2]: http://www.eclipse.org/Xtext/documentation/2_1_0/100-serialization.php#serializationcontract 
   [3]: http://stackoverflow.com/questions/8154790/visualize-lalr-grammar

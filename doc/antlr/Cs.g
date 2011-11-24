@@ -3,6 +3,7 @@ grammar Cs;
 options{
   output=AST;
   ASTLabelType=CommonTree;
+  //language=Python;
 }
 
 tokens {
