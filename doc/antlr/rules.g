@@ -13,11 +13,21 @@ line
   ///| statement
   ;
 
-expression
+assign
+  : assignable EQUAL expression
+  ;
+
+// left-factor
+expressionNotOperation
   : value
-  | operation
+  | assign
   ;
  
+expression
+  : expressionNotOperation
+  | operation
+  ;
+
 identifier
   : IDENTIFIER
   ;
@@ -41,19 +51,57 @@ literal
   ;
 
 alphaNumeric
- :	 NUMBER 
- | 	STRING;
+  : NUMBER 
+  | STRING;
 
 parenthetical
   : LPAREN body RPAREN
   ;
 
+// order of precedence, from higher to lower:
+// questionOp, unaryOp, mathOp, additiveOp, shiftOp, relationOp, compareOp, logicOp
+
+atom
+  : expressionNotOperation
+  ;
+
+questionOp
+  : atom QUESTION?
+  ;
+
+mathOp
+  : questionOp (MATH questionOp)*
+  ;
+
+additiveOp
+  : mathOp ((PLUS | MINUS) mathOp)*
+  ;
+
+shiftOp
+  : additiveOp (SHIFT additiveOp)*
+  ;
+
+relationOp
+  : shiftOp (RELATION shiftOp)*
+  ;
+
+compareOp
+  : relationOp (COMPARE relationOp)*
+  ;
+
+logicOp
+  : compareOp (LOGIC compareOp)*
+  ;
+
 operation
-  : MINUS expression
+  : UNARY expression
+  | MINUS expression
   | PLUS expression
   | MINUS_MINUS simpleAssignable
   | PLUS_PLUS simpleAssignable
   | simpleAssignable PLUS_PLUS
   | simpleAssignable MINUS_MINUS
   | simpleAssignable COMPOUND_ASSIGN expression
+  //| logicOp
   ;
+

@@ -1,5 +1,10 @@
 gunit CoffeeScript;
 
+identifier:
+"foo" OK
+"fooBar" OK
+"new" FAIL // keyword
+
 value:
 "32" OK
 "\"some text\"" OK
@@ -8,8 +13,14 @@ value:
 " ( 3 ) " OK
 
 operation:
+"!reversed" OK
+"new Object" FAIL // :(
 "-4" OK
 "++foo" OK
 "bar++" OK
 "count += 1" OK
-"nullable?" FAIL
+"nullable?" FAIL // :(
+"2 + 3" FAIL // :(
+
+assign:
+"count = 0" OK // :(
