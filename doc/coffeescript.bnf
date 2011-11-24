@@ -1,0 +1,198 @@
+/* converted on Tue Nov 22, 2011, 22:22 (UTC+01) by jison-to-w3c */
+/* Converted at http://bottlecaps.de/convert/ */
+/* Feed this file to http://railroad.my28msec.com to visualize it */
+
+Root     ::= ( Body | Block TERMINATOR )?
+Body     ::= Line ( TERMINATOR Line | TERMINATOR )*
+Line     ::= Expression
+           | Statement
+Statement
+         ::= Return
+           | Throw
+           | Comment
+           | STATEMENT
+Expression
+         ::= Value
+           | Invocation
+           | Code
+           | Operation
+           | Assign
+           | If
+           | Try
+           | While
+           | For
+           | Switch
+           | Class
+Block    ::= INDENT OUTDENT
+           | INDENT Body OUTDENT
+Identifier
+         ::= IDENTIFIER
+AlphaNumeric
+         ::= NUMBER
+           | STRING
+Literal  ::= AlphaNumeric
+           | JS
+           | REGEX
+           | BOOL
+Assign   ::= Assignable '=' Expression
+           | Assignable '=' INDENT Expression OUTDENT
+AssignObj
+         ::= ObjAssignable
+           | ObjAssignable ':' Expression
+           | ObjAssignable ':' INDENT Expression OUTDENT
+           | Comment
+ObjAssignable
+         ::= Identifier
+           | AlphaNumeric
+           | ThisProperty
+Return   ::= RETURN Expression
+           | RETURN
+Comment  ::= HERECOMMENT
+Code     ::= PARAM_START ( | Param ) ( ',' Param )* PARAM_END FuncGlyph Block
+           | FuncGlyph Block
+FuncGlyph
+         ::= '->'
+           | '=>'
+OptComma ::= ','?
+Param    ::= ParamVar
+           | ParamVar '...'
+           | ParamVar '=' Expression
+ParamVar ::= Identifier
+           | ThisProperty
+           | Array
+           | Object
+Splat    ::= Expression '...'
+SimpleAssignable
+         ::= Identifier
+           | Value Accessor
+           | Invocation Accessor
+           | ThisProperty
+Assignable
+         ::= SimpleAssignable
+           | Array
+           | Object
+Value    ::= Assignable
+           | Literal
+           | Parenthetical
+           | Range
+           | This
+Accessor ::= '.' Identifier
+           | '?.' Identifier
+           | '::' Identifier
+           | '::'
+           | INDEX_START IndexValue INDEX_END INDEX_SOAK*
+IndexValue
+         ::= Expression
+           | Slice
+Object   ::= '{' AssignList OptComma '}'
+AssignList
+         ::= ( AssignObj | AssignList ',' AssignObj | AssignList OptComma TERMINATOR AssignObj | AssignList OptComma INDENT AssignList OptComma OUTDENT )?
+Class    ::= CLASS
+           | CLASS Block
+           | CLASS EXTENDS Expression
+           | CLASS EXTENDS Expression Block
+           | CLASS SimpleAssignable
+           | CLASS SimpleAssignable Block
+           | CLASS SimpleAssignable EXTENDS Expression
+           | CLASS SimpleAssignable EXTENDS Expression Block
+Invocation
+         ::= ( Value OptFuncExist Arguments | SUPER | SUPER Arguments ) ( OptFuncExist Arguments )*
+OptFuncExist
+         ::= FUNC_EXIST?
+Arguments
+         ::= CALL_START CALL_END
+           | CALL_START ArgList OptComma CALL_END
+This     ::= THIS
+           | '@'
+ThisProperty
+         ::= '@' Identifier
+Array    ::= '[' ']'
+           | '[' ArgList OptComma ']'
+RangeDots
+         ::= '..'
+           | '...'
+Range    ::= '[' Expression RangeDots Expression ']'
+Slice    ::= Expression RangeDots Expression
+           | Expression RangeDots
+           | RangeDots Expression
+ArgList  ::= Arg
+           | ArgList ',' Arg
+           | ArgList OptComma TERMINATOR Arg
+           | INDENT ArgList OptComma OUTDENT
+           | ArgList OptComma INDENT ArgList OptComma OUTDENT
+Arg      ::= Expression
+           | Splat
+SimpleArgs
+         ::= Expression ( ',' Expression )*
+Try      ::= TRY Block
+           | TRY Block Catch
+           | TRY Block FINALLY Block
+           | TRY Block Catch FINALLY Block
+Catch    ::= CATCH Identifier Block
+Throw    ::= THROW Expression
+Parenthetical
+         ::= '(' Body ')'
+           | '(' INDENT Body OUTDENT ')'
+WhileSource
+         ::= WHILE Expression
+           | WHILE Expression WHEN Expression
+           | UNTIL Expression
+           | UNTIL Expression WHEN Expression
+While    ::= WhileSource Block
+           | Statement WhileSource
+           | Expression WhileSource
+           | Loop
+Loop     ::= LOOP Block
+           | LOOP Expression
+For      ::= Statement ForBody
+           | Expression ForBody
+           | ForBody Block
+ForBody  ::= FOR Range
+           | ForStart ForSource
+ForStart ::= FOR ForVariables
+           | FOR OWN ForVariables
+ForValue ::= Identifier
+           | Array
+           | Object
+ForVariables
+         ::= ForValue
+           | ForValue ',' ForValue
+ForSource
+         ::= FORIN Expression
+           | FOROF Expression
+           | FORIN Expression WHEN Expression
+           | FOROF Expression WHEN Expression
+           | FORIN Expression BY Expression
+           | FORIN Expression WHEN Expression BY Expression
+           | FORIN Expression BY Expression WHEN Expression
+Switch   ::= SWITCH Expression INDENT Whens OUTDENT
+           | SWITCH Expression INDENT Whens ELSE Block OUTDENT
+           | SWITCH INDENT Whens OUTDENT
+           | SWITCH INDENT Whens ELSE Block OUTDENT
+Whens    ::= When+
+When     ::= LEADING_WHEN SimpleArgs Block
+           | LEADING_WHEN SimpleArgs Block TERMINATOR
+IfBlock  ::= IF Expression Block ( ELSE IF Expression Block )*
+If       ::= IfBlock
+           | IfBlock ELSE Block
+           | Statement POST_IF Expression
+           | Expression POST_IF Expression
+Operation
+         ::= UNARY Expression
+           | '-' Expression
+           | '+' Expression
+           | '--' SimpleAssignable
+           | '++' SimpleAssignable
+           | SimpleAssignable '--'
+           | SimpleAssignable '++'
+           | Expression '?'
+           | Expression '+' Expression
+           | Expression '-' Expression
+           | Expression MATH Expression
+           | Expression SHIFT Expression
+           | Expression COMPARE Expression
+           | Expression LOGIC Expression
+           | Expression RELATION Expression
+           | SimpleAssignable COMPOUND_ASSIGN Expression
+           | SimpleAssignable COMPOUND_ASSIGN INDENT Expression OUTDENT
+           | SimpleAssignable EXTENDS Expression
