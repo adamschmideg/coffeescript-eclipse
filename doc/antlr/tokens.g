@@ -9,3 +9,5 @@ RPAREN	:	')';
 STRING	:	'"' (('a'..'z') | ' ')* '"';
 NUMBER	:	'1'..'9' ('0'..'9')*;
 TERMINATOR : '\n';
+
+WS  :   (' ')+ {skip();} ;

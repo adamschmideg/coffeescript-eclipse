@@ -5,3 +5,4 @@ value:
 "\"some text\"" OK
 "somevar" OK
 "(42)" OK
+" ( 3 ) " OK
