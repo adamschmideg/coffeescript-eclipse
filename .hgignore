@@ -1,8 +1,11 @@
+syntax:glob
 .metadata
-csep.*/bin
-csep.*/src-gen
-csep.*/xtend-gen
-csep.*/plugin.xml.*
+csep*/bin
+csep*/src-gen
+csep*/xtend-gen
+csep*/plugin.xml.*
 org.eclipse.xtext.example
-.*out
-.*.swp
+*.swp
+devel
+devel.*
+out
