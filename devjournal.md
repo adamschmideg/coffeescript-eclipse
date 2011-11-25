@@ -31,6 +31,14 @@
    So I abandon this track, and go back to painful old java.
  * The difficulty seems to be left-factoring expressions.
    I asked for [help with left-factoring expressions][5] at Stackoverflow.
+ * I got an answer to my question which doesn't fix the problem but
+   helped me understand it.
+   The issue boils down to this: write a simple expression language with
+   function calls.
+   An expression can be an operation or a function call.
+   The operand in an operation can be any expression, including a
+   function call.
+ * I'm not sure how close I can stay to the original LR grammar.
 
   [1]: http://jevopisdeveloperblog.blogspot.com/2011/03/implement-tostring-with-xtexts.html
   [2]: http://www.eclipse.org/Xtext/documentation/2_1_0/100-serialization.php#serializationcontract 
