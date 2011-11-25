@@ -14,6 +14,7 @@ NEW : 'new';
 NUMBER	:	('0'..'9')+;
 PLUS : '+';
 PLUS_PLUS : '++';
+QUESTION : '?';
 RELATION : 'in' | 'of' | 'instanceof'; 
 RPAREN	:	')';
 SHIFT : '<<' | '>>';

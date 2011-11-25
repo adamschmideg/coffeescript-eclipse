@@ -29,8 +29,11 @@
    Ubuntu: there is no python binding for antlr3, the java version
    doesn't match with the downloadable python bundles.
    So I abandon this track, and go back to painful old java.
+ * The difficulty seems to be left-factoring expressions.
+   I asked for [help with left-factoring expressions][5] at Stackoverflow.
 
   [1]: http://jevopisdeveloperblog.blogspot.com/2011/03/implement-tostring-with-xtexts.html
   [2]: http://www.eclipse.org/Xtext/documentation/2_1_0/100-serialization.php#serializationcontract 
   [3]: http://stackoverflow.com/questions/8154790/visualize-lalr-grammar
   [4]: http://goldparser.org/
+  [5]: http://stackoverflow.com/questions/8263772/left-factoring-grammar-of-coffeescript-expressions

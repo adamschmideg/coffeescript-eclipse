@@ -1,7 +1,6 @@
 
 root
   : body
-  ///| block TERMINATOR
   ;
 
 body
@@ -10,21 +9,15 @@ body
 
 line
   : expression
-  ///| statement
   ;
 
 assign
   : assignable EQUAL expression
   ;
 
-// left-factor
-expressionNotOperation
+expression
   : value
   | assign
-  ;
- 
-expression
-  : expressionNotOperation
   | operation
   ;
 
@@ -58,15 +51,14 @@ parenthetical
   : LPAREN body RPAREN
   ;
 
-// order of precedence, from higher to lower:
-// questionOp, unaryOp, mathOp, additiveOp, shiftOp, relationOp, compareOp, logicOp
-
-atom
-  : expressionNotOperation
+// term should be the same as expression except operation to avoid left-recursion
+term
+  : value
+  | assign
   ;
 
 questionOp
-  : atom QUESTION?
+  : term QUESTION?
   ;
 
 mathOp
@@ -102,6 +94,6 @@ operation
   | simpleAssignable PLUS_PLUS
   | simpleAssignable MINUS_MINUS
   | simpleAssignable COMPOUND_ASSIGN expression
-  //| logicOp
+  | logicOp
   ;
 
