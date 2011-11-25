@@ -10,7 +10,6 @@ LPAREN	:	'(';
 MATH : '*' | '/';
 MINUS : '-';
 MINUS_MINUS : '--';
-NEW : 'new';
 NUMBER	:	('0'..'9')+;
 PLUS : '+';
 PLUS_PLUS : '++';
@@ -20,7 +19,7 @@ RPAREN	:	')';
 SHIFT : '<<' | '>>';
 STRING	:	'"' (('a'..'z') | ' ')* '"';
 TERMINATOR : '\n';
-UNARY : '!' | '~' | NEW;
+UNARY : '!' | '~' | 'new';
 // Put it at the end, so keywords will be matched earlier
 IDENTIFIER :	('a'..'z' | 'A'..'Z')+;
 

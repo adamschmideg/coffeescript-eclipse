@@ -16,9 +16,12 @@ assign
   ;
 
 expression
+  : operation
+  ;
+
+expressionNotOperation
   : value
   | assign
-  | operation
   ;
 
 identifier
@@ -51,14 +54,8 @@ parenthetical
   : LPAREN body RPAREN
   ;
 
-// term should be the same as expression except operation to avoid left-recursion
-term
-  : value
-  | assign
-  ;
-
 questionOp
-  : term QUESTION?
+  : expressionNotOperation QUESTION?
   ;
 
 mathOp

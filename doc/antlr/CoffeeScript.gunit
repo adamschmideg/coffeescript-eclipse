@@ -14,13 +14,16 @@ value:
 
 operation:
 "!reversed" OK
-"new Object" FAIL // :(
+"new Object" OK
 "-4" OK
 "++foo" OK
 "bar++" OK
 "count += 1" OK
-"nullable?" FAIL // :(
-"2 + 3" FAIL // :(
+"nullable?" OK
+"2 + 3" OK
 
 assign:
-"count = 0" OK // :(
+"count = 0" OK
+
+expression:
+"+" FAIL
