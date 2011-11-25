@@ -38,6 +38,9 @@
    An expression can be an operation or a function call.
    The operand in an operation can be any expression, including a
    function call.
+ * The lesson learned is this: if I have `expression: operation | whatever`,
+   and `whatever` can be reached via `operation`, then omit it from the
+   right-hand side of `expression`.
  * I'm not sure how close I can stay to the original LR grammar.
 
   [1]: http://jevopisdeveloperblog.blogspot.com/2011/03/implement-tostring-with-xtexts.html

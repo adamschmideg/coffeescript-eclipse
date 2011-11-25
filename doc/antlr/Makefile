@@ -31,3 +31,12 @@ out/Test.class: out/Test.java out/CoffeeScriptParser.class
 
 out/CoffeeScriptParser.class: out/CoffeeScriptParser.java
 	javac -cp devel/${ANTLR3} out/*.java -d out
+
+fun: init out/FunExpParser.class FunExp.gunit
+	java -cp devel/${ANTLR3}:out org.antlr.gunit.Interp FunExp.gunit
+
+out/FunExpParser.class: out/FunExpParser.java
+	javac -cp devel/${ANTLR3}:out out/FunExpParser.java out/FunExpLexer.java -d out
+
+out/FunExpParser.java: FunExp.g
+	java -jar devel/${ANTLR3} -o out FunExp.g
