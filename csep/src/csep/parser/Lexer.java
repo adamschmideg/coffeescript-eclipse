@@ -6,10 +6,7 @@ import java.util.List;
 import org.antlr.runtime.ANTLRStringStream;
 import org.antlr.runtime.CharStream;
 import org.antlr.runtime.CommonToken;
-import org.antlr.runtime.RecognitionException;
 import org.antlr.runtime.Token;
-
-import beaver.Symbol;
 
 import com.aptana.editor.coffee.parsing.Terminals;
 import com.aptana.editor.coffee.parsing.lexer.CoffeeScanner;

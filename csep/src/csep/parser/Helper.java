@@ -6,7 +6,6 @@ import java.lang.reflect.Modifier;
 
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.xtext.parsetree.reconstr.Serializer;
-import org.eclipse.xtext.resource.SaveOptions;
 
 import com.google.inject.Guice;
 
@@ -45,7 +44,7 @@ public class Helper {
 		}
 		try {
 			StringBuffer buf = new StringBuffer();
-			Class clazz = eobj.getClass();
+			Class<? extends EObject> clazz = eobj.getClass();
 			buf.append(clazz.getSimpleName() + "\n");
 			Field[] fields = clazz.getDeclaredFields();
 			for (Field f : fields) {
@@ -55,8 +54,8 @@ public class Helper {
 					String methodName = "get"
 							+ name.substring(0, 1).toUpperCase()
 							+ name.substring(1, name.length());
-					Method method = clazz.getDeclaredMethod(methodName, null);
-					Object child = method.invoke(eobj, null);
+					Method method = clazz.getDeclaredMethod(methodName, (Class<?>)null);
+					Object child = method.invoke(eobj, (Object[])null);
 					if (child instanceof EObject) {
 						buf.append(stringify((EObject) child, indent + INDENT));
 					} else {

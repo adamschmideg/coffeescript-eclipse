@@ -8,9 +8,6 @@ package com.aptana.editor.coffee.parsing;
 public class CoffeeCommentNode 
 {
 	private String fText;
-	private int start;
-	private int end;
-
 	/**
 	 * CoffeeCommentNode
 	 * 
@@ -20,8 +17,6 @@ public class CoffeeCommentNode
 	 */
 	public CoffeeCommentNode(String text, int start, int end)
 	{
-		this.start = start;
-		this.end = end;
 		fText = text;
 	}
 
