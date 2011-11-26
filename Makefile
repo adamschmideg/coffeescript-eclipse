@@ -1,6 +1,7 @@
+#TODO: devel/all.jar gets regenerated every time
+#TODO: `source/config/make.config` doesn't work
 
-JARS=\
-/org.apache.log4j_1.2.15.v201012070815.jar\
+JARS=/org.apache.log4j_1.2.15.v201012070815.jar\
 /org.eclipse.xtext_2.1.0.v201111010612.jar\
 /org.eclipse.emf.ecore.xmi_2.7.0.v20110520-1406.jar\
 /org.eclipse.emf.ecore_2.7.0.v20110912-0920.jar\
@@ -32,7 +33,10 @@ JARS=\
 /org.apache.commons.logging_1.0.4.v201101211617.jar\
 /org.eclipse.xtext.ui.codetemplates_2.1.0.v201111010612.jar
 
-init: devel/lib createjars
+convert: devel/all.jar
+	cd csep; java -jar ../devel/all.jar src/csep/GenerateCoffeeScript.mwe2
+
+init: devel/lib
 
 config:
 	source config/make.config
@@ -40,18 +44,15 @@ config:
 devel/lib:
 	mkdir -p devel/lib
 
-createjars: MANIFEST.MF copyjars.sh
-	sh copyjars.sh
-	jar cvfm devel/all.jar MANIFEST.MF csep/bin
-	rm MANIFEST.MF copyjars.sh
+devel/all.jar: init devel/manifest devel/copyjars.sh
+	sh devel/copyjars.sh
+	jar cvfm devel/all.jar devel/manifest -C csep/bin .
 
-MANIFEST.MF:
-	echo 'Main-Class: org.eclipse.emf.mwe2.launch.runtime.Mwe2Launcher' > MANIFEST.MF
-	echo "Class-Path: ${JARS}" | sed -e "s|/|lib/|g" >> MANIFEST.MF
+devel/manifest:
+	echo 'Main-Class: org.eclipse.emf.mwe2.launch.runtime.Mwe2Launcher' > devel/manifest
+	echo "Class-Path: ${JARS}" | sed -e 's| | \n |g' -e "s|/|lib/|g" >> devel/manifest
 
-copyjars.sh: 
-	echo ${JARS} | sed 's/ /\n/g' | sed -e "s|^|cp ${ECLIPSE_HOME}/plugins/|" -e 's|.jar|.jar devel/lib|' > copyjars.sh
+devel/copyjars.sh: 
+	echo ${JARS} | sed 's/ /\n/g' | sed -e "s|^|cp ${ECLIPSE_HOME}/plugins/|" -e 's|.jar|.jar devel/lib|' > devel/copyjars.sh
 
-convert:
-	cd csep; java -jar ../devel/all.jar src/csep/GenerateCoffeeScript.mwe2
 
