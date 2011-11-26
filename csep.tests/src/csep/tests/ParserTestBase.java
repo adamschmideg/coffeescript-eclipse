@@ -1,14 +1,14 @@
 package csep.tests;
 
+import junit.framework.Assert;
+
+import org.eclipse.xtext.junit4.InjectWith;
+import org.eclipse.xtext.junit4.util.ParseHelper;
+
 import com.google.inject.Inject;
+
 import csep.coffeeScript.Root;
 import csep.parser.Helper;
-import csep.tests.InjectorProviderCustom;
-import junit.framework.Assert;
-import org.eclipse.xtext.junit4.InjectWith;
-import org.eclipse.xtext.junit4.XtextRunner;
-import org.eclipse.xtext.junit4.util.ParseHelper;
-import org.junit.runner.RunWith;
 
 /**
  * Enable testing if a code snippet gets parsed as expected.

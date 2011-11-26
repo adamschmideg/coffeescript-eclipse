@@ -24,7 +24,42 @@
 	* I found [GOLD parser][4] which has an IDE, but runs only on Windows.
   	  But I may check it out.
 
+* Learning ANTLR
+  * Tried to use the generated python target, but it seemed difficult on
+   Ubuntu: there is no python binding for antlr3, the java version
+   doesn't match with the downloadable python bundles.
+   So I abandon this track, and go back to painful old java.
+ * The difficulty seems to be left-factoring expressions.
+   I asked for [help with left-factoring expressions][5] at Stackoverflow.
+ * I got an answer to my question which doesn't fix the problem but
+   helped me understand it.
+   The issue boils down to this: write a simple expression language with
+   function calls.
+   An expression can be an operation or a function call.
+   The operand in an operation can be any expression, including a
+   function call.
+ * The lesson learned is this: if I have `expression: operation | whatever`,
+   and `whatever` can be reached via `operation`, then omit it from the
+   right-hand side of `expression`.
+ * I'm not sure how close I can stay to the original LR grammar.
+
+* [Convert Antlr grammar to Xtext][6]
+ * Terminals should be prefixed with `terminal`
+ * The first rule should be the root, it cannot be a terminal
+ * Fix the error `Cannot create datatype X` by including
+   `import "http://www.eclipse.org/emf/2002/Ecore" as ecore` right after
+   the first line
+ * Fix the error `Generated package X may not be empty` by including a
+  feature in the root rule.
+  If you have `Root: Foo`, replace it with `Root: bar=Foo`.
+ * Rules are case-insensitive, you cannot have a terminal ID and a rule
+  Id in the same file.
+ * Optionally you may want to capitalize the rule names to follow the
+  java convention.
+
   [1]: http://jevopisdeveloperblog.blogspot.com/2011/03/implement-tostring-with-xtexts.html
   [2]: http://www.eclipse.org/Xtext/documentation/2_1_0/100-serialization.php#serializationcontract 
   [3]: http://stackoverflow.com/questions/8154790/visualize-lalr-grammar
   [4]: http://goldparser.org/
+  [5]: http://stackoverflow.com/questions/8263772/left-factoring-grammar-of-coffeescript-expressions
+  [6]: http://stackoverflow.com/questions/8279790/convert-simple-antlr-grammar-to-xtext

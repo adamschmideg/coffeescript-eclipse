@@ -1,11 +1,8 @@
 package csep.tests
 
-import org.junit.runner.RunWith
-import org.eclipse.xtext.junit4.XtextRunner
 import org.eclipse.xtext.junit4.InjectWith
+import org.eclipse.xtext.junit4.XtextRunner
 import org.junit.Test
-import csep.coffeeScript.Assign
-import java.util.*
 
 @org.junit.runner.RunWith(typeof(XtextRunner))
 @InjectWith(typeof(InjectorProviderCustom))

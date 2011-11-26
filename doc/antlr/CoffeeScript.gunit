@@ -1,0 +1,29 @@
+gunit CoffeeScript;
+
+identifier:
+"foo" OK
+"fooBar" OK
+"new" FAIL // keyword
+
+value:
+"32" OK
+"\"some text\"" OK
+"somevar" OK
+"(42)" OK
+" ( 3 ) " OK
+
+operation:
+"!reversed" OK
+"new Object" OK
+"-4" OK
+"++foo" OK
+"bar++" OK
+"count += 1" OK
+"nullable?" OK
+"2 + 3" OK
+
+assign:
+"count = 0" OK
+
+expression:
+"+" FAIL
