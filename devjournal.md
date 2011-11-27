@@ -57,9 +57,22 @@
  * Optionally you may want to capitalize the rule names to follow the
   java convention.
 
+* Expression grammar works now, but with `Decision can match input such
+   as XXX using multiple alternatives` warnings.
+   Exploring it led to [this Stackoverflow question][7] for this grammar
+   (converted to Xtext):
+     ```
+     Exp: it=Factor;
+     Factor: Atom ({Factor.left=current} op=('*' | '/') right=Atom)*;
+     Atom: INT | ':' Exp;
+     terminal INT: ('0'..'9')+;
+     ```
+  It gives a warning, too.
+
   [1]: http://jevopisdeveloperblog.blogspot.com/2011/03/implement-tostring-with-xtexts.html
   [2]: http://www.eclipse.org/Xtext/documentation/2_1_0/100-serialization.php#serializationcontract 
   [3]: http://stackoverflow.com/questions/8154790/visualize-lalr-grammar
   [4]: http://goldparser.org/
   [5]: http://stackoverflow.com/questions/8263772/left-factoring-grammar-of-coffeescript-expressions
   [6]: http://stackoverflow.com/questions/8279790/convert-simple-antlr-grammar-to-xtext
+  [7]: http://stackoverflow.com/questions/7954142/antlr-decision-can-match-input-using-multiple-alternatives
