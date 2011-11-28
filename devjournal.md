@@ -57,6 +57,12 @@
  * Optionally you may want to capitalize the rule names to follow the
   java convention.
 
+* Running headless with make
+  * I'm going to abandod this because eclipse packages are versioned with a build date too which is difficult to handle in a Makefile.
+  * Possible (and time-consuming) solutions are
+    * use some dependency management tool, such as ivy
+    * do some bash scripting magic to find foo-[version]-v[build-date].jar and copy it as foo-[version].jar
+
   [1]: http://jevopisdeveloperblog.blogspot.com/2011/03/implement-tostring-with-xtexts.html
   [2]: http://www.eclipse.org/Xtext/documentation/2_1_0/100-serialization.php#serializationcontract 
   [3]: http://stackoverflow.com/questions/8154790/visualize-lalr-grammar
