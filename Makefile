@@ -1,5 +1,4 @@
 #TODO: devel/all.jar gets regenerated every time
-#TODO: `source/config/make.config` doesn't work
 
 JARS=/org.apache.log4j_1.2.15.v201012070815.jar\
 /org.eclipse.xtext_2.1.0.v201111010612.jar\
@@ -33,7 +32,9 @@ JARS=/org.apache.log4j_1.2.15.v201012070815.jar\
 /org.apache.commons.logging_1.0.4.v201101211617.jar\
 /org.eclipse.xtext.ui.codetemplates_2.1.0.v201111010612.jar
 
-convert: devel/all.jar
+ECLIPSE_HOME=`cat config/make.config | grep 'eclipse.home' | sed -e 's/eclipse.home=\(.*\)/\1/'`
+
+convert: init devel/all.jar
 	cd csep; java -jar ../devel/all.jar src/csep/GenerateCoffeeScript.mwe2
 
 init: devel/lib
@@ -44,7 +45,7 @@ config:
 devel/lib:
 	mkdir -p devel/lib
 
-devel/all.jar: init devel/manifest devel/copyjars.sh
+devel/all.jar: devel/manifest devel/copyjars.sh
 	sh devel/copyjars.sh
 	jar cvfm devel/all.jar devel/manifest -C csep/bin .
 
