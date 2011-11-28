@@ -1,0 +1,84 @@
+/* The token values are for making testing/development easier, 
+ * because an external lexer will be used.
+ */
+grammar csep.Tokens
+
+import "http://www.eclipse.org/emf/2002/Ecore" as ecore
+
+terminal AT_SIGIL: 'dummy AT_SIGIL';
+terminal BOOL: 'dummy BOOL';
+terminal BOUND_FUNC_ARROW: 'dummy BOUND_FUNC_ARROW';
+terminal BY: 'dummy BY';
+terminal CALL_END: 'dummy CALL_END';
+terminal CALL_START: 'dummy CALL_START';
+terminal CATCH: 'dummy CATCH';
+terminal CLASS: 'dummy CLASS';
+terminal COLON: 'dummy COLON';
+terminal COLON_SLASH: 'dummy COLON_SLASH';
+terminal COMMA: 'dummy COMMA';
+terminal COMPARE : '<' | '==' | '>' | '<=' | '>=' | '!=';
+terminal COMPOUND_ASSIGN: '+=' | '-=';
+terminal DOT_DOT: 'dummy DOT_DOT';
+terminal DOT: 'dummy DOT';
+terminal DOUBLE_COLON: 'dummy DOUBLE_COLON';
+terminal ELLIPSIS: 'dummy ELLIPSIS';
+terminal ELSE: 'dummy ELSE';
+terminal EQUAL: '=';
+terminal EXTENDS: 'dummy EXTENDS';
+terminal FINALLY: 'dummy FINALLY';
+terminal FOR: 'dummy FOR';
+terminal FORIN: 'dummy FORIN';
+terminal FOROF: 'dummy FOROF';
+terminal FUNC_ARROW: 'dummy FUNC_ARROW';
+terminal FUNC_EXIST: 'dummy FUNC_EXIST';
+terminal HERECOMMENT: 'dummy HERECOMMENT';
+terminal IF: 'dummy IF';
+terminal INDENT: '{*'; // just for testing!
+terminal INDEX_END: 'dummy INDEX_END';
+terminal INDEX_PROTO: 'dummy INDEX_PROTO';
+terminal INDEX_SOAK: 'dummy INDEX_SOAK';
+terminal INDEX_START: 'dummy INDEX_START';
+terminal JS: 'dummy JS';
+terminal LBRACKET: 'dummy LBRACKET';
+terminal LCURLY: 'dummy LCURLY';
+terminal LEADING_WHEN: 'dummy LEADING_WHEN';
+terminal LOGIC: '&&' | '||';
+terminal LOOP: 'dummy LOOP';
+terminal LPAREN: '(';
+terminal MATH: '*' | '/';
+terminal MINUS: '-';
+terminal MINUS_MINUS: '--';
+terminal NEW: 'dummy NEW';
+terminal NUMBER returns ecore::EInt: ('0'..'9')+;
+terminal OUTDENT: '*}';
+terminal OWN: 'dummy OWN';
+terminal PARAM_END: 'dummy PARAM_END';
+terminal PARAM_START: 'dummy PARAM_START';
+terminal PLUS: '+';
+terminal PLUS_PLUS: '++';
+terminal POST_IF: 'dummy POST_IF';
+terminal QUESTION: '?';
+terminal QUESTION_DOT: 'dummy QUESTION_DOT';
+terminal RBRACKET: 'dummy RBRACKET';
+terminal RCURLY: 'dummy RCURLY';
+terminal REGEX: 'dummy REGEX';
+terminal RELATION: 'in' | 'of' | 'instanceof'; 
+terminal RETURN: 'dummy RETURN';
+terminal RPAREN: ')';
+terminal SHIFT: '<<' | '>>';
+terminal STATEMENT: 'dummy STATEMENT';
+terminal STRING: '"' (('a'..'z') | ' ')* '"';
+terminal SUPER: 'dummy SUPER';
+terminal SWITCH: 'dummy SWITCH';
+terminal TERMINATOR: '\n';
+terminal THEN: 'dummy THEN';
+terminal THIS: 'dummy THIS';
+terminal THROW: 'dummy THROW';
+terminal TRY: 'dummy TRY';
+terminal UNARY: '!' | '~' | 'new';
+terminal UNTIL: 'dummy UNTIL';
+terminal WHEN: 'dummy WHEN';
+terminal WHILE: 'dummy WHILE';
+
+// Put it at the end, so keywords will be matched earlier
+terminal IDENTIFIER: '^'?('a'..'z'|'A'..'Z'|'_') ('a'..'z'|'A'..'Z'|'_'|'0'..'9')*;
