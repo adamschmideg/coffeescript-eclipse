@@ -7,6 +7,8 @@ import org.eclipse.xtext.junit4.util.ParseHelper;
 
 import com.google.inject.Inject;
 
+import csep.coffeeScript.Body;
+import csep.coffeeScript.Line;
 import csep.coffeeScript.Root;
 import csep.parser.Helper;
 
@@ -26,6 +28,16 @@ public class ParserTestBase {
 		if (expected != null && snippet != null) {
 			Root root = parser.parse(snippet.toString());
 			String parsed = Helper.stringify(root).trim();
+			String expectedStr = expected.toString().trim();
+			Assert.assertEquals(expectedStr, parsed);
+		}
+	}
+	
+	public void checkLine(final Object snippet, final Object expected) throws Exception {
+		if (expected != null && snippet != null) {
+			Body body = (Body)parser.parse(snippet.toString());
+			Line line = body.getLines().get(0);
+			String parsed = Helper.stringify(line).trim();
 			String expectedStr = expected.toString().trim();
 			Assert.assertEquals(expectedStr, parsed);
 		}

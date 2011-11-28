@@ -54,8 +54,8 @@ public class Helper {
 					String methodName = "get"
 							+ name.substring(0, 1).toUpperCase()
 							+ name.substring(1, name.length());
-					Method method = clazz.getDeclaredMethod(methodName, (Class<?>)null);
-					Object child = method.invoke(eobj, (Object[])null);
+					Method method = clazz.getDeclaredMethod(methodName);
+					Object child = method.invoke(eobj);
 					if (child instanceof EObject) {
 						buf.append(stringify((EObject) child, indent + INDENT));
 					} else {

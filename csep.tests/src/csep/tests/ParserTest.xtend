@@ -10,7 +10,7 @@ class ParserTest extends ParserTestBase {
 	
 	@Test
 	def void testSimple() {
-		check('4 * 3 - 2', '''
+		checkLine('4 * 3 - 2', '''
 AdditiveOp
   left: MathOp
     left: NumberLiteral
@@ -25,7 +25,7 @@ AdditiveOp
 	
 	@Test
 	def void testCompare() {
-		check('(2 == 3) + (2 < 4)', '''
+		checkLine('(2 == 3) + (2 < 4)', '''
 AdditiveOp
   left: CompareOp
     left: NumberLiteral
