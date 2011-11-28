@@ -3,61 +3,93 @@ import "http://www.eclipse.org/emf/2002/Ecore" as ecore
 
 generate coffeeScript "http://www.coffeescript.org/eclipse"
 
-/**
- * The <var>Root</var> is the top-level node in the syntax tree. Since we parse
- * bottom-up, all parsing must end here.
- */
-//Root: Body | Block TERMINATOR;
-Root: Operation;
+Root
+  : Body
+  ;
 
-/**
- * Any list of statements and expressions, separated by line breaks or
- * semicolons.
- */
-Body: Line (TERMINATOR lines+=Line)*;
+Body
+  : Line (TERMINATOR lines+=Line)
+  ;
 
-/**
- * Block and statements, which make up a line in a body.
- */
-Line: Expression;
+Line
+  : Expression
+  ;
 
-/**
- * Pure statements which cannot be expressions.
- */
-StatementRule: Comment | STATEMENT;
+Assign
+  : Assignable EQUAL Expression
+  ;
 
-Comment: HERECOMMENT;
+Operand
+  : Value
+  | Assign
+  ;
 
-/**
- * All the different types of expressions in our language. The basic unit of
- * CoffeeScript is the <var>Expression</var> -- everything that can be an
- * expression is one. Blocks serve as the building blocks of many other rules,
- * making them somewhat circular.
- */
-Expression: Assign;
+Expression
+  : Operation
+  ;
 
-/**
- * An indented block of expressions. Note that the [Rewriter](rewriter.html)
- * will convert some postfix forms into blocks for us, by adjusting the token
- * stream.
- */
-Block: {Block} INDENT Body? OUTDENT;
+SimpleAssignable
+  : IDENTIFIER
+  ;
 
-Assign: IDENTIFIER EQUAL Operation;
+Assignable
+  : SimpleAssignable
+  ;
 
-Operation: CompareOp;
+Value
+  : Assignable
+  | Literal
+  | Parenthetical
+  ;
 
-CompareOp returns Operation:
-  AdditiveOp ({CompareOp.left=current} operator=COMPARE right=AdditiveOp)*;
+Literal
+  : AlphaNumeric
+  ;
 
-AdditiveOp returns Operation:
-  MathOp ({AdditiveOp.left=current} operator=(PLUS | MINUS) right=MathOp)*;
-  
-MathOp returns Operation:
- Primary ({MathOp.left=current} operator=MATH right=Primary)*;
+AlphaNumeric
+  : NUMBER 
+  | STRING;
 
-Primary returns Operation:
- NumberLiteral |
- LPAREN Operation RPAREN;
- 
-NumberLiteral: value=NUMBER;
+Parenthetical
+  : LPAREN Body RPAREN
+  ;
+
+QuestionOp returns Operation
+  : Operand ({QuestionOp.operand=current} QUESTION)?
+  ;
+
+MathOp returns Operation
+  : QuestionOp ({MathOp.left=current} operator=MATH right=QuestionOp)*
+  ;
+
+AdditiveOp returns Operation
+  : MathOp ({AdditiveOp.left=current} operator=(PLUS | MINUS) right=MathOp)*
+  ;
+
+ShiftOp returns Operation
+  : AdditiveOp ({ShiftOp.left=current} operator=SHIFT right=AdditiveOp)*
+  ;
+
+RelationOp returns Operation
+  : ShiftOp ({RelationOp.left=current} operator=RELATION right=ShiftOp)*
+  ;
+
+CompareOp returns Operation
+  : RelationOp ({CompareOp.left=current} operator=COMPARE right=RelationOp)*
+  ;
+
+LogicOp returns Operation
+  : CompareOp ({LogicOp.left=current} operator=LOGIC right=CompareOp)*
+  ;
+
+Operation
+  : UNARY Operation
+  | MINUS Operation
+  | PLUS Operation
+  | MINUS_MINUS SimpleAssignable
+  | PLUS_PLUS SimpleAssignable
+  | SimpleAssignable PLUS_PLUS
+  | SimpleAssignable MINUS_MINUS
+  | SimpleAssignable COMPOUND_ASSIGN Operation
+  | LogicOp
+  ;
