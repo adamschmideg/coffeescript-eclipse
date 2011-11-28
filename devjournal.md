@@ -63,9 +63,13 @@
     * use some dependency management tool, such as ivy
     * do some bash scripting magic to find foo-[version]-v[build-date].jar and copy it as foo-[version].jar
 
+* Terminals in a separate file.
+  Well, [I've struggled with it][7].
+
   [1]: http://jevopisdeveloperblog.blogspot.com/2011/03/implement-tostring-with-xtexts.html
   [2]: http://www.eclipse.org/Xtext/documentation/2_1_0/100-serialization.php#serializationcontract 
   [3]: http://stackoverflow.com/questions/8154790/visualize-lalr-grammar
   [4]: http://goldparser.org/
   [5]: http://stackoverflow.com/questions/8263772/left-factoring-grammar-of-coffeescript-expressions
   [6]: http://stackoverflow.com/questions/8279790/convert-simple-antlr-grammar-to-xtext
+  [7]: http://stackoverflow.com/questions/8302333/xtext-grammar-in-two-files

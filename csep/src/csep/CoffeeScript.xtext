@@ -8,7 +8,7 @@ Root
   ;
 
 Body
-  : Line (TERMINATOR lines+=Line)
+  : lines+=Line (TERMINATOR lines+=Line)
   ;
 
 Line
@@ -16,7 +16,7 @@ Line
   ;
 
 Assign
-  : Assignable EQUAL Expression
+  : left=Assignable EQUAL right=Expression
   ;
 
 Operand
