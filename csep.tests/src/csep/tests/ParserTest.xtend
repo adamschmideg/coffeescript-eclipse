@@ -63,4 +63,12 @@ Assign
     right: NumberLiteral
       value: 1''')
 	}
+	
+	@Test
+	def void testWrongAssignment() {
+		// TODO: this should fail, not just parse partially
+		checkLine('1 = 2', '''
+NumberLiteral
+  value: 1''')
+	}
 }
