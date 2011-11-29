@@ -62,9 +62,9 @@ public class Helper {
 		for (Map.Entry<String,Object> entry : props.entrySet()) {
 			Object child = entry.getValue();
 			if (child != null && !IGNORE_PROP_NAMES.contains(entry.getKey())) {
-				buf.append(indent + entry.getKey() + ": ");
+				buf.append(indent + entry.getKey() + ":");
 				if (child instanceof EObject) {
-					buf.append(stringify((EObject) child, indent + INDENT));
+					buf.append(" " + stringify((EObject) child, indent + INDENT));
 				} 
 				else if (child instanceof List) {
 					buf.append("\n");
@@ -73,7 +73,7 @@ public class Helper {
 						buf.append(stringify(kid, indent + INDENT + INDENT));
 					}
 				} else {
-					buf.append("" + child + "\n");
+					buf.append(" " + child + "\n");
 				}
 			}
 		}

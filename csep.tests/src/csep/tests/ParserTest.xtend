@@ -36,14 +36,14 @@ AdditiveOp+
 		checkLine('(2 == 3) + (2 < 4)', '''
 AdditiveOp+
   left: Body
-    lines: 
+    lines:
       CompareOp==
         left: NumberLiteral
           value: 2
         right: NumberLiteral
           value: 3
   right: Body
-    lines: 
+    lines:
       CompareOp<
         left: NumberLiteral
           value: 2
@@ -70,5 +70,26 @@ Assign
 		checkLine('1 = 2', '''
 NumberLiteral
   value: 1''')
+	}
+	
+	@Test
+	def void testMoreLines() {
+		check('''
+		a = 3
+		b = 4
+		''', '''
+Body
+  lines:
+    Assign
+      left: Id
+        name: a
+      right: NumberLiteral
+        value: 3
+    Assign
+      left: Id
+        name: b
+      right: NumberLiteral
+        value: 4		
+		''')
 	}
 }
