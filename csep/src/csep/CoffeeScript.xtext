@@ -28,8 +28,10 @@ Expression
   : Operation
   ;
 
+Id: name=IDENTIFIER;
+
 SimpleAssignable
-  : IDENTIFIER
+  : Id
   ;
 
 Assignable
@@ -42,13 +44,14 @@ Value
   | Parenthetical
   ;
 
-Literal
-  : AlphaNumeric
-  ;
+NumberLiteral: value=NUMBER;
 
-AlphaNumeric
-  : NUMBER 
-  | STRING;
+StringLiteral: value=STRING;
+
+Literal
+  : NumberLiteral
+  | StringLiteral
+  ;
 
 Parenthetical
   : LPAREN Body RPAREN
@@ -90,7 +93,7 @@ Operation
   | PLUS_PLUS SimpleAssignable
   | SimpleAssignable PLUS_PLUS
   | SimpleAssignable MINUS_MINUS
-  | SimpleAssignable COMPOUND_ASSIGN Operation
+  | left=SimpleAssignable operator=COMPOUND_ASSIGN right=Operation
   | LogicOp
   ;
 

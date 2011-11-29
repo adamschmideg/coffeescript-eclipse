@@ -4,6 +4,11 @@ import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.xtext.parsetree.reconstr.Serializer;
@@ -20,6 +25,7 @@ import csep.CoffeeScriptRuntimeModule;
 public class Helper {
 	public final static String INDENT = "  ";
 	private static Serializer serializer;
+	public final static Set<String> IGNORE_PROP_NAMES = new HashSet<String>(Arrays.asList(new String[]{"class", "operator"}));
 
 	public static Serializer getSerializer() {
 		if (serializer == null) {
@@ -43,48 +49,50 @@ public class Helper {
 		if (eobj == null) {
 			return "null";
 		}
-		try {
-			StringBuffer buf = new StringBuffer();
-			Class<? extends EObject> clazz = eobj.getClass();
-			Object maybeOperator = getProperty(eobj, "operator");
-			String name = clazz.getSimpleName();
-			if (maybeOperator != null)
-				name += "" + maybeOperator;
-			buf.append(name + "\n");
-			Field[] fields = clazz.getDeclaredFields();
-			for (Field f : fields) {
-				String propName = f.getName();
-				if (!Modifier.isStatic(f.getModifiers()) && !"operator".equals(propName)) {
-					Object child = getProperty(eobj, propName);
-					buf.append(indent + propName + ": ");
-					if (child instanceof EObject) {
-						buf.append(stringify((EObject) child, indent + INDENT));
-					} else {
-						buf.append("" + child + "\n");
-					}
+		StringBuffer buf = new StringBuffer();
+		Class<? extends EObject> clazz = eobj.getClass();
+		Map<String, Object> props = getProperties(eobj);
+		Object maybeOperator = props.get("operator");
+		String name = clazz.getSimpleName();
+		if (maybeOperator != null) {
+			name += "" + maybeOperator;
+		}
+		buf.append(name + "\n");
+		for (Map.Entry<String,Object> entry : props.entrySet()) {
+			Object child = entry.getValue();
+			if (child != null && !IGNORE_PROP_NAMES.contains(entry.getKey())) {
+				buf.append(indent + entry.getKey() + ": ");
+				if (child instanceof EObject) {
+					buf.append(stringify((EObject) child, indent + INDENT));
+				} else {
+					buf.append("" + child + "\n");
 				}
 			}
-			return buf.toString().replace("Impl", "");
-		} catch (Exception ex) { // fall back:
-			ex.printStackTrace();
-			return eobj.getClass().getSimpleName() + '@' + eobj.hashCode();
 		}
+		return buf.toString().replace("Impl", "");
 	}
-	
+
 	/**
-	 * Get the value of a property
-	 * @param obj whose property is read
-	 * @param name of the property
+	 * Why do I have to write this function??!
 	 */
-	public static Object getProperty(Object obj, String name) {
-		try {
-			String methodName = "get" + name.substring(0, 1).toUpperCase()
-					+ name.substring(1, name.length());
-			Method method = obj.getClass().getDeclaredMethod(methodName);
-			Object prop = method.invoke(obj);
-			return prop;
-		} catch (Exception e) {
-			return null;
+	public static Map<String,Object> getProperties(Object obj) {
+		Map<String,Object> props = new HashMap<String,Object>();
+		for (Method m: obj.getClass().getMethods()) {
+			int mod = m.getModifiers();
+			if (Modifier.isPublic(mod) && 
+					!Modifier.isStatic(mod) && 
+					m.getParameterTypes().length == 0 &&
+					m.getName().startsWith("get")) {
+				String name = m.getName().substring(3,4).toLowerCase() + m.getName().substring(4);
+				Object value = null;
+				try {
+					value = m.invoke(obj);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+				props.put(name, value);
+			}
 		}
+		return props;
 	}
 }
