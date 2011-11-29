@@ -65,6 +65,18 @@ Assign
 	}
 	
 	@Test
+	def void testBlockAssign() {
+	  checkLine('''
+	  a =
+	    42''', '''
+Assign
+  left: Id
+    name: a
+  right: NumberLiteral
+    value: 42''')
+	}
+	
+	@Test
 	def void testWrongAssignment() {
 		// TODO: this should fail, not just parse partially
 		checkLine('1 = 2', '''

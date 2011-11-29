@@ -5,18 +5,23 @@ generate coffeeScript "http://www.coffeescript.org/eclipse"
 
 Root
   : Body
+  | Block TERMINATOR
   ;
 
 Body
-  : lines+=Line (TERMINATOR lines+=Line)
+  : lines+=Line (TERMINATOR lines+=Line?)*
   ;
 
 Line
   : Expression
   ;
 
+Block
+  : {Block} INDENT Body? OUTDENT
+  ;
+  
 Assign
-  : left=Assignable EQUAL right=Expression
+  : left=Assignable EQUAL (right=Expression | (INDENT right=Expression OUTDENT))
   ;
 
 Operand
