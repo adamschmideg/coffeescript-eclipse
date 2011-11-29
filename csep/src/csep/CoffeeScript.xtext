@@ -24,11 +24,22 @@ Assign
   : left=Assignable EQUAL (right=Expression | (INDENT right=Expression OUTDENT))
   ;
 
+// This is a central unit of the grammar, like 'expression' in the original grammar
 Operand
   : Value
   | Assign
+  | IfBlock
   ;
 
+IfBlock
+  : IF condition=Expression trueBlock=Block (elseIfBlocks+=ElseIfBlock)* (ELSE falseBlock=Block)?
+  ;
+
+ElseIfBlock
+  : ELSE IF condition=Expression trueBlock=Block	
+  ;
+  
+// See also Operand
 Expression
   : Operation
   ;
