@@ -35,16 +35,20 @@ AdditiveOp+
 	def void testCompare() {
 		checkLine('(2 == 3) + (2 < 4)', '''
 AdditiveOp+
-  left: CompareOp==
-    left: NumberLiteral
-      value: 2
-    right: NumberLiteral
-      value: 3
-  right: CompareOp<
-    left: NumberLiteral
-      value: 2
-    right: NumberLiteral
-      value: 4''')
+  left: Body
+    lines: 
+      CompareOp==
+        left: NumberLiteral
+          value: 2
+        right: NumberLiteral
+          value: 3
+  right: Body
+    lines: 
+      CompareOp<
+        left: NumberLiteral
+          value: 2
+        right: NumberLiteral
+          value: 4''')
 	}	
 	
 	@Test

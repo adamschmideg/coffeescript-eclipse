@@ -7,6 +7,7 @@ import java.lang.reflect.Modifier;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -45,13 +46,13 @@ public class Helper {
 		return stringify(eobj, INDENT);
 	}
 
-	protected static String stringify(EObject eobj, String indent) {
-		if (eobj == null) {
+	protected static String stringify(Object obj, String indent) {
+		if (obj == null) {
 			return "null";
 		}
 		StringBuffer buf = new StringBuffer();
-		Class<? extends EObject> clazz = eobj.getClass();
-		Map<String, Object> props = getProperties(eobj);
+		Class<?> clazz = obj.getClass();
+		Map<String, Object> props = getProperties(obj);
 		Object maybeOperator = props.get("operator");
 		String name = clazz.getSimpleName();
 		if (maybeOperator != null) {
@@ -64,6 +65,13 @@ public class Helper {
 				buf.append(indent + entry.getKey() + ": ");
 				if (child instanceof EObject) {
 					buf.append(stringify((EObject) child, indent + INDENT));
+				} 
+				else if (child instanceof List) {
+					buf.append("\n");
+					for (Object kid: (List<?>)child) {
+						buf.append(indent + INDENT);
+						buf.append(stringify(kid, indent + INDENT + INDENT));
+					}
 				} else {
 					buf.append("" + child + "\n");
 				}
