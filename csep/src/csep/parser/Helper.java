@@ -1,6 +1,7 @@
 package csep.parser;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 
@@ -45,17 +46,17 @@ public class Helper {
 		try {
 			StringBuffer buf = new StringBuffer();
 			Class<? extends EObject> clazz = eobj.getClass();
-			buf.append(clazz.getSimpleName() + "\n");
+			Object maybeOperator = getProperty(eobj, "operator");
+			String name = clazz.getSimpleName();
+			if (maybeOperator != null)
+				name += "" + maybeOperator;
+			buf.append(name + "\n");
 			Field[] fields = clazz.getDeclaredFields();
 			for (Field f : fields) {
-				if (!Modifier.isStatic(f.getModifiers())) {
-					String name = f.getName();
-					buf.append(indent + name + ": ");
-					String methodName = "get"
-							+ name.substring(0, 1).toUpperCase()
-							+ name.substring(1, name.length());
-					Method method = clazz.getDeclaredMethod(methodName);
-					Object child = method.invoke(eobj);
+				String propName = f.getName();
+				if (!Modifier.isStatic(f.getModifiers()) && !"operator".equals(propName)) {
+					Object child = getProperty(eobj, propName);
+					buf.append(indent + propName + ": ");
 					if (child instanceof EObject) {
 						buf.append(stringify((EObject) child, indent + INDENT));
 					} else {
@@ -67,6 +68,23 @@ public class Helper {
 		} catch (Exception ex) { // fall back:
 			ex.printStackTrace();
 			return eobj.getClass().getSimpleName() + '@' + eobj.hashCode();
+		}
+	}
+	
+	/**
+	 * Get the value of a property
+	 * @param obj whose property is read
+	 * @param name of the property
+	 */
+	public static Object getProperty(Object obj, String name) {
+		try {
+			String methodName = "get" + name.substring(0, 1).toUpperCase()
+					+ name.substring(1, name.length());
+			Method method = obj.getClass().getDeclaredMethod(methodName);
+			Object prop = method.invoke(obj);
+			return prop;
+		} catch (Exception e) {
+			return null;
 		}
 	}
 }
