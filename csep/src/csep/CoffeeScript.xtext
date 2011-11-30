@@ -28,16 +28,14 @@ Assign
 Operand
   : Value
   | Assign
-  | IfBlock
+  | IfExp
   ;
 
-IfBlock
-  : IF condition=Expression trueBlock=Block (elseIfBlocks+=ElseIfBlock)* (ELSE falseBlock=Block)?
+IfExp
+  : IF blocks+=CondBlock (ELSE IF blocks+=CondBlock)* (ELSE defaultBlock=Block)?
   ;
 
-ElseIfBlock
-  : ELSE IF condition=Expression trueBlock=Block	
-  ;
+CondBlock: condition=Expression action=Block;
   
 // See also Operand
 Expression
