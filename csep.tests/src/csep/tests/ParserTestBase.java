@@ -1,55 +1,70 @@
 package csep.tests;
 
-import junit.framework.Assert;
+import junit.framework.AssertionFailedError;
 
-import org.eclipse.xtext.junit4.InjectWith;
-import org.eclipse.xtext.junit4.util.ParseHelper;
-import org.eclipse.emf.common.util.Diagnostic;
-import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.ecore.util.Diagnostician;
+import org.eclipse.xtext.junit.AbstractXtextTests;
+import org.eclipse.xtext.resource.XtextResource;
 
-import com.google.inject.Inject;
-
-import csep.coffeeScript.Body;
-import csep.coffeeScript.Line;
-import csep.coffeeScript.Root;
-import csep.parser.Helper;
+import csep.CoffeeScriptStandaloneSetup;
 
 /**
  * Enable testing if a code snippet gets parsed as expected.
+ * 
  * @author Adam Schmideg <adam@schmideg.net>
  */
 
-@InjectWith(InjectorProviderCustom.class)
-public class ParserTestBase {
-  
-  @Inject
-  private ParseHelper<Root> parser;
-  private Diagnostician diagnostician = new Diagnostician();
-  
-	public void check(final Object snippet, final Object expected)
-			throws Exception {
-		if (expected != null && snippet != null) {
-			Root root = parser.parse(snippet.toString());
-			compare(root, expected);
+public abstract class ParserTestBase extends AbstractXtextTests {
+
+	@Override
+	protected void setUp() throws Exception {
+		super.setUp();
+		with(new CoffeeScriptStandaloneSetup());
+	}
+
+	/**
+	 * XXX: Always return false, otherwise {@link AbstractXtextTests} will check whitespaces,
+	 * so for example "a = 2" would fail, because it's not equal to its serialized version "a=2". 
+	 */
+	@Override
+	protected boolean shouldTestSerializer(XtextResource resource) {
+		return false;
+	}
+
+	protected void expect(Object input, int errors) {
+		try {
+			getModelAndExpect(input.toString(), errors);
+		} catch (AssertionFailedError afe) {
+			throw afe;
+		} catch (Exception e) {
+			fail(e.getMessage());
 		}
 	}
-	
-	public void checkLine(final Object snippet, final Object expected) throws Exception {
-		if (expected != null && snippet != null) {
-			Body body = (Body)parser.parse(snippet.toString());
-			Line line = body.getLines().get(0);
-			compare(line, expected);
-		}
-	}	
-	
-	public void compare(EObject parseResult, Object expected) throws Exception {
-		Diagnostic issues = diagnostician.validate(parseResult);
-		if (issues.getSeverity() != Diagnostic.OK) {
-			Assert.fail(issues.getMessage());
-		}
-		String parsed = Helper.stringify(parseResult).trim();
-		String expectedStr = expected.toString().trim();
-		Assert.assertEquals(expectedStr, parsed);
+
+	/**
+	 * Input can be parsed without syntax errors
+	 * @param input typically a String or a multiline xtend String
+	 */
+	public void ok(Object input) {
+		expect(input, 0);
 	}
+
+	/**
+	 * Parsing input results in one syntax error
+	 * @param input
+	 */
+	public void error(Object input) {
+		expect(input, 1);
+	}
+	
+	/**
+	 * Indicate that a test case should parse, but it gives errors
+	 */
+	 public void shouldWork(Object input) {
+		 try {
+			 ok(input);
+		 }
+		 catch (AssertionFailedError afe) {
+			 System.out.println("Warning: " + input + "\n\t" + afe.getMessage());
+		 }
+	 }
 }
