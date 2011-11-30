@@ -1,7 +1,5 @@
 package csep.parser;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.Arrays;
@@ -66,7 +64,7 @@ public class Helper {
 				continue;
 			if (IGNORE_PROP_NAMES.contains(entry.getKey()))
 				continue;
-			if (child instanceof List && ((List) child).isEmpty())
+			if (child instanceof List && ((List<?>) child).isEmpty())
 				continue;
 			buf.append(indent + entry.getKey() + ":");
 			if (child instanceof EObject) {
