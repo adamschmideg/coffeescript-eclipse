@@ -8,7 +8,7 @@ class OperatorsTest extends ParserTestBase {
   def void testBinary() {
     ok('3 + 2')
     ok('4+5')
-    shouldWork('a*-b')
+    shouldBeOk('a*-b')
     error('a +')
   }
 
@@ -27,6 +27,22 @@ class OperatorsTest extends ParserTestBase {
   }
 
   @Test
+  def void testBitwise() {
+    ok('10 &   3')
+    ok('10 |   3')
+    ok('10 ^   3')
+    ok('10 <<  3')
+    ok('10 >>  3')
+    ok('10 >>> 3')
+    ok('num &=   3')
+    ok('num |=   3')
+    ok('num ^=   3')
+    ok('num <<=  3')
+    ok('num >>=  3')
+    ok('num >>>= 3')
+  }
+
+  @Test
   def void testMultipleOperators() {
     ok('- -1')
     error('--1')
@@ -38,6 +54,26 @@ class OperatorsTest extends ParserTestBase {
     ok('new Boolean instanceof Boolean')
     ok('new Number not instanceof String')
     ok('new Array not instanceof Boolean')
+  }
+
+  @Test
+  def void testExistential() {
+    ok('a ? b')
+    shouldBeOk('nothing ? -1')
+    ok('defined?')
+    ok('!nothing?')
+    ok('(1 or 0)?')
+  }
+
+  @Test
+  def void testChainable() {
+    ok('a < b < c')
+  }
+
+  @Test
+  def void testCombinedComparisons() {
+    ok('a < b > c')
+    ok('10 < 20 > 2+3 is 5')
   }
   
 }

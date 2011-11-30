@@ -32,10 +32,11 @@ Operand
   ;
 
 IfExp
-  : IF blocks+=CondBlock (ELSE IF blocks+=CondBlock)* (ELSE defaultBlock=Block)?
+  : blocks+=CondBlock (ELSE blocks+=CondBlock)* (ELSE defaultBlock=Block)?
   ;
 
-CondBlock: condition=Expression action=Block;
+// IF can be 'if' or 'unless'
+CondBlock: operator=IF condition=Expression action=Block;
   
 // See also Operand
 Expression

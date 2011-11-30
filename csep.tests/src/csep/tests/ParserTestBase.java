@@ -61,9 +61,10 @@ public abstract class ParserTestBase extends AbstractXtextTests {
 	/**
 	 * Indicate that a test case should parse, but it gives errors
 	 */
-	 public void shouldWork(Object input) {
+	 public void shouldBeOk(Object input) {
 		 try {
 			 ok(input);
+			 logger.warn("Expected an error, but parsed successfully '" + input + "'");
 		 }
 		 catch (AssertionFailedError afe) {
 			 logger.warn("Expected to successfully parse '" + input + "', but " + afe.getMessage());
