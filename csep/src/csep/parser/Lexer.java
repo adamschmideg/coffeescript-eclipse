@@ -3,6 +3,7 @@ package csep.parser;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.antlr.runtime.ANTLRStringStream;
 import org.antlr.runtime.CharStream;
 import org.antlr.runtime.CommonToken;
@@ -13,6 +14,7 @@ import com.aptana.editor.coffee.parsing.lexer.CoffeeScanner;
 import com.aptana.editor.coffee.parsing.lexer.CoffeeSymbol;
 
 public class Lexer extends csep.parser.antlr.internal.InternalCoffeeScriptLexer {
+	private final static Logger logger = Logger.getLogger(Lexer.class);
 	private CoffeeScanner aptanaScanner;
 
 	public Lexer(CharStream in) {
@@ -46,12 +48,9 @@ public class Lexer extends csep.parser.antlr.internal.InternalCoffeeScriptLexer 
 			e.printStackTrace();
 			token = new CommonToken(CommonToken.INVALID_TOKEN); 
 		}
-		Token superToken = super.nextToken();
-		System.out.println("super: " + superToken);
-		System.out.println("token: " + token);
-		System.out.println();
+		//Token superToken = super.nextToken();
+		logger.debug("token: " + token);
 		return token;
-		//return superToken;
 	}
 
 	public List<Token> tokenize() throws Exception {

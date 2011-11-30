@@ -2,6 +2,7 @@ package csep.tests;
 
 import junit.framework.AssertionFailedError;
 
+import org.apache.log4j.Logger;
 import org.eclipse.xtext.junit.AbstractXtextTests;
 import org.eclipse.xtext.resource.XtextResource;
 
@@ -14,6 +15,7 @@ import csep.CoffeeScriptStandaloneSetup;
  */
 
 public abstract class ParserTestBase extends AbstractXtextTests {
+	private final static Logger logger = Logger.getLogger(ParserTestBase.class);
 
 	@Override
 	protected void setUp() throws Exception {
@@ -64,7 +66,7 @@ public abstract class ParserTestBase extends AbstractXtextTests {
 			 ok(input);
 		 }
 		 catch (AssertionFailedError afe) {
-			 System.out.println("Warning: " + input + "\n\t" + afe.getMessage());
+			 logger.warn("Expected to successfully parse '" + input + "', but " + afe.getMessage());
 		 }
 	 }
 }
