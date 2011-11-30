@@ -67,6 +67,10 @@
   Well, [I've struggled with it][7].
 
 * Partial parsing instead of failure: `1 = 2` should fail, but it the first token gets parsed, the rest discarded without any error message.
+  * Done, using `org.eclipse.xtext.junit.AbstractXtextTests.getModelAndExpect()`
+
+* How is THEN handled?
+  Fortunately, it seems to be handled by the lexer, making it a block
 
   [1]: http://jevopisdeveloperblog.blogspot.com/2011/03/implement-tostring-with-xtexts.html
   [2]: http://www.eclipse.org/Xtext/documentation/2_1_0/100-serialization.php#serializationcontract 

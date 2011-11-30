@@ -3,10 +3,12 @@ package csep.tests;
 import junit.framework.AssertionFailedError;
 
 import org.apache.log4j.Logger;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.xtext.junit.AbstractXtextTests;
 import org.eclipse.xtext.resource.XtextResource;
 
 import csep.CoffeeScriptStandaloneSetup;
+import csep.parser.Helper;
 
 /**
  * Enable testing if a code snippet gets parsed as expected.
@@ -34,7 +36,10 @@ public abstract class ParserTestBase extends AbstractXtextTests {
 
 	protected void expect(Object input, int errors) {
 		try {
-			getModelAndExpect(input.toString(), errors);
+			EObject parseResult = getModelAndExpect(input.toString(), errors);
+			if (logger.isDebugEnabled()) {
+				logger.debug("Parsed '" + input + "'\n" +Helper.stringify(parseResult));
+			}
 		} catch (AssertionFailedError afe) {
 			throw afe;
 		} catch (Exception e) {
