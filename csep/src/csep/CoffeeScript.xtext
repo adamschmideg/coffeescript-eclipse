@@ -37,6 +37,8 @@ IfExp
 
 // IF can be 'if' or 'unless'
 CondBlock: operator=IF condition=Expression action=Block;
+
+PostfixCondBlock: action=Expression operator=IF condition=Expression;
   
 // See also Operand
 Expression
