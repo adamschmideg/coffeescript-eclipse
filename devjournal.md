@@ -76,6 +76,25 @@
   The problem is "num = 2 if even" is parsed as an assignment "num = 2", then the next IF token is considered an error.
   It may be handled the same way as the existence operator.
 
+* Study XBase to see how they handle expressions.
+  This is how to get to the XBase grammar:
+    * Create a new XText project
+    * Append `with org.eclipse.xtext.xbase.Xbase` to the grammar definition line
+    * Navigate to `Xbase` and press F3
+
+ My first impression is they follow this strategy
+ * Sort every rule related to expressions by its precedence
+ * Create a chain of rules from lowest to highest precedence
+ * The highest precendenc rule refers to `PrimaryExpression`
+ * `PrimaryExpression` has all the expressions which consume at least one token from the stream
+
+ I don't know why unary expression is included in the chain, and not in the PrimaryExpression.
+
+* Some grammar features worth studying
+  * Cross-reference denoted as `[Foo]`, for example `'Class: class' name=ID 'extends' superClass=[Class];`
+    The referrred `[Class]` will not create a new class name, but expects an existing name
+  * Syntactic predicate denoted as `=>`.
+
   [1]: http://jevopisdeveloperblog.blogspot.com/2011/03/implement-tostring-with-xtexts.html
   [2]: http://www.eclipse.org/Xtext/documentation/2_1_0/100-serialization.php#serializationcontract 
   [3]: http://stackoverflow.com/questions/8154790/visualize-lalr-grammar
