@@ -1,5 +1,6 @@
 
 This is a project to provide an Eclipse plugin for [CoffeeScript][coffeescript], using [Xtext][xtext].
+Development uses Xtext 2.1.
 It just started, so you may be interested in the roadmap, including where we are at the moment.
 
 ## Starting point
