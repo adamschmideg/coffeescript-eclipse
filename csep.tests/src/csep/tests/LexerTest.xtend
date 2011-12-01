@@ -22,6 +22,11 @@ class LexerTest {
     	check('')
     	check('if ')
 		check('if a ')
+		check('''
+		  a = 1
+		    b
+		   c
+		  d''')
     }
     
 	def void check(CharSequence input) {

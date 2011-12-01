@@ -1,5 +1,6 @@
 package csep.parser;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -36,6 +37,7 @@ public class Lexer extends csep.parser.antlr.internal.InternalCoffeeScriptLexer 
 	public Token nextToken() {
 		Token token = null;
 		CoffeeSymbol symbol = null;
+		Exception problem = null;
 		try {
 			symbol = aptanaScanner.nextToken();
 			if (symbol == null) {
@@ -49,9 +51,22 @@ public class Lexer extends csep.parser.antlr.internal.InternalCoffeeScriptLexer 
 				token = new BeaverToken(symbol);
 			} 
 	    }
-		catch (Exception e) {
-			logger.warn("Cannot get next token " + BeaverToken.stringify(symbol));
-			token = CommonToken.INVALID_TOKEN; 
+		catch (IOException e) {
+			problem = e;
+		} 
+		catch (beaver.Scanner.Exception e) {
+			problem = e;
+		}
+		catch (ArrayIndexOutOfBoundsException e) {
+			// XXX: Put an OUTDENT token here,
+			// the exception was probably thrown by CoffeeScanner.outdentToken 
+			// when there are more indents than outdents
+			token = new CommonToken(RULE_OUTDENT);
+		}
+		// Common exception handling
+		if (problem != null) {
+			logger.warn("Cannot get next token ", problem);
+			token = CommonToken.INVALID_TOKEN;
 		}
 		//Token superToken = super.nextToken();
 		logger.debug("token: " + token);
