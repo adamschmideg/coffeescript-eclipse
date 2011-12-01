@@ -95,8 +95,8 @@ class ControlFlowTest extends ParserTestBase {
 
   @Test
   def void testPostfixConditional() {
-    ok('num = 42 if asked')
-    ok('num = 0 unless more')
+    shouldBeOk('num = 42 if asked')
+    shouldBeOk('num = 0 unless more')
   }
 
 }

@@ -38,7 +38,7 @@ public abstract class ParserTestBase extends AbstractXtextTests {
 		try {
 			EObject parseResult = getModelAndExpect(input.toString(), errors);
 			if (logger.isDebugEnabled()) {
-				logger.debug("Parsed '" + input + "'\n" +Helper.stringify(parseResult));
+				logger.debug("Parsed " + this.getClass().getSimpleName() + " '" + input + "'\n" +Helper.stringify(parseResult));
 			}
 		} catch (AssertionFailedError afe) {
 			throw afe;
@@ -67,12 +67,13 @@ public abstract class ParserTestBase extends AbstractXtextTests {
 	 * Indicate that a test case should parse, but it gives errors
 	 */
 	 public void shouldBeOk(Object input) {
+		 String clazz = this.getClass().getSimpleName();
 		 try {
-			 ok(input);
-			 logger.warn("Expected an error, but parsed successfully '" + input + "'");
+			 ok(input);			 
+			 logger.warn("Expected an error, but parsed successfully " + clazz + " '" + input + "'");
 		 }
 		 catch (AssertionFailedError afe) {
-			 logger.warn("Expected to successfully parse '" + input + "', but " + afe.getMessage());
+			 logger.warn("Expected to successfully parse " + clazz + " '" + input + "', but " + afe.getMessage());
 		 }
 	 }
 }

@@ -8,10 +8,19 @@ class OperatorsTest extends ParserTestBase {
   def void testBinary() {
     ok('3 + 2')
     ok('4+5')
-    shouldBeOk('a*-b')
     error('a +')
   }
-
+  
+  @Test
+  def void testUnaryWithBinary() {
+    shouldBeOk('a*-b')  
+    shouldBeOk('a * -b')
+    ok('a? + b')
+    ok('a?+b')
+    shouldBeOk('a++ + b')
+    shouldBeOk('++a - b')
+  }
+  
   @Test
   def void testCompound() {
     ok('1 + 2 * 3')
