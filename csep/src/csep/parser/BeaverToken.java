@@ -1,12 +1,15 @@
 package csep.parser;
 
 import org.antlr.runtime.CommonToken;
-
-import com.aptana.editor.coffee.parsing.Terminals;
-
-import csep.parser.antlr.internal.InternalCoffeeScriptLexer;
+import org.antlr.runtime.Token;
 
 import beaver.Symbol;
+
+import com.aptana.editor.coffee.parsing.Terminals;
+import com.aptana.editor.coffee.parsing.lexer.CoffeeScanner;
+import com.aptana.editor.coffee.parsing.lexer.CoffeeSymbol;
+
+import csep.parser.antlr.internal.InternalCoffeeScriptLexer;
 
 /**
  * A token which is instantiated with a beaver.Symbol
@@ -115,12 +118,31 @@ public class BeaverToken extends CommonToken {
 	}
 	
 	/**
-	 * Map an Aptana symbol id to an Antlr token id 
+	 * Map an Aptana symbol id to an Antlr token id.
+	 * XXX: if <var>aptanaId</var> is {@link CoffeeScanner#UNKNOWN}, it gets swallowed
+	 * @return a mapping token id, or {@link Token#INVALID_TOKEN_TYPE} if no mapping was found
 	 */
 	public static int mapId(int aptanaId) {
-		if (aptanaId < TOKEN_MAP.length)
+		if (aptanaId < TOKEN_MAP.length && aptanaId >= 0)
 			return TOKEN_MAP[aptanaId];
 		else
-			throw new IllegalArgumentException("Symbol id out of range: " + aptanaId);
+			return INVALID_TOKEN_TYPE;
+	}
+	
+	/**
+	 * String representation of a {@link Symbol}, because {@link CoffeeSymbol#coffeeToken()} 
+	 * does not handle special tokens of negative value.
+	 */
+	public static String stringify(CoffeeSymbol symbol) {
+		if (symbol == null) {
+			return "null";
+		}
+		else if (symbol.getId() >= 0) {
+			return symbol.coffeeToken();
+		}
+		else {
+			String val = "" + symbol.getValue();
+			return "[" + symbol.getId() + ", '" + val.replace("\n", "NL") + "']";
+		}
 	}
 }

@@ -10,13 +10,24 @@ import org.junit.Test
 class LexerTest {
 	
 	@Test
-	def void testSimple() {
-		val lexer = new Lexer('''
+	def void testBasic() {
+		check('''
 			number=42
 			answer=42
 		''')
+	}
+
+    @Test
+    def void testInvalidToken() {
+    	check('')
+    	check('if ')
+		check('if a ')
+    }
+    
+	def void check(CharSequence input) {
+		val lexer = new Lexer(input)
 		val tokens = lexer.tokenize()
-		//println("tokens: " + tokens)
+		println(tokens)
 	}
 	
 }

@@ -28,25 +28,30 @@ public class Lexer extends csep.parser.antlr.internal.InternalCoffeeScriptLexer 
 		this(new ANTLRStringStream(str));
 	}
 	
-	public Lexer(org.eclipse.xtext.xtend2.lib.StringConcatenation str) {
+	public Lexer(CharSequence str) {
 		this(str.toString());
 	}
 	
 	@Override
 	public Token nextToken() {
 		Token token = null;
+		CoffeeSymbol symbol = null;
 		try {
-			CoffeeSymbol symbol = aptanaScanner.nextToken();
-			if (symbol.getId() == Terminals.EOF) {
+			symbol = aptanaScanner.nextToken();
+			if (symbol == null) {
+				// XXX: why do we get a null symbol?
+				token = CommonToken.INVALID_TOKEN;
+			}
+			else if (symbol.getId() == Terminals.EOF) {
 				token = new CommonToken(CommonToken.EOF);
 			}
 			else {
 				token = new BeaverToken(symbol);
 			} 
-		}
+	    }
 		catch (Exception e) {
-			e.printStackTrace();
-			token = new CommonToken(CommonToken.INVALID_TOKEN); 
+			logger.warn("Cannot get next token " + BeaverToken.stringify(symbol));
+			token = CommonToken.INVALID_TOKEN; 
 		}
 		//Token superToken = super.nextToken();
 		logger.debug("token: " + token);
