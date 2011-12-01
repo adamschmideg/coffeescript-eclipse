@@ -29,7 +29,7 @@ public abstract class ParserTestBase extends AbstractXtextTests {
 	 * XXX: Always return false, otherwise {@link AbstractXtextTests} will check whitespaces,
 	 * so for example "a = 2" would fail, because it's not equal to its serialized version "a=2". 
 	 */
-	@Override
+	//@Override
 	protected boolean shouldTestSerializer(XtextResource resource) {
 		return false;
 	}
