@@ -98,6 +98,10 @@ Workflow {
 			
 			// generates a more lightweight Antlr parser and lexer tailored for content assist  
 			fragment = parser.antlr.XtextAntlrUiGeneratorFragment {}
+			
+			// This fragment generates a grammar to csep/src-gen/csep/parser/antlr/internal/DebugInternalCoffeeScript.g
+			// which can be opened with Antlrworks
+			fragment = parser.antlr.DebugAntlrGeneratorFragment {}
 
 			// generates junit test support classes into Generator#pathTestProject
 			fragment = junit.Junit4Fragment {}

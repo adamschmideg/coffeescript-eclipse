@@ -102,6 +102,9 @@
     New stuff includes a railroad diagram (`Views->Xtext->Xtext Syntax Graph`).
     It also refers to a new generator fragment, `org.eclipse.xtext.generator.parser.antlr.DebugAntlrGeneratorFragment`
     which I don't know yet how to use.
+  * It was just a single line of code, and `csep/src-gen/csep/parser/antlr/internal/DebugInternalCoffeeScript.g`
+    gets generated which can be opened and debugged with Antlrworks
+    seamlessly
 
   [1]: http://jevopisdeveloperblog.blogspot.com/2011/03/implement-tostring-with-xtexts.html
   [2]: http://www.eclipse.org/Xtext/documentation/2_1_0/100-serialization.php#serializationcontract 
