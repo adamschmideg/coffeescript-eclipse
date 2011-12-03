@@ -12,36 +12,65 @@ Body
   : lines+=Line (TERMINATOR lines+=Line?)*
   ;
 
-Line
-  : Expression
-  ;
+Line:
+	Expression;
+	
+Stmt returns Stmt:
+	RETURN Expression |
+	THROW Expression;
+	
+Expression returns Stmt:
+	PostfixIf;
+	
+// right-assoc
+PostfixIf returns Stmt:
+	Assignment ({PostfixIf.truePart=current} operator=IF condition=PostfixIf)?;
+
+Assignment returns Stmt:
+	UnaryOp |
+	left=SimpleAssignable operator=(EQUAL | COMPOUND_ASSIGN) right=Assignment;
+
+UnaryOp returns Stmt:
+	LogicOp |
+	(UNARY | PLUS | MINUS) Expression |
+	(PLUS_PLUS | MINUS_MINUS) SimpleAssignable;
+
+LogicOp returns Stmt:
+ 	CompareOp ({LogicOp.left=current} operator=LOGIC right=CompareOp)*;
+  
+CompareOp returns Stmt:
+  RelationOp ({CompareOp.left=current} operator=COMPARE right=RelationOp)*;
+
+RelationOp returns Stmt:
+  ShiftOp ({RelationOp.left=current} operator=RELATION right=ShiftOp)*;
+
+ShiftOp returns Stmt:
+  AdditiveOp ({ShiftOp.left=current} operator=SHIFT right=AdditiveOp)*;
+
+AdditiveOp returns Stmt:
+  MathOp ({AdditiveOp.left=current} operator=(PLUS | MINUS) right=MathOp)*;
+
+MathOp returns Stmt:
+  QuestionOp ({MathOp.left=current} operator=MATH right=QuestionOp)*;
+
+QuestionOp returns Stmt:
+  PrimaryExpression ({QuestionOp.operand=current} QUESTION)?;
+
+PrimaryExpression returns Stmt:
+	Value |
+	IfExp;
+	
 
 Block
   : {Block} INDENT Body? OUTDENT
   ;
   
-Assign
-  : left=Assignable EQUAL (right=Expression | (INDENT right=Expression OUTDENT))
-  ;
-
-// This is a central unit of the grammar, like 'expression' in the original grammar
-PrimaryExp
-  : Value
-  | Assign
-  | IfExp
-  ;
-
 IfExp
   : blocks+=CondBlock (ELSE blocks+=CondBlock)* (ELSE defaultBlock=Block)?
   ;
 
 // IF can be 'if' or 'unless'
 CondBlock: operator=IF condition=Expression action=Block;
-
-// See also PrimaryExp
-Expression
-  : Operation
-  ;
 
 Id: name=IDENTIFIER;
 
@@ -71,51 +100,7 @@ Literal
 Parenthetical
   : LPAREN Body RPAREN
   ;
-
-QuestionOp returns Operation
-  : PrimaryExp ({QuestionOp.operand=current} QUESTION)?
-  ;
-
-MathOp returns Operation
-  : QuestionOp ({MathOp.left=current} operator=MATH right=QuestionOp)*
-  ;
-
-AdditiveOp returns Operation
-  : MathOp ({AdditiveOp.left=current} operator=(PLUS | MINUS) right=MathOp)*
-  ;
-
-ShiftOp returns Operation
-  : AdditiveOp ({ShiftOp.left=current} operator=SHIFT right=AdditiveOp)*
-  ;
-
-RelationOp returns Operation
-  : ShiftOp ({RelationOp.left=current} operator=RELATION right=ShiftOp)*
-  ;
-
-CompareOp returns Operation
-  : RelationOp ({CompareOp.left=current} operator=COMPARE right=RelationOp)*
-  ;
-
-LogicOp returns Operation
-  : CompareOp ({LogicOp.left=current} operator=LOGIC right=CompareOp)*
-  ;
-
-PostfixIf returns Operation
-  : LogicOp ({PostfixIf.action=current} operator=IF right=LogicOp)*
-  ;
-
-Operation
-  : UNARY Operation
-  | MINUS Operation
-  | PLUS Operation
-  | MINUS_MINUS SimpleAssignable
-  | PLUS_PLUS SimpleAssignable
-  | SimpleAssignable PLUS_PLUS
-  | SimpleAssignable MINUS_MINUS
-  | left=SimpleAssignable operator=COMPOUND_ASSIGN right=Expression
-  | PostfixIf
-  ;
-
+ 
 // terminals {{{
 terminal AT_SIGIL: 'dummy AT_SIGIL';
 terminal BOOL: 'dummy BOOL';
@@ -144,7 +129,7 @@ terminal FOROF: 'dummy FOROF';
 terminal FUNC_ARROW: 'dummy FUNC_ARROW';
 terminal FUNC_EXIST: 'dummy FUNC_EXIST';
 terminal HERECOMMENT: 'dummy HERECOMMENT';
-terminal IF: 'dummy IF';
+terminal IF: 'if' | 'unless';
 terminal INDENT: '{*'; // just for testing!
 terminal INDEX_END: 'dummy INDEX_END';
 terminal INDEX_PROTO: 'dummy INDEX_PROTO';
