@@ -92,11 +92,17 @@ def call_antlrworks(antlrworks_jar, class_path, prj, grammar):
     Set up classpath and call antlrworks to debug grammar
     """
     prj_bin = '{prj}/bin'.format(prj=prj)
-    real_class_path = os.pathsep.join(class_path + [prj_bin])
+    real_class_path = os.pathsep.join(class_path + [prj_bin, antlrworks_jar])
+    main_class = 'org.antlr.works.IDE'
+    grammar_file = '{prj}/src-gen/{prj}/parser/antlr/internal/Internal{grammar}.g'.format(prj=prj, grammar=grammar)
+    print grammar_file
     raw_cmd = '''
-        java -cp {classpath} -jar {antlrworks_jar}
+        java -cp {classpath} {main_class} -open {grammar_file}
     '''
-    cmd = raw_cmd.format(classpath=real_class_path, antlrworks_jar=antlrworks_jar).split()
+    cmd = raw_cmd.format(\
+        classpath=real_class_path,
+        main_class=main_class,
+        grammar_file=grammar_file).split()
     call(cmd)
 
 def main():

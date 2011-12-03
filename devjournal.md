@@ -95,6 +95,14 @@
     The referrred `[Class]` will not create a new class name, but expects an existing name
   * Syntactic predicate denoted as `=>`.
 
+* Debugging Xtext grammar with Antlrworks
+  * The grammar generated doesn't compile, it's looking for a class
+   `DebugAbstractInternalAntlrParser` which cannot be found anywhere
+  * Xtext [claims to have new stuff for debugging][8].
+    New stuff includes a railroad diagram (`Views->Xtext->Xtext Syntax Graph`).
+    It also refers to a new generator fragment, `org.eclipse.xtext.generator.parser.antlr.DebugAntlrGeneratorFragment`
+    which I don't know yet how to use.
+
   [1]: http://jevopisdeveloperblog.blogspot.com/2011/03/implement-tostring-with-xtexts.html
   [2]: http://www.eclipse.org/Xtext/documentation/2_1_0/100-serialization.php#serializationcontract 
   [3]: http://stackoverflow.com/questions/8154790/visualize-lalr-grammar
@@ -102,3 +110,4 @@
   [5]: http://stackoverflow.com/questions/8263772/left-factoring-grammar-of-coffeescript-expressions
   [6]: http://stackoverflow.com/questions/8279790/convert-simple-antlr-grammar-to-xtext
   [7]: http://stackoverflow.com/questions/8302333/xtext-grammar-in-two-files
+  [8]: http://eclipse.org/Xtext/documentation/indigo/new_and_noteworthy.php
