@@ -25,7 +25,7 @@ Assign
   ;
 
 // This is a central unit of the grammar, like 'expression' in the original grammar
-Operand
+PrimaryExp
   : Value
   | Assign
   | IfExp
@@ -38,9 +38,7 @@ IfExp
 // IF can be 'if' or 'unless'
 CondBlock: operator=IF condition=Expression action=Block;
 
-PostfixCondBlock: operator=IF condition=Expression;
-  
-// See also Operand
+// See also PrimaryExp
 Expression
   : Operation
   ;
@@ -75,7 +73,7 @@ Parenthetical
   ;
 
 QuestionOp returns Operation
-  : Operand ({QuestionOp.operand=current} QUESTION)?
+  : PrimaryExp ({QuestionOp.operand=current} QUESTION)?
   ;
 
 MathOp returns Operation
@@ -102,6 +100,10 @@ LogicOp returns Operation
   : CompareOp ({LogicOp.left=current} operator=LOGIC right=CompareOp)*
   ;
 
+PostfixIf returns Operation
+  : LogicOp ({PostfixIf.action=current} operator=IF right=LogicOp)*
+  ;
+
 Operation
   : UNARY Operation
   | MINUS Operation
@@ -110,10 +112,11 @@ Operation
   | PLUS_PLUS SimpleAssignable
   | SimpleAssignable PLUS_PLUS
   | SimpleAssignable MINUS_MINUS
-  | left=SimpleAssignable operator=COMPOUND_ASSIGN right=Operation
-  | LogicOp
+  | left=SimpleAssignable operator=COMPOUND_ASSIGN right=Expression
+  | PostfixIf
   ;
 
+// terminals {{{
 terminal AT_SIGIL: 'dummy AT_SIGIL';
 terminal BOOL: 'dummy BOOL';
 terminal BOUND_FUNC_ARROW: 'dummy BOUND_FUNC_ARROW';
@@ -191,3 +194,5 @@ terminal WHILE: 'dummy WHILE';
 
 // Put it at the end, so keywords will be matched earlier
 terminal IDENTIFIER: '^'?('a'..'z'|'A'..'Z'|'_') ('a'..'z'|'A'..'Z'|'_'|'0'..'9')*;
+// }}} end of terminals
+// vim: set fdm=marker:

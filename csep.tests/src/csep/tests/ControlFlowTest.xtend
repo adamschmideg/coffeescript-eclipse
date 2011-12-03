@@ -97,6 +97,8 @@ class ControlFlowTest extends ParserTestBase {
   def void testPostfixConditional() {
     shouldBeOk('num = 42 if asked')
     shouldBeOk('num = 0 unless more')
+    shouldBeOk('2 if you and me')
+    shouldBeOk('you + me if together')
   }
 
 }

@@ -70,7 +70,7 @@ public abstract class ParserTestBase extends AbstractXtextTests {
 		 String clazz = this.getClass().getSimpleName();
 		 try {
 			 ok(input);			 
-			 logger.warn("Expected an error, but parsed successfully " + clazz + " '" + input + "'");
+			 fail("Expected an error, but parsed successfully '" + input + "'");
 		 }
 		 catch (AssertionFailedError afe) {
 			 logger.warn("Expected to successfully parse " + clazz + " '" + input + "', but " + afe.getMessage());
