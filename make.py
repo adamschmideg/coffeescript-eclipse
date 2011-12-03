@@ -3,6 +3,7 @@ from glob import glob
 from subprocess import call
 import ConfigParser
 import os
+from string import Template
 
 bare_jars = [
     'com.google.collect_1.0.0',
@@ -39,9 +40,17 @@ bare_jars = [
 ]
 
 def find_eclipse_home():
-    config = ConfigParser.ConfigParser()
-    config.read('config/make.ini')
-    return config.get('paths', 'eclipse')
+    return user_config().get('paths', 'eclipse')
+
+def global_config():
+    cfg = ConfigParser.ConfigParser()
+    cfg.read('config/global.ini')
+    return cfg
+
+def user_config():
+    cfg = ConfigParser.ConfigParser()
+    cfg.read('config/user.ini')
+    return cfg
 
 def real_jar(directory, bare_jar):
     """
@@ -56,25 +65,50 @@ def real_jar(directory, bare_jar):
         print 'Missing %s' % bare_jar
         return None
 
-def compile_grammar(class_path):
-    source_dir = 'csep/src-gen'
-    src_dirs = ['csep/src-gen', 'csep/src']
-    cp = os.pathsep.join(class_path + src_dirs)
-    files = [
-        'csep/parser/antlr/internal/InternalCoffeeScriptLexer.java',
-        'csep/parser/antlr/internal/InternalCoffeeScriptParser.java',
-    ]
-    real_files = ' '.join(['%s/%s' % (source_dir, f) for f in files])
-    raw_cmd = 'javac -cp %s -sourcepath %s %s' % (cp, source_dir, real_files)
-    print raw_cmd
-    cmd = raw_cmd.split()
+def compile_grammar(class_path, prj, grammar):
+    params = dict(prj=prj, grammar=grammar)
+    src_gen = '{prj}/src-gen'.format(**params)
+    src_dir = '{prj}/src'.format(**params)
+    out_dir = '{prj}/bin'.format(**params)
+    params['src_gen'] = src_gen
+    real_class_path = os.pathsep.join(class_path + [src_gen, src_dir])
+    lexer = '{src_gen}/{prj}/parser/antlr/internal/Internal{grammar}Lexer.java'.format(**params)
+    parser = '{src_gen}/{prj}/parser/antlr/internal/Internal{grammar}Parser.java'.format(**params)
+    raw_cmd = '''
+        javac -cp {class_path} -d {out_dir} -sourcepath {source_path} {lexer} {parser}
+    '''
+    compile_params = {
+        'class_path': real_class_path,
+        'out_dir': out_dir,
+        'source_path': src_dir,
+        'lexer': lexer,
+        'parser': parser
+    }
+    cmd = raw_cmd.format(**compile_params).split()
+    call(cmd)
+
+def call_antlrworks(antlrworks_jar, class_path, prj, grammar):
+    """
+    Set up classpath and call antlrworks to debug grammar
+    """
+    prj_bin = '{prj}/bin'.format(prj=prj)
+    real_class_path = os.pathsep.join(class_path + [prj_bin])
+    raw_cmd = '''
+        java -cp {classpath} -jar {antlrworks_jar}
+    '''
+    cmd = raw_cmd.format(classpath=real_class_path, antlrworks_jar=antlrworks_jar).split()
     call(cmd)
 
 def main():
     eclipse_home = find_eclipse_home()
+    antlrworks_jar = user_config().get('paths', 'antlrworks')
+    cfg = global_config()
     plugins_dir = os.path.join(eclipse_home, 'plugins')
     jars = [real_jar(plugins_dir, bare) for bare in bare_jars]
-    compile_grammar(jars)
+    prj_name = cfg.get('project', 'name')
+    prj_grammar = cfg.get('project', 'grammar')
+    compile_grammar(jars, prj_name, prj_grammar)
+    call_antlrworks(antlrworks_jar, jars, prj_name, prj_grammar)
 
 if __name__ == '__main__':
     main()
