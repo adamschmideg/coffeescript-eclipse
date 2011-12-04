@@ -106,6 +106,12 @@
     gets generated which can be opened and debugged with Antlrworks
     seamlessly
 
+* Warning: "Decision can match input such as "RULE_IF" using multiple alternatives: 1, 2"
+  * Before the previous commit it almost disappeared, then it came back.
+  * The answer to this [Stackoverflow question][9] says, you can set
+   `option=greedy` in Antlr, but this is not an option here, because the
+   Antlr grammar is generated.
+
   [1]: http://jevopisdeveloperblog.blogspot.com/2011/03/implement-tostring-with-xtexts.html
   [2]: http://www.eclipse.org/Xtext/documentation/2_1_0/100-serialization.php#serializationcontract 
   [3]: http://stackoverflow.com/questions/8154790/visualize-lalr-grammar
@@ -114,3 +120,4 @@
   [6]: http://stackoverflow.com/questions/8279790/convert-simple-antlr-grammar-to-xtext
   [7]: http://stackoverflow.com/questions/8302333/xtext-grammar-in-two-files
   [8]: http://eclipse.org/Xtext/documentation/indigo/new_and_noteworthy.php
+  [9]: http://stackoverflow.com/questions/7954142/antlr-decision-can-match-input-using-multiple-alternatives
