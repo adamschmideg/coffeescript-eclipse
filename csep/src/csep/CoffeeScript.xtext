@@ -52,7 +52,8 @@ MathOp returns Stmt:
 UnaryOp returns Stmt:
 	PrimaryExpression QUESTION? |
 	(UNARY | PLUS | MINUS) Expression |
-	(PLUS_PLUS | MINUS_MINUS) SimpleAssignable;
+	(PLUS_PLUS | MINUS_MINUS) SimpleAssignable |
+	SimpleAssignable (PLUS_PLUS | MINUS_MINUS);
 
 PrimaryExpression returns Stmt:
 	Value |
@@ -154,7 +155,7 @@ terminal PARAM_END: 'dummy PARAM_END';
 terminal PARAM_START: 'dummy PARAM_START';
 terminal PLUS: '+';
 terminal PLUS_PLUS: '++';
-terminal POST_IF: 'if' | 'unless'; // I know, unreachable because of IF
+terminal POST_IF: 'dummy POST_IF'; // practically the same as IF
 terminal QUESTION: '?';
 terminal QUESTION_DOT: 'dummy QUESTION_DOT';
 terminal RBRACKET: 'dummy RBRACKET';
