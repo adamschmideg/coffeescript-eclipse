@@ -59,7 +59,7 @@ class ControlFlowTest extends ParserTestBase {
 
   @Test
   def void testReservedWords() {
-    shouldBeOk('if false then undefined else null')
+    ok('if false then undefined else null')
   }
 
   @Test

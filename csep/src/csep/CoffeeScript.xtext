@@ -90,9 +90,12 @@ NumberLiteral: value=NUMBER;
 
 StringLiteral: value=STRING;
 
+BoolLiteral: value=BOOL;
+
 Literal
   : NumberLiteral
   | StringLiteral
+  | BoolLiteral
   ;
 
 Parenthetical
@@ -101,7 +104,7 @@ Parenthetical
  
 // terminals {{{
 terminal AT_SIGIL: 'dummy AT_SIGIL';
-terminal BOOL: 'dummy BOOL';
+terminal BOOL: 'true' | 'false' | 'undefined' | 'null';
 terminal BOUND_FUNC_ARROW: 'dummy BOUND_FUNC_ARROW';
 terminal BY: 'dummy BY';
 terminal CALL_END: 'dummy CALL_END';
