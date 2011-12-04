@@ -23,8 +23,9 @@ Expression returns Stmt:
 	PostfixIf;
 	
 // right-assoc
+// Note: the lexer seems to know it should give a POST_IF token here
 PostfixIf returns Stmt:
-	Assignment ({PostfixIf.truePart=current} operator=IF condition=PostfixIf)?;
+	Assignment ({PostfixIf.truePart=current} operator=(POST_IF | IF) condition=PostfixIf)?;
 
 Assignment returns Stmt:
 	LogicOp |
@@ -150,7 +151,7 @@ terminal PARAM_END: 'dummy PARAM_END';
 terminal PARAM_START: 'dummy PARAM_START';
 terminal PLUS: '+';
 terminal PLUS_PLUS: '++';
-terminal POST_IF: 'dummy POST_IF';
+terminal POST_IF: 'if' | 'unless'; // I know, unreachable because of IF
 terminal QUESTION: '?';
 terminal QUESTION_DOT: 'dummy QUESTION_DOT';
 terminal RBRACKET: 'dummy RBRACKET';

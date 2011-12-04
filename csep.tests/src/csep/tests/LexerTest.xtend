@@ -44,6 +44,18 @@ TERMINATOR:
 		  ''', 9)
     }
     
+    @Test
+    def void testPostfixIf() {
+    	check('num = 2 if even', '''
+IDENTIFIER:num
+EQUAL:=
+NUMBER:2
+POST_IF:if
+IDENTIFIER:even
+TERMINATOR:
+''')
+    }
+    
 	def void check(CharSequence input, CharSequence expectedStr) {
 		val lexer = new Lexer(input)
 		val tokens = lexer.tokenizeToStrings()
