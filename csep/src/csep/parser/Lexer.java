@@ -28,11 +28,11 @@ public class Lexer extends csep.parser.antlr.internal.InternalCoffeeScriptLexer 
 	public Lexer(String str) {
 		this(new ANTLRStringStream(str));
 	}
-	
+
 	public Lexer(CharSequence str) {
 		this(str.toString());
 	}
-	
+
 	@Override
 	public Token nextToken() {
 		Token token = null;
@@ -43,23 +43,18 @@ public class Lexer extends csep.parser.antlr.internal.InternalCoffeeScriptLexer 
 			if (symbol == null) {
 				// XXX: why do we get a null symbol?
 				token = CommonToken.INVALID_TOKEN;
-			}
-			else if (symbol.getId() == Terminals.EOF) {
+			} else if (symbol.getId() == Terminals.EOF) {
 				token = new CommonToken(CommonToken.EOF);
-			}
-			else {
+			} else {
 				token = new BeaverToken(symbol);
-			} 
-	    }
-		catch (IOException e) {
+			}
+		} catch (IOException e) {
 			problem = e;
-		} 
-		catch (beaver.Scanner.Exception e) {
+		} catch (beaver.Scanner.Exception e) {
 			problem = e;
-		}
-		catch (ArrayIndexOutOfBoundsException e) {
+		} catch (ArrayIndexOutOfBoundsException e) {
 			// XXX: Put an OUTDENT token here,
-			// the exception was probably thrown by CoffeeScanner.outdentToken 
+			// the exception was probably thrown by CoffeeScanner.outdentToken
 			// when there are more indents than outdents
 			token = new CommonToken(RULE_OUTDENT);
 		}
@@ -68,11 +63,18 @@ public class Lexer extends csep.parser.antlr.internal.InternalCoffeeScriptLexer 
 			logger.warn("Cannot get next token ", problem);
 			token = CommonToken.INVALID_TOKEN;
 		}
-		//Token superToken = super.nextToken();
+		// Token superToken = super.nextToken();
 		logger.debug("token: " + token);
+		//return super.nextToken();
 		return token;
 	}
 
+	/**
+	 * Read the whole input and tokenize it
+	 * 
+	 * @return a list of tokens
+	 * @throws Exception
+	 */
 	public List<Token> tokenize() throws Exception {
 		List<Token> symbols = new ArrayList<Token>();
 		while (true) {
@@ -86,4 +88,20 @@ public class Lexer extends csep.parser.antlr.internal.InternalCoffeeScriptLexer 
 		return symbols;
 	}
 
+	/**
+	 * Tokenize the whole input, skipping hidden terminals
+	 * 
+	 * @return a simplified string representation of the token stream in the
+	 *         form of "tokenName:text"
+	 * @throws Exception
+	 */
+	public List<String> tokenizeToStrings() throws Exception {
+		List<String> strings = new ArrayList<String>();
+		for (Token t : tokenize()) {
+			if (t.getChannel() == Token.DEFAULT_CHANNEL) {
+				strings.add(Helper.getNameAndText(t));
+			}
+		}
+		return strings;
+	}
 }

@@ -145,4 +145,5 @@ public class BeaverToken extends CommonToken {
 			return "[" + symbol.getId() + ", '" + val.replace("\n", "NL") + "']";
 		}
 	}
+	
 }

@@ -1,5 +1,6 @@
 package csep.parser;
 
+import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.Arrays;
@@ -9,12 +10,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.antlr.runtime.Token;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.xtext.parsetree.reconstr.Serializer;
 
 import com.google.inject.Guice;
 
 import csep.CoffeeScriptRuntimeModule;
+import csep.parser.antlr.internal.InternalCoffeeScriptLexer;
 
 /**
  * Used mostly for debugging
@@ -69,16 +72,14 @@ public class Helper {
 			buf.append(indent + entry.getKey() + ":");
 			if (child instanceof EObject) {
 				buf.append(" " + stringify((EObject) child, indent + INDENT));
-			} 
-			else if (child instanceof List) {
+			} else if (child instanceof List) {
 				List<?> list = (List<?>) child;
 				buf.append("\n");
 				for (Object kid : list) {
 					buf.append(indent + INDENT);
 					buf.append(stringify(kid, indent + INDENT + INDENT));
 				}
-			} 
-			else {
+			} else {
 				buf.append(" " + child + "\n");
 			}
 
@@ -109,4 +110,43 @@ public class Helper {
 		}
 		return props;
 	}
+
+	/**
+	 * Given a class with static int fields, get the field name for an id
+	 */
+	@SuppressWarnings("rawtypes")
+	public static String getFieldNameForId(Class clazz, int id) {
+		for (Field f : clazz.getFields()) {
+			try {
+				Object fieldValue = f.get(null);
+				if (fieldValue.equals(id)) {
+					return f.getName();
+				}
+			} catch (Exception e) {
+				// ignore
+			}
+		}
+		return null;
+	}
+
+	/**
+	 * Get only the token name and text
+	 */
+	public static String getNameAndText(Token token) {
+		if (token == null) {
+			return null;
+		} 
+		else {
+			String value = token.getText();
+			String name = Helper.getFieldNameForId(InternalCoffeeScriptLexer.class, token.getType());
+			if (name == null)
+				name = "<" + token.getType() + ">";
+			if (name.startsWith("RULE_"))
+				name = name.substring("RULE_".length());
+			if (token.getType() == InternalCoffeeScriptLexer.RULE_TERMINATOR)
+				value = "";
+			return name + ":" + value;
+		}
+	}
+
 }

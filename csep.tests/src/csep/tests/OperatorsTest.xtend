@@ -85,4 +85,9 @@ class OperatorsTest extends ParserTestBase {
     ok('10 < 20 > 2+3 is 5')
   }
   
+  @Test
+  def void testAssignment() {
+  	ok('a = b = 3')
+  	ok('a = ++b')
+  }
 }
