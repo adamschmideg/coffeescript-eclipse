@@ -68,12 +68,16 @@ public abstract class ParserTestBase extends AbstractXtextTests {
 	 */
 	 public void shouldBeOk(Object input) {
 		 String clazz = this.getClass().getSimpleName();
+		 boolean wasOk = false;
 		 try {
-			 ok(input);			 
-			 fail("Expected an error, but parsed successfully '" + input + "'");
+			 ok(input);	
+			 wasOk = true;			
 		 }
 		 catch (AssertionFailedError afe) {
 			 logger.warn("Expected to successfully parse " + clazz + " '" + input + "', but " + afe.getMessage());
+		 }
+		 if (wasOk) {
+			 fail("Expected an error, but parsed successfully '" + input + "'");
 		 }
 	 }
 }

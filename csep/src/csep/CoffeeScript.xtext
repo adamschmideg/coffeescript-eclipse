@@ -27,13 +27,8 @@ PostfixIf returns Stmt:
 	Assignment ({PostfixIf.truePart=current} operator=IF condition=PostfixIf)?;
 
 Assignment returns Stmt:
-	UnaryOp |
-	left=SimpleAssignable operator=(EQUAL | COMPOUND_ASSIGN) right=Assignment;
-
-UnaryOp returns Stmt:
 	LogicOp |
-	(UNARY | PLUS | MINUS) Expression |
-	(PLUS_PLUS | MINUS_MINUS) SimpleAssignable;
+	left=SimpleAssignable operator=(EQUAL | COMPOUND_ASSIGN) right=Assignment;
 
 LogicOp returns Stmt:
  	CompareOp ({LogicOp.left=current} operator=LOGIC right=CompareOp)*;
@@ -51,10 +46,12 @@ AdditiveOp returns Stmt:
   MathOp ({AdditiveOp.left=current} operator=(PLUS | MINUS) right=MathOp)*;
 
 MathOp returns Stmt:
-  QuestionOp ({MathOp.left=current} operator=MATH right=QuestionOp)*;
+  UnaryOp ({MathOp.left=current} operator=MATH right=UnaryOp)*;
 
-QuestionOp returns Stmt:
-  PrimaryExpression ({QuestionOp.operand=current} QUESTION)?;
+UnaryOp returns Stmt:
+	PrimaryExpression QUESTION? |
+	(UNARY | PLUS | MINUS) Expression |
+	(PLUS_PLUS | MINUS_MINUS) SimpleAssignable;
 
 PrimaryExpression returns Stmt:
 	Value |

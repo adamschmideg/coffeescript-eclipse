@@ -13,12 +13,12 @@ class OperatorsTest extends ParserTestBase {
   
   @Test
   def void testUnaryWithBinary() {
-    shouldBeOk('a*-b')  
-    shouldBeOk('a * -b')
+    ok('a*-b')  
+    ok('a * -b')
     ok('a? + b')
     ok('a?+b')
     shouldBeOk('a++ + b')
-    shouldBeOk('++a - b')
+    ok('++a - b')
   }
   
   @Test
@@ -68,7 +68,7 @@ class OperatorsTest extends ParserTestBase {
   @Test
   def void testExistential() {
     ok('a ? b')
-    shouldBeOk('nothing ? -1')
+    ok('nothing ? -1')
     ok('defined?')
     ok('!nothing?')
     ok('(1 or 0)?')
