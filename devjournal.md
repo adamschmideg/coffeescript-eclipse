@@ -120,6 +120,9 @@
   I don't know how to achieve this in the Xtext grammar.
   I don't know why this fixes the Antlr grammar, either.
 
+* Handle dynamic variables.
+  It's more difficult than it first seemed, see [my Stackoverflow question about handling dynamic variables][10]
+
   [1]: http://jevopisdeveloperblog.blogspot.com/2011/03/implement-tostring-with-xtexts.html
   [2]: http://www.eclipse.org/Xtext/documentation/2_1_0/100-serialization.php#serializationcontract 
   [3]: http://stackoverflow.com/questions/8154790/visualize-lalr-grammar
@@ -129,3 +132,4 @@
   [7]: http://stackoverflow.com/questions/8302333/xtext-grammar-in-two-files
   [8]: http://eclipse.org/Xtext/documentation/indigo/new_and_noteworthy.php
   [9]: http://stackoverflow.com/questions/7954142/antlr-decision-can-match-input-using-multiple-alternatives
+  [10]: http://stackoverflow.com/questions/8387818/handle-dynamic-variable-with-xtext-grammar
