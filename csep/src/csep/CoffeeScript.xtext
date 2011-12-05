@@ -29,7 +29,7 @@ PostfixIf returns Stmt:
 
 Assignment returns Stmt:
 	LogicOp |
-	left=SimpleAssignable operator=(EQUAL | COMPOUND_ASSIGN) right=Expression;
+	left=Variable operator=(EQUAL | COMPOUND_ASSIGN) right=Expression;
 
 LogicOp returns Stmt:
  	CompareOp ({LogicOp.left=current} operator=LOGIC right=CompareOp)*;
@@ -52,13 +52,11 @@ MathOp returns Stmt:
 UnaryOp returns Stmt:
 	PrimaryExpression QUESTION? |
 	(UNARY | PLUS | MINUS) Expression |
-	(PLUS_PLUS | MINUS_MINUS) SimpleAssignable |
-	SimpleAssignable (PLUS_PLUS | MINUS_MINUS);
-
-PrimaryExpression returns Stmt:
-	Value |
-	IfExp;
+	IncrementedVariable;
 	
+PrimaryExpression returns Stmt:
+	IfExp |
+	Value;
 
 Block
   : {Block} INDENT Body? OUTDENT
@@ -73,20 +71,33 @@ CondBlock: operator=IF condition=Expression action=Block;
 
 Id: name=IDENTIFIER;
 
-SimpleAssignable
-  : Id
-  ;
+Value returns Value:
+	UnassignableValue |
+	Assignable;
 
-Assignable
-  : SimpleAssignable
-  ;
+UnassignableValue returns Value:
+	Literal |
+	Parenthetical;
 
-Value
-  : Assignable
-  | Literal
-  | Parenthetical
-  ;
+Variable returns Value:
+	// uncommenting the next line would cause a non-LL decision
+	//UnassignableValue props+=Accessor+ |
+	Id props+=Accessor*;
 
+IncrementedVariable returns Value:
+	(PLUS_PLUS | MINUS_MINUS) Variable |
+	Variable (PLUS_PLUS | MINUS_MINUS);
+
+Assignable returns Value:
+	Variable |
+	Array;
+	
+Accessor returns Value:
+	DOT Id (CALL_START CALL_END)?;
+
+Array returns Value:
+	{Value} LBRACKET RBRACKET;
+	
 NumberLiteral: value=NUMBER;
 
 StringLiteral: value=STRING;
