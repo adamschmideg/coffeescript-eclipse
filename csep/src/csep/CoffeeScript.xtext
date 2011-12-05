@@ -25,11 +25,11 @@ Expression returns Stmt:
 // right-assoc
 // Note: the lexer seems to know it should give a POST_IF token here
 PostfixIf returns Stmt:
-	Assignment ({PostfixIf.truePart=current} operator=(POST_IF | IF) condition=PostfixIf)?;
+	Assignment ({PostfixIf.truePart=current} operator=(POST_IF | IF) condition=Expression)?;
 
 Assignment returns Stmt:
 	LogicOp |
-	left=SimpleAssignable operator=(EQUAL | COMPOUND_ASSIGN) right=Assignment;
+	left=SimpleAssignable operator=(EQUAL | COMPOUND_ASSIGN) right=Expression;
 
 LogicOp returns Stmt:
  	CompareOp ({LogicOp.left=current} operator=LOGIC right=CompareOp)*;

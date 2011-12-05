@@ -111,6 +111,14 @@
   * The answer to this [Stackoverflow question][9] says, you can set
    `option=greedy` in Antlr, but this is not an option here, because the
    Antlr grammar is generated.
+  * This issue has no impact on parsing itself, it affects only the way
+  how AST will be constructed.
+  So I'm going to deal with this question later, in the AST construction phase.
+  * A dirty quick-fix in the generated DebugInternalCoffeeScript is to make
+  this change: in `rulePostfixIf` append a caret to
+  `(RULE_POSTIF|RULE_IF)`, so it becomes `(RULE_POSTIF|RULE_IF)^`.
+  I don't know how to achieve this in the Xtext grammar.
+  I don't know why this fixes the Antlr grammar, either.
 
   [1]: http://jevopisdeveloperblog.blogspot.com/2011/03/implement-tostring-with-xtexts.html
   [2]: http://www.eclipse.org/Xtext/documentation/2_1_0/100-serialization.php#serializationcontract 
