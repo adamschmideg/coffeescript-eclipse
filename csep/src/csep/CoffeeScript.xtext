@@ -25,34 +25,35 @@ Expression returns Stmt:
 // right-assoc
 // Note: the lexer seems to know it should give a POST_IF token here
 PostfixIf returns Stmt:
-	Assignment ({PostfixIf.truePart=current} operator=(POST_IF | IF) condition=Expression)?;
+	Assignment (=>({PostfixIf.truePart=current} operator=(POST_IF | IF)) condition=Expression)?;
 
 Assignment returns Stmt:
-	LogicOp |
-	left=Variable operator=(EQUAL | COMPOUND_ASSIGN) right=Expression;
+	(=>(left=Assignable operator=(EQUAL | COMPOUND_ASSIGN)) right=Expression) |
+	LogicOp;
 
 LogicOp returns Stmt:
- 	CompareOp ({LogicOp.left=current} operator=LOGIC right=CompareOp)*;
+ 	CompareOp (=>({LogicOp.left=current} operator=LOGIC) right=CompareOp)*;
   
 CompareOp returns Stmt:
-  RelationOp ({CompareOp.left=current} operator=COMPARE right=RelationOp)*;
+  RelationOp (=>({CompareOp.left=current} operator=COMPARE) right=RelationOp)*;
 
 RelationOp returns Stmt:
-  ShiftOp ({RelationOp.left=current} operator=RELATION right=ShiftOp)*;
+  ShiftOp (=>({RelationOp.left=current} operator=RELATION) right=ShiftOp)*;
 
 ShiftOp returns Stmt:
-  AdditiveOp ({ShiftOp.left=current} operator=SHIFT right=AdditiveOp)*;
+  AdditiveOp (=>({ShiftOp.left=current} operator=SHIFT) right=AdditiveOp)*;
 
 AdditiveOp returns Stmt:
-  MathOp ({AdditiveOp.left=current} operator=(PLUS | MINUS) right=MathOp)*;
+  MathOp (=>({AdditiveOp.left=current} operator=(PLUS | MINUS)) right=MathOp)*;
 
 MathOp returns Stmt:
-  UnaryOp ({MathOp.left=current} operator=MATH right=UnaryOp)*;
+  UnaryOp (=>({MathOp.left=current} operator=MATH) right=UnaryOp)*;
 
 UnaryOp returns Stmt:
-	PrimaryExpression QUESTION? |
 	(UNARY | PLUS | MINUS) Expression |
-	IncrementedVariable;
+	(PLUS_PLUS | MINUS_MINUS) Variable |
+	// FIXME: postfix increment
+	PrimaryExpression QUESTION?;
 	
 PrimaryExpression returns Stmt:
 	IfExp |
@@ -72,7 +73,7 @@ CondBlock: operator=IF condition=Expression action=Block;
 Id: name=IDENTIFIER;
 
 Value returns Value:
-	UnassignableValue |
+	(=>(UnassignableValue)) |
 	Assignable;
 
 UnassignableValue returns Value:
@@ -80,13 +81,8 @@ UnassignableValue returns Value:
 	Parenthetical;
 
 Variable returns Value:
-	// uncommenting the next line would cause a non-LL decision
-	//UnassignableValue props+=Accessor+ |
+	UnassignableValue props+=Accessor+ |
 	Id props+=Accessor*;
-
-IncrementedVariable returns Value:
-	(PLUS_PLUS | MINUS_MINUS) Variable |
-	Variable (PLUS_PLUS | MINUS_MINUS);
 
 Assignable returns Value:
 	Variable |

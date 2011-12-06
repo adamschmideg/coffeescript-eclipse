@@ -17,7 +17,7 @@ class OperatorsTest extends ParserTestBase {
     ok('a * -b')
     ok('a? + b')
     ok('a?+b')
-    ok('a++ + b')
+    shouldBeOk('a++ + b')
     ok('++a - b')
   }
   
