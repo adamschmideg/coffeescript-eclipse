@@ -73,23 +73,31 @@ CondBlock: operator=IF condition=Expression action=Block;
 Id: name=IDENTIFIER;
 
 Value returns Value:
-	(=>(UnassignableValue)) |
-	Assignable;
+	//(=>(UnassignableValue)) |
+	=>Assignable |
+	UnassignableValue;
 
 UnassignableValue returns Value:
-	Literal |
-	Parenthetical;
+	Parenthetical |
+	FunctionCall |
+	Literal;
+
+FunctionCall returns Value:
+	=>(Id CALL_START) CALL_END;
 
 Variable returns Value:
-	UnassignableValue props+=Accessor+ |
-	Id props+=Accessor*;
+	UnassignableValue prop=Property |
+	Id prop=Property?;
 
+Property returns Value:
+	props+=Accessor* DOT prop=Id;
+	
 Assignable returns Value:
 	Variable |
 	Array;
 	
 Accessor returns Value:
-	DOT Id (CALL_START CALL_END)?;
+	=>DOT (FunctionCall | Id);
 
 Array returns Value:
 	{Value} LBRACKET RBRACKET;
@@ -106,9 +114,8 @@ Literal
   | BoolLiteral
   ;
 
-Parenthetical
-  : LPAREN Body RPAREN
-  ;
+Parenthetical:
+	=>LPAREN Body RPAREN;
  
 // terminals {{{
 terminal AT_SIGIL: 'dummy AT_SIGIL';

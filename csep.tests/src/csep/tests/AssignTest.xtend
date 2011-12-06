@@ -26,4 +26,12 @@ class AssignTest extends ParserTestBase {
     ok('a = ++b')
     shouldBeOk('[a, b, c] = [1, 2, 3]')
   }
+  
+  @Test
+  def void testUnassignable() {
+  	error('1 = 2')
+  	error('(a + b) = 2')
+  	ok('foo.bar = 3')
+  	error('foo.bar() = 3')
+  }
 }

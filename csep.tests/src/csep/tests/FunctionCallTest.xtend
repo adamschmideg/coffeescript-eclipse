@@ -7,15 +7,15 @@ class FunctionCallTest extends ParserTestBase {
 	@Test
 	def void testProperty() {
 		ok('foo.bar')
-		shouldBeOk('"text".len')
-		ok('a.size + b.getSize()')
+		ok('"text".len')
+		shouldBeOk('a.size + b.getSize()')
 	}
 	
 	@Test
 	def void testCallSimple() {
-		shouldBeOk('foo()')
-		ok('list.pop()')
+		ok('foo()')
+		shouldBeOk('list.pop()')
 		shouldBeOk('"text".trim()')
-		ok('list.pop().remove()')
+		shouldBeOk('list.pop().remove()')
 	}
 }
