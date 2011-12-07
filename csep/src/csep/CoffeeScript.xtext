@@ -53,12 +53,26 @@ UnaryOp returns Stmt:
 	(UNARY | PLUS | MINUS) Expression |
 	(PLUS_PLUS | MINUS_MINUS) Variable |
 	// FIXME: postfix increment
-	PrimaryExpression QUESTION?;
+	FunctionCall QUESTION?;
+	
+FunctionCall returns Stmt:
+	Property ({FunctionCall.x=current} FUNC_EXIST? CALL_START CALL_END)*;
+	
+Property returns Stmt:
+	PrimaryExpression ({Property.x=current} (prop=PropertyAccess | ind=IndexAccess))*;
+
+PropertyAccess:
+	(DOT | QUESTION_DOT) Id;
+	
+IndexAccess:
+	LBRACKET Expression RBRACKET;
 	
 PrimaryExpression returns Stmt:
 	IfExp |
-	Value;
-
+	Parenthetical |
+	Literal |
+	Id;
+	
 Block
   : {Block} INDENT Body? OUTDENT
   ;
@@ -74,31 +88,21 @@ Id: name=IDENTIFIER;
 
 Value returns Value:
 	//(=>(UnassignableValue)) |
-	=>Assignable |
+	Assignable |
 	UnassignableValue;
 
 UnassignableValue returns Value:
 	Parenthetical |
-	FunctionCall |
 	Literal;
 
-FunctionCall returns Value:
-	=>(Id CALL_START) CALL_END;
-
 Variable returns Value:
-	UnassignableValue prop=Property |
-	Id prop=Property?;
+	Id |
+	{Variable} prop=Property;
 
-Property returns Value:
-	props+=Accessor* DOT prop=Id;
-	
 Assignable returns Value:
 	Variable |
 	Array;
 	
-Accessor returns Value:
-	=>DOT (FunctionCall | Id);
-
 Array returns Value:
 	{Value} LBRACKET RBRACKET;
 	
