@@ -1,0 +1,35 @@
+- Statement
+  - PureStmt (Expression exp)
+    - ReturnStmt
+    - ThrowStmt
+  - Expression
+    - Assignment (Assignable left, Expression right)
+    - BinaryExp (Expression left, Expression right)
+      - LogicOp
+      - MathOp
+    - UnaryOp (Expression exp)
+    - IfExp
+    - WhileExp
+    - PrimaryExp
+      - Application (PrimaryExp value)
+        - FunctionCall (ArgList args)
+        - Property
+          - NamedProperty (String accessor, Id id)
+            - ThisProperty
+          - IndexedProperty (Index index)
+      - Literal (Class type)
+        - StringLiteral (String value)
+        - NumberLiteral (Number value)
+      - Parenthetical (Expression exp)
+      - Range (Expression start, String dots, Expression end)
+      - Assignable
+        - Array (ArgList values)
+        - Dictionary
+        - Variable
+          - Id (String name)
+          - Property
+
+- ArgList (List<Expression> expressions, boolean splat)
+- Index
+  - SimpleIndex (Expression index)
+  - Slice (Expression start, String dots, Expression end)
