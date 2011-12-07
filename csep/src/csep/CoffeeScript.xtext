@@ -28,7 +28,7 @@ PostfixIf returns Stmt:
 	Assignment (=>({PostfixIf.truePart=current} operator=(POST_IF | IF)) condition=Expression)?;
 
 Assignment returns Stmt:
-	(=>(left=Assignable operator=(EQUAL | COMPOUND_ASSIGN)) right=Expression) |
+	(=>(left=(Id | PropertyAccess) operator=(EQUAL | COMPOUND_ASSIGN)) right=Expression) |
 	LogicOp;
 
 LogicOp returns Stmt:
@@ -53,18 +53,20 @@ UnaryOp returns Stmt:
 	(UNARY | PLUS | MINUS) Expression |
 	(PLUS_PLUS | MINUS_MINUS) Variable |
 	// FIXME: postfix increment
-	FunctionCall QUESTION?;
+	AccessOp QUESTION?;
+	
+// Nested function calls and property accesses -- I couldn't come up with a better name
+AccessOp returns Stmt:
+	PrimaryExpression ({AccessOp.exp=current} access=(FunctionCall | PropertyAccess))*;
+
+Property returns Stmt:
+	x=AccessOp y=PropertyAccess;
 	
 FunctionCall returns Stmt:
-	Property ({FunctionCall.x=current} FUNC_EXIST? CALL_START CALL_END)*;
+	{FunctionCall} FUNC_EXIST? CALL_START CALL_END;
 	
-Property returns Stmt:
-	PrimaryExpression ({Property.x=current} (prop=PropertyAccess | ind=IndexAccess))*;
-
-PropertyAccess:
-	(DOT | QUESTION_DOT) Id;
-	
-IndexAccess:
+PropertyAccess returns Stmt:
+	((DOT | QUESTION_DOT) Id) |
 	LBRACKET Expression RBRACKET;
 	
 PrimaryExpression returns Stmt:
@@ -96,8 +98,8 @@ UnassignableValue returns Value:
 	Literal;
 
 Variable returns Value:
-	Id |
-	{Variable} prop=Property;
+	// Id is via Property
+	{Variable} prop=PropertyAccess;
 
 Assignable returns Value:
 	Variable |
