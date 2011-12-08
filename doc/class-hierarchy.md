@@ -1,12 +1,10 @@
-- Statement
-  - PureStmt (Expression exp)
+- Line
+  - Stmt (Expression exp)
     - ReturnStmt
     - ThrowStmt
   - Expression
     - Assignment (Assignable left, Expression right)
     - BinaryExp (Expression left, Expression right)
-      - LogicOp
-      - MathOp
     - UnaryOp (Expression exp)
     - IfExp
     - WhileExp

@@ -8,68 +8,83 @@ Root
   | Block TERMINATOR
   ;
 
-Body
-  : lines+=Line (TERMINATOR lines+=Line?)*
-  ;
+Body:
+	lines+=Line (TERMINATOR lines+=Line?)*;
 
 Line:
+	Stmt |
 	Expression;
 	
-Stmt returns Stmt:
-	RETURN Expression |
-	THROW Expression;
+Stmt:
+	ReturnStmt |
+	ThrowStmt;
 	
-Expression returns Stmt:
+ReturnStmt:
+	RETURN exp=Expression;
+	
+ThrowStmt:
+	THROW exp=Expression;
+	
+Expression:
 	PostfixIf;
 	
 // right-assoc
 // Note: the lexer seems to know it should give a POST_IF token here
-PostfixIf returns Stmt:
+PostfixIf returns Expression:
 	Assignment (=>({PostfixIf.truePart=current} operator=(POST_IF | IF)) condition=Expression)?;
 
-Assignment returns Stmt:
-	(=>(left=(Id | PropertyAccess) operator=(EQUAL | COMPOUND_ASSIGN)) right=Expression) |
+Assignment returns Expression:
+	{Assignment} (=>(left=(Id | PropertyAccess) operator=(EQUAL | COMPOUND_ASSIGN)) right=Expression) |
 	LogicOp;
 
-LogicOp returns Stmt:
- 	CompareOp (=>({LogicOp.left=current} operator=LOGIC) right=CompareOp)*;
+LogicOp returns Expression:
+ 	CompareOp (=>({BinaryExp.left=current} operator=LOGIC) right=CompareOp)*;
   
-CompareOp returns Stmt:
-  RelationOp (=>({CompareOp.left=current} operator=COMPARE) right=RelationOp)*;
+CompareOp returns Expression:
+  RelationOp (=>({BinaryExp.left=current} operator=COMPARE) right=RelationOp)*;
 
-RelationOp returns Stmt:
-  ShiftOp (=>({RelationOp.left=current} operator=RELATION) right=ShiftOp)*;
+RelationOp returns Expression:
+  ShiftOp (=>({BinaryExp.left=current} operator=RELATION) right=ShiftOp)*;
 
-ShiftOp returns Stmt:
-  AdditiveOp (=>({ShiftOp.left=current} operator=SHIFT) right=AdditiveOp)*;
+ShiftOp returns Expression:
+  AdditiveOp (=>({BinaryExp.left=current} operator=SHIFT) right=AdditiveOp)*;
 
-AdditiveOp returns Stmt:
-  MathOp (=>({AdditiveOp.left=current} operator=(PLUS | MINUS)) right=MathOp)*;
+AdditiveOp returns Expression:
+  MathOp (=>({BinaryExp.left=current} operator=(PLUS | MINUS)) right=MathOp)*;
 
-MathOp returns Stmt:
-  UnaryOp (=>({MathOp.left=current} operator=MATH) right=UnaryOp)*;
+MathOp returns Expression:
+  UnaryOp (=>({BinaryExp.left=current} operator=MATH) right=UnaryOp)*;
 
-UnaryOp returns Stmt:
+UnaryOp returns Expression:
 	(UNARY | PLUS | MINUS) Expression |
 	(PLUS_PLUS | MINUS_MINUS) Variable |
 	// FIXME: postfix increment
-	AccessOp QUESTION?;
+	Application QUESTION?;
 	
 // Nested function calls and property accesses -- I couldn't come up with a better name
-AccessOp returns Stmt:
-	PrimaryExpression ({AccessOp.exp=current} access=(FunctionCall | PropertyAccess))*;
+Application:
+	value=PrimaryExpression ({Application.value=current} dummy=(FunctionCall | PropertyAccess))*;
 
-Property returns Stmt:
-	x=AccessOp y=PropertyAccess;
-	
-FunctionCall returns Stmt:
+FunctionCall:
 	{FunctionCall} FUNC_EXIST? CALL_START CALL_END;
 	
-PropertyAccess returns Stmt:
-	((DOT | QUESTION_DOT) Id) |
-	LBRACKET Expression RBRACKET;
+PropertyAccess:
+	NamedPropertyAccess |
+	IndexedPropertyAccess;
 	
-PrimaryExpression returns Stmt:
+NamedPropertyAccess:	
+	(accessor=(DOT | QUESTION_DOT) name=Id) |
+	(accessor=DOUBLE_COLON name=Id?);
+
+IndexedPropertyAccess:
+	LBRACKET index=Index RBRACKET;
+	
+Index:
+	(=>(dots=DOT_DOT) end=Expression) |
+	(=>(start=Expression dots=DOT_DOT) end=Expression?) |
+	exp=Expression;
+	
+PrimaryExpression:
 	IfExp |
 	Parenthetical |
 	Literal |
@@ -121,7 +136,7 @@ Literal
   ;
 
 Parenthetical:
-	=>LPAREN Body RPAREN;
+	=>LPAREN content=Body RPAREN;
  
 // terminals {{{
 terminal AT_SIGIL: 'dummy AT_SIGIL';
