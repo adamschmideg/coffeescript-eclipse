@@ -123,6 +123,10 @@
 * Handle dynamic variables.
   It's more difficult than it first seemed, see [my Stackoverflow question about handling dynamic variables][10]
 
+* There is a difference between the generated debug grammar and the
+ generated proper grammar, even to the extent that the debug grammar
+ works, the proper one doesn't compile.
+
   [1]: http://jevopisdeveloperblog.blogspot.com/2011/03/implement-tostring-with-xtexts.html
   [2]: http://www.eclipse.org/Xtext/documentation/2_1_0/100-serialization.php#serializationcontract 
   [3]: http://stackoverflow.com/questions/8154790/visualize-lalr-grammar

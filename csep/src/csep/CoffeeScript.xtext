@@ -34,8 +34,14 @@ PostfixIf returns Expression:
 	Assignment (=>({PostfixIf.truePart=current} operator=(POST_IF | IF)) condition=Expression)?;
 
 Assignment returns Expression:
-	{Assignment} (=>(left=(Id | PropertyAccess) operator=(EQUAL | COMPOUND_ASSIGN)) right=Expression) |
-	LogicOp;
+	/* The generated DebugInternalCoffeeScript.g works with the commented out rules
+	 * but the InternalCoffeeScript.g doesn't even compile
+
+	{Assignment} (=>(left=Id operator=(EQUAL | COMPOUND_ASSIGN)) right=Expression) |
+	{Assignment} (=>(left=Property operator=(EQUAL | COMPOUND_ASSIGN)) right=Expression) |
+	LogicOp
+	*/
+	LogicOp (=>({Assignment.left=current} operator=EQUAL) right=Expression)?;
 
 LogicOp returns Expression:
  	CompareOp (=>({BinaryExp.left=current} operator=LOGIC) right=CompareOp)*;
@@ -63,8 +69,15 @@ UnaryOp returns Expression:
 	
 // Nested function calls and property accesses -- I couldn't come up with a better name
 Application:
-	value=PrimaryExpression ({Application.value=current} dummy=(FunctionCall | PropertyAccess))*;
-
+	PrimaryExpression ({Application.value=current} feature=FeatureCall)*;
+	
+Property:
+	=>(PrimaryExpression feat+=FeatureCall* DOT) prop=Id;
+	
+FeatureCall:
+	FunctionCall |
+	PropertyAccess;
+	
 FunctionCall:
 	{FunctionCall} FUNC_EXIST? CALL_START CALL_END;
 	
@@ -77,7 +90,7 @@ NamedPropertyAccess:
 	(accessor=DOUBLE_COLON name=Id?);
 
 IndexedPropertyAccess:
-	LBRACKET index=Index RBRACKET;
+	INDEX_START index=Index INDEX_END;
 	
 Index:
 	(=>(dots=DOT_DOT) end=Expression) |
@@ -123,11 +136,14 @@ Assignable returns Value:
 Array returns Value:
 	{Value} LBRACKET RBRACKET;
 	
-NumberLiteral: value=NUMBER;
+NumberLiteral:
+	{NumberLiteral} NUMBER;
 
-StringLiteral: value=STRING;
+StringLiteral:
+	{StringLiteral} STRING;
 
-BoolLiteral: value=BOOL;
+BoolLiteral:
+	{BoolLiteral} BOOL;
 
 Literal
   : NumberLiteral
@@ -139,24 +155,44 @@ Parenthetical:
 	=>LPAREN content=Body RPAREN;
  
 // terminals {{{
-terminal AT_SIGIL: 'dummy AT_SIGIL';
+/* Note: these are only to enable debugging with Antlworks,
+ * The actual tokens are provided by the lexer.
+ * The debugger is smart in some cases, and emits different tokens
+ * for the same character depending on the context.
+ * For example
+ * "(1)" -> LPAREN NUMBER RPAREN
+ * "func()" -> IDENTIFIER CALL_START CALL_END
+ * But the debugger expects different strings for the tokens,
+ * so special ones get an additional asterisk:
+ * LPAREN: '('
+ * CALL_START: '(*'
+ * 
+ * To imitate indentation while debugging, use INDENT and OUTDENT, like this
+ *   if maybe {*
+ *     action()
+ *   *}
+ *   else {*
+ *     wait()
+ *   *}
+ */
+terminal AT_SIGIL: '@';
 terminal BOOL: 'true' | 'false' | 'undefined' | 'null';
 terminal BOUND_FUNC_ARROW: 'dummy BOUND_FUNC_ARROW';
 terminal BY: 'dummy BY';
-terminal CALL_END: 'dummy CALL_END';
-terminal CALL_START: 'dummy CALL_START';
+terminal CALL_END: '*)';
+terminal CALL_START: '(*';
 terminal CATCH: 'dummy CATCH';
-terminal CLASS: 'dummy CLASS';
-terminal COLON: 'dummy COLON';
+terminal CLASS: 'class';
+terminal COLON: ':';
 terminal COLON_SLASH: 'dummy COLON_SLASH';
 terminal COMMA: 'dummy COMMA';
 terminal COMPARE : '<' | '==' | '>' | '<=' | '>=' | '!=';
 terminal COMPOUND_ASSIGN: '+=' | '-=';
-terminal DOT_DOT: 'dummy DOT_DOT';
-terminal DOT: 'dummy DOT';
-terminal DOUBLE_COLON: 'dummy DOUBLE_COLON';
-terminal ELLIPSIS: 'dummy ELLIPSIS';
-terminal ELSE: 'dummy ELSE';
+terminal DOT_DOT: '..';
+terminal DOT: '.';
+terminal DOUBLE_COLON: '::';
+terminal ELLIPSIS: '...';
+terminal ELSE: 'else';
 terminal EQUAL: '=';
 terminal EXTENDS: 'dummy EXTENDS';
 terminal FINALLY: 'dummy FINALLY';
@@ -167,11 +203,11 @@ terminal FUNC_ARROW: 'dummy FUNC_ARROW';
 terminal FUNC_EXIST: 'dummy FUNC_EXIST';
 terminal HERECOMMENT: 'dummy HERECOMMENT';
 terminal IF: 'if' | 'unless';
-terminal INDENT: '{*'; // just for testing!
-terminal INDEX_END: 'dummy INDEX_END';
+terminal INDENT: '{*';
+terminal INDEX_END: '*]';
 terminal INDEX_PROTO: 'dummy INDEX_PROTO';
 terminal INDEX_SOAK: 'dummy INDEX_SOAK';
-terminal INDEX_START: 'dummy INDEX_START';
+terminal INDEX_START: '[*';
 terminal JS: 'dummy JS';
 terminal LBRACKET: 'dummy LBRACKET';
 terminal LCURLY: 'dummy LCURLY';
@@ -192,12 +228,12 @@ terminal PLUS: '+';
 terminal PLUS_PLUS: '++';
 terminal POST_IF: 'dummy POST_IF'; // practically the same as IF
 terminal QUESTION: '?';
-terminal QUESTION_DOT: 'dummy QUESTION_DOT';
+terminal QUESTION_DOT: '?.';
 terminal RBRACKET: 'dummy RBRACKET';
 terminal RCURLY: 'dummy RCURLY';
 terminal REGEX: 'dummy REGEX';
 terminal RELATION: 'in' | 'of' | 'instanceof'; 
-terminal RETURN: 'dummy RETURN';
+terminal RETURN: 'return';
 terminal RPAREN: ')';
 terminal SHIFT: '<<' | '>>';
 terminal STATEMENT: 'dummy STATEMENT';
@@ -207,7 +243,7 @@ terminal SWITCH: 'dummy SWITCH';
 terminal TERMINATOR: '\n';
 terminal THEN: 'dummy THEN';
 terminal THIS: 'dummy THIS';
-terminal THROW: 'dummy THROW';
+terminal THROW: 'throw';
 terminal TRY: 'dummy TRY';
 terminal UNARY: '!' | '~' | 'new';
 terminal UNTIL: 'dummy UNTIL';
