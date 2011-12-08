@@ -126,6 +126,7 @@
 * There is a difference between the generated debug grammar and the
  generated proper grammar, even to the extent that the debug grammar
  works, the proper one doesn't compile.
+ See [my question at Stackoverflow][11] for more.
 
   [1]: http://jevopisdeveloperblog.blogspot.com/2011/03/implement-tostring-with-xtexts.html
   [2]: http://www.eclipse.org/Xtext/documentation/2_1_0/100-serialization.php#serializationcontract 
@@ -137,3 +138,4 @@
   [8]: http://eclipse.org/Xtext/documentation/indigo/new_and_noteworthy.php
   [9]: http://stackoverflow.com/questions/7954142/antlr-decision-can-match-input-using-multiple-alternatives
   [10]: http://stackoverflow.com/questions/8387818/handle-dynamic-variable-with-xtext-grammar
+  [11]: http://stackoverflow.com/questions/8438755/stripping-actions-from-antlr-grammar-changes-its-parsing-algorithm
