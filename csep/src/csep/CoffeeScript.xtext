@@ -63,7 +63,7 @@ UnaryOp returns Expression:
 	
 // Nested function calls and property accesses -- I couldn't come up with a better name
 Application:
-	PrimaryExpression ({Application.value=current} feature=FeatureCall)*;
+	value=PrimaryExpression features+=FeatureCall*;
 	
 FeatureCall:
 	FunctionCall |
