@@ -17,17 +17,20 @@ class ArrayTest extends ParserTestBase {
 		ok('[1, 2,]')
 		ok('[1, 2...]')
 		error('[1,,]')
-		shouldBeOk('''
-		a = [
+		ok('''
+indent = [1
+   2]''')
+		ok('''
+		[
 		  1
 		  2
 		]''')
-		shouldBeOk('''
-		b = [
+		ok('''
+		[
 		  3, 4,
 		]
 		''')
-		shouldBeOk('''
+		ok('''
 		c = [
 		  4...,
 		  5,6
