@@ -43,7 +43,7 @@ public abstract class ParserTestBase extends AbstractXtextTests {
 		} catch (AssertionFailedError afe) {
 			throw afe;
 		} catch (Exception e) {
-			fail(e.getMessage());
+			throw new RuntimeException(e);
 		}
 	}
 

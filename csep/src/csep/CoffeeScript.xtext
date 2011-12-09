@@ -34,14 +34,8 @@ PostfixIf returns Expression:
 	Assignment (=>({PostfixIf.truePart=current} operator=(POST_IF | IF)) condition=Expression)?;
 
 Assignment returns Expression:
-	/* The generated DebugInternalCoffeeScript.g works with the commented out rules
-	 * but the InternalCoffeeScript.g doesn't even compile
-
-	{Assignment} (=>(left=Id operator=(EQUAL | COMPOUND_ASSIGN)) right=Expression) |
-	{Assignment} (=>(left=Property operator=(EQUAL | COMPOUND_ASSIGN)) right=Expression) |
-	LogicOp
-	*/
-	LogicOp (=>({Assignment.left=current} operator=EQUAL) right=Expression)?;
+	{Assignment} (=>(left=Assignable operator=(EQUAL | COMPOUND_ASSIGN)) right=Expression) |
+	LogicOp;
 
 LogicOp returns Expression:
  	CompareOp (=>({BinaryExp.left=current} operator=LOGIC) right=CompareOp)*;
@@ -70,9 +64,6 @@ UnaryOp returns Expression:
 // Nested function calls and property accesses -- I couldn't come up with a better name
 Application:
 	PrimaryExpression ({Application.value=current} feature=FeatureCall)*;
-	
-Property:
-	=>(PrimaryExpression feat+=FeatureCall* DOT) prop=Id;
 	
 FeatureCall:
 	FunctionCall |
@@ -116,24 +107,23 @@ CondBlock: operator=IF condition=Expression action=Block;
 
 Id: name=IDENTIFIER;
 
-Value returns Value:
-	//(=>(UnassignableValue)) |
-	Assignable |
-	UnassignableValue;
-
-UnassignableValue returns Value:
-	Parenthetical |
-	Literal;
-
-Variable returns Value:
-	// Id is via Property
-	{Variable} prop=PropertyAccess;
-
-Assignable returns Value:
-	Variable |
-	Array;
+Property:
+	// FIXME: property is actually "Expression DOT Id"
+	Id DOT prop=Id;
 	
-Array returns Value:
+Variable:
+	Id |
+	Property;
+
+Assignable:
+    Variable;
+	/*
+	 * FIXME: handle more complex assignables
+	 *
+	Array;
+	*/
+	
+Array:
 	{Value} LBRACKET RBRACKET;
 	
 NumberLiteral:
