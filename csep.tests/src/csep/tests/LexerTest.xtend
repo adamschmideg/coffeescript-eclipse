@@ -55,7 +55,7 @@ IDENTIFIER:even
 TERMINATOR:
 ''')
     }
-       
+    
 	def void check(CharSequence input, CharSequence expectedStr) {
 		val lexer = new Lexer(input)
 		val tokens = lexer.tokenizeToStrings()

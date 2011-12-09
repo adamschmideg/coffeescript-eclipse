@@ -92,6 +92,7 @@ PrimaryExpression:
 	IfExp |
 	Parenthetical |
 	Literal |
+	Array |
 	Id;
 	
 Block
@@ -123,8 +124,17 @@ Assignable:
 	Array;
 	*/
 	
+Arg:
+	exp=Expression splat?=ELLIPSIS?;
+	
+ArgLine:
+	head=Arg (COMMA tail+=Arg)* COMMA?;
+	
+ArgList:
+	{ArgList} (lines+=ArgLine ((TERMINATOR lines+=ArgLine) | (INDENT lines+=ArgLine OUTDENT))*)?;
+	
 Array:
-	{Value} LBRACKET RBRACKET;
+	=>LBRACKET ArgList RBRACKET;
 	
 NumberLiteral:
 	{NumberLiteral} NUMBER;
@@ -165,6 +175,16 @@ Parenthetical:
  *     wait()
  *   *}
  */
+// compound terminals at the beginning to they don't get shadowed
+terminal ELLIPSIS: '...';
+terminal DOT_DOT: '..';
+terminal DOUBLE_COLON: '::';
+terminal SHIFT: '<<' | '>>';
+terminal COMPARE : '<' | '==' | '>' | '<=' | '>=' | '!=';
+terminal COMPOUND_ASSIGN: '+=' | '-=';
+terminal PLUS_PLUS: '++';
+terminal MINUS_MINUS: '--';
+
 terminal AT_SIGIL: '@';
 terminal BOOL: 'true' | 'false' | 'undefined' | 'null';
 terminal BOUND_FUNC_ARROW: 'dummy BOUND_FUNC_ARROW';
@@ -176,12 +196,7 @@ terminal CLASS: 'class';
 terminal COLON: ':';
 terminal COLON_SLASH: 'dummy COLON_SLASH';
 terminal COMMA: 'dummy COMMA';
-terminal COMPARE : '<' | '==' | '>' | '<=' | '>=' | '!=';
-terminal COMPOUND_ASSIGN: '+=' | '-=';
-terminal DOT_DOT: '..';
 terminal DOT: '.';
-terminal DOUBLE_COLON: '::';
-terminal ELLIPSIS: '...';
 terminal ELSE: 'else';
 terminal EQUAL: '=';
 terminal EXTENDS: 'dummy EXTENDS';
@@ -199,7 +214,7 @@ terminal INDEX_PROTO: 'dummy INDEX_PROTO';
 terminal INDEX_SOAK: 'dummy INDEX_SOAK';
 terminal INDEX_START: '[*';
 terminal JS: 'dummy JS';
-terminal LBRACKET: 'dummy LBRACKET';
+terminal LBRACKET: '[';
 terminal LCURLY: 'dummy LCURLY';
 terminal LEADING_WHEN: 'dummy LEADING_WHEN';
 terminal LOGIC: '&&' | '||';
@@ -207,7 +222,6 @@ terminal LOOP: 'dummy LOOP';
 terminal LPAREN: '(';
 terminal MATH: '*' | '/';
 terminal MINUS: '-';
-terminal MINUS_MINUS: '--';
 terminal NEW: 'dummy NEW';
 terminal NUMBER returns ecore::EInt: ('0'..'9')+;
 terminal OUTDENT: '*}';
@@ -215,17 +229,15 @@ terminal OWN: 'dummy OWN';
 terminal PARAM_END: 'dummy PARAM_END';
 terminal PARAM_START: 'dummy PARAM_START';
 terminal PLUS: '+';
-terminal PLUS_PLUS: '++';
 terminal POST_IF: 'dummy POST_IF'; // practically the same as IF
 terminal QUESTION: '?';
 terminal QUESTION_DOT: '?.';
-terminal RBRACKET: 'dummy RBRACKET';
+terminal RBRACKET: ']';
 terminal RCURLY: 'dummy RCURLY';
 terminal REGEX: 'dummy REGEX';
 terminal RELATION: 'in' | 'of' | 'instanceof'; 
 terminal RETURN: 'return';
 terminal RPAREN: ')';
-terminal SHIFT: '<<' | '>>';
 terminal STATEMENT: 'dummy STATEMENT';
 terminal STRING: '"' (('a'..'z') | ' ')* '"';
 terminal SUPER: 'dummy SUPER';

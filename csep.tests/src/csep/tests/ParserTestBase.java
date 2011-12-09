@@ -1,5 +1,7 @@
 package csep.tests;
 
+import java.util.List;
+
 import junit.framework.AssertionFailedError;
 
 import org.apache.log4j.Logger;
@@ -9,6 +11,7 @@ import org.eclipse.xtext.resource.XtextResource;
 
 import csep.CoffeeScriptStandaloneSetup;
 import csep.parser.Helper;
+import csep.parser.Lexer;
 
 /**
  * Enable testing if a code snippet gets parsed as expected.
@@ -34,13 +37,17 @@ public abstract class ParserTestBase extends AbstractXtextTests {
 		return false;
 	}
 
-	protected void expect(Object input, int errors) {
+	protected void expect(CharSequence input, int errors) {
+		List<String> tokens = null;
 		try {
+			Lexer lexer = new Lexer(input);
+			tokens = lexer.tokenizeToStrings();
 			EObject parseResult = getModelAndExpect(input.toString(), errors);
 			if (logger.isDebugEnabled()) {
 				logger.debug("Parsed " + this.getClass().getSimpleName() + " '" + input + "'\n" +Helper.stringify(parseResult));
 			}
 		} catch (AssertionFailedError afe) {
+			logger.warn("Tokens of '" + input + "' -> " + tokens);
 			throw afe;
 		} catch (Exception e) {
 			throw new RuntimeException(e);
@@ -51,7 +58,7 @@ public abstract class ParserTestBase extends AbstractXtextTests {
 	 * Input can be parsed without syntax errors
 	 * @param input typically a String or a multiline xtend String
 	 */
-	public void ok(Object input) {
+	public void ok(CharSequence input) {
 		expect(input, 0);
 	}
 
@@ -59,14 +66,14 @@ public abstract class ParserTestBase extends AbstractXtextTests {
 	 * Parsing input results in one syntax error
 	 * @param input
 	 */
-	public void error(Object input) {
+	public void error(CharSequence input) {
 		expect(input, 1);
 	}
 	
 	/**
 	 * Indicate that a test case should parse, but it gives errors
 	 */
-	 public void shouldBeOk(Object input) {
+	 public void shouldBeOk(CharSequence input) {
 		 String clazz = this.getClass().getSimpleName();
 		 boolean wasOk = false;
 		 try {
