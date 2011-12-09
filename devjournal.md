@@ -128,6 +128,16 @@
  works, the proper one doesn't compile.
  See [my question at Stackoverflow][11] for more.
 
+* Another trick I tried for assignment is to treat property assignment
+ differently, so `a.b = 3` is thought of as `a (.b =) 3`.
+ The actual Xtext is
+
+    Assignment returns Expression: 
+     {Assignment} (=>(left=(Id | Array) operator=(EQUAL | COMPOUND_ASSIGN)) right=Expression) |
+     LogicOp (=>({PropertyAssignment.left=current} prop=PropertyAccess operator=EQUAL) right=Expression)?;
+
+ Unfortunately, it gives the same non-LL(*) decision error.
+
   [1]: http://jevopisdeveloperblog.blogspot.com/2011/03/implement-tostring-with-xtexts.html
   [2]: http://www.eclipse.org/Xtext/documentation/2_1_0/100-serialization.php#serializationcontract 
   [3]: http://stackoverflow.com/questions/8154790/visualize-lalr-grammar
