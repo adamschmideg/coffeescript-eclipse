@@ -23,8 +23,5 @@ class FunctionCallTest extends ParserTestBase {
 	@Test
 	def void testAssignProperty() {
 		ok('a.b = 1')
-		shouldBeOk('a.b.c = 1')
-		shouldBeOk('f().a = 2')
-		shouldBeOk('(1 + 2).len = 3')
 	}
 }
