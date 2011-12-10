@@ -90,7 +90,7 @@ class ControlFlowTest extends ParserTestBase {
   def void testNestedSingleLineConditional() {
     ok('if nothing then oops else b = if 0 then oops else nonce')
     ok('if nothing then oops else (if 0 then oops else nonce)')
-    shouldBeOk('if something then id(if nothing then oops else nonce)')
+    ok('if something then id(if nothing then oops else nonce)')
   }
 
   @Test

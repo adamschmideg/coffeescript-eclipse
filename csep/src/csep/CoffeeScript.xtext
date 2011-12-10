@@ -70,7 +70,7 @@ FeatureCall:
 	PropertyAccess;
 	
 FunctionCall:
-	{FunctionCall} FUNC_EXIST? CALL_START CALL_END;
+	{FunctionCall} FUNC_EXIST? CALL_START args=ArgList CALL_END;
 	
 PropertyAccess:
 	NamedPropertyAccess |

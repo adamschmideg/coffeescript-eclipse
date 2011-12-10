@@ -24,4 +24,19 @@ class FunctionCallTest extends ParserTestBase {
 	def void testAssignProperty() {
 		ok('a.b = 1')
 	}
+	
+	@Test
+	def void testParameters() {
+		ok('fun(2)')
+		ok('fun(2,3)')
+		ok('fun 4')
+		error('fun 4 5')
+		ok('fun 4,5')
+		ok('''
+		  fun(
+		    6
+		    7
+		  )''')
+		ok('fun(named=42, 9)')
+	}
 }
