@@ -24,7 +24,7 @@ class AssignTest extends ParserTestBase {
   def void testCompound() {
     ok('a = b = 1')
     ok('a = ++b')
-    shouldBeOk('[a, b, c] = [1, 2, 3]')
+    ok('[a, b, c] = [1, 2, 3]')
   }
   
   @Test
