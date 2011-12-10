@@ -34,7 +34,7 @@ PostfixIf returns Expression:
 	Assignment (=>({PostfixIf.truePart=current} operator=(POST_IF | IF)) condition=Expression)?;
 
 Assignment returns Expression:
-	{Assignment} (=>(left=Assignable operator=(EQUAL | COMPOUND_ASSIGN)) right=Expression) |
+	(=>(left=Assignable operator=(EQUAL | COMPOUND_ASSIGN)) right=Expression) |
 	LogicOp;
 
 LogicOp returns Expression:
@@ -121,8 +121,6 @@ Assignable:
     Array;
 	/*
 	 * FIXME: handle more complex assignables
-	 *
-	Array;
 	*/
 	
 Arg:

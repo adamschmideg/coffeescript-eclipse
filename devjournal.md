@@ -128,6 +128,16 @@
  works, the proper one doesn't compile.
  See [my question at Stackoverflow][11] for more.
  * Just installed an [Antlr Eclipse plugin][12] to compare the grammars
+ * I found the reason:
+  
+    Assignment:
+      {Assignment} (=>(left...));
+
+  The `{Assignment}` part will be converted to an action in the internal
+  grammar, and to an empty group before the syntactic predicate in the
+  stripped off grammary, and to nothing in the debug grammar.
+  The empty group seems to invalidate the syntactic predicate.
+  I removed the `{Assignment}`, so an uglier AST will be produced.
 
 * Another trick I tried for assignment is to treat property assignment
  differently, so `a.b = 3` is thought of as `a (.b =) 3`.
