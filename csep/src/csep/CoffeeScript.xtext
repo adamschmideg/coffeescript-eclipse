@@ -117,7 +117,8 @@ Variable:
 	Property;
 
 Assignable:
-    Variable;
+    Variable |
+    Array;
 	/*
 	 * FIXME: handle more complex assignables
 	 *
