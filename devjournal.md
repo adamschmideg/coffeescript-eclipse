@@ -127,6 +127,7 @@
  generated proper grammar, even to the extent that the debug grammar
  works, the proper one doesn't compile.
  See [my question at Stackoverflow][11] for more.
+ * Just installed an [Antlr Eclipse plugin][12] to compare the grammars
 
 * Another trick I tried for assignment is to treat property assignment
  differently, so `a.b = 3` is thought of as `a (.b =) 3`.
@@ -149,3 +150,4 @@
   [9]: http://stackoverflow.com/questions/7954142/antlr-decision-can-match-input-using-multiple-alternatives
   [10]: http://stackoverflow.com/questions/8387818/handle-dynamic-variable-with-xtext-grammar
   [11]: http://stackoverflow.com/questions/8438755/stripping-actions-from-antlr-grammar-changes-its-parsing-algorithm
+  [12]: http://antlrv3ide.sourceforge.net/
