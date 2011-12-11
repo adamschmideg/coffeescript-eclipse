@@ -26,13 +26,25 @@ ThrowStmt:
 	THROW exp=Expression;
 	
 Expression:
-	PostfixIf;
+	Postfix;
 	
 // right-assoc
 // Note: the lexer seems to know it should give a POST_IF token here
-PostfixIf returns Expression:
-	Assignment (=>({PostfixIf.truePart=current} operator=(POST_IF | IF)) condition=Expression)?;
+Postfix returns Expression:
+	Assignment p+=PostfixIf?;
+	//Assignment (=>({PostfixIf.truePart=current} operator=(POST_IF | IF)) condition=Expression)?;
 
+PostfixIf returns Expression:	
+	=>operator=POST_IF condition=Expression;
+/*
+ * Uncommenting this rule would cause an error
+ * 
+PostfixFor returns Expression:
+	FOR Range;
+ */	
+Range:
+	=>(LBRACKET start=Expression (DOT | ELLIPSIS)) end=Expression RBRACKET;
+ 
 Assignment returns Expression:
 	(=>(left=Assignable operator=(EQUAL | COMPOUND_ASSIGN)) right=Assigned) |
 	LogicOp;
