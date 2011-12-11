@@ -97,6 +97,7 @@ PrimaryExpression:
 	Literal |
 	Array |
 	Dictionary |
+	Lambda |
 	Id;
 	
 Block
@@ -162,7 +163,14 @@ DictItem:
 DictKey:
 	Literal |
 	Id;
+
+// Code in coffeescript
+Lambda:
+	(PARAM_START (params+=Param (COMMA params+=Param)*)? PARAM_END)? (FUNC_ARROW | BOUND_FUNC_ARROW) Block;
 	
+Param:
+	(Id | Array | Dictionary) (splat?=ELLIPSIS | (EQUAL defaultValue=Expression))?;
+		
 NumberLiteral:
 	{NumberLiteral} NUMBER;
 
@@ -207,6 +215,8 @@ terminal ELLIPSIS: '...';
 terminal DOT_DOT: '..';
 terminal DOUBLE_COLON: '::';
 terminal SHIFT: '<<' | '>>';
+terminal BOUND_FUNC_ARROW: '=>';
+terminal FUNC_ARROW: '->';
 terminal COMPARE : '<' | '==' | '>' | '<=' | '>=' | '!=';
 terminal COMPOUND_ASSIGN: '+=' | '-=';
 terminal PLUS_PLUS: '++';
@@ -214,7 +224,6 @@ terminal MINUS_MINUS: '--';
 
 terminal AT_SIGIL: '@';
 terminal BOOL: 'true' | 'false' | 'undefined' | 'null';
-terminal BOUND_FUNC_ARROW: 'dummy BOUND_FUNC_ARROW';
 terminal BY: 'dummy BY';
 terminal CALL_END: '*)';
 terminal CALL_START: '(*';
@@ -231,7 +240,6 @@ terminal FINALLY: 'dummy FINALLY';
 terminal FOR: 'dummy FOR';
 terminal FORIN: 'dummy FORIN';
 terminal FOROF: 'dummy FOROF';
-terminal FUNC_ARROW: 'dummy FUNC_ARROW';
 terminal FUNC_EXIST: 'dummy FUNC_EXIST';
 terminal HERECOMMENT: 'dummy HERECOMMENT';
 terminal IF: 'if' | 'unless';
