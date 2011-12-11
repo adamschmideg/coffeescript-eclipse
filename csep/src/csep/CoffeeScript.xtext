@@ -98,7 +98,7 @@ PrimaryExpression:
 	Array |
 	Dictionary |
 	Lambda |
-	Id;
+	IdRef;
 	
 Block
   : {Block} INDENT Body? OUTDENT
@@ -110,6 +110,8 @@ IfExp
 
 // IF can be 'if' or 'unless'
 CondBlock: operator=IF condition=Expression action=Block;
+
+IdRef: val=[Id|IDENTIFIER];
 
 Id: name=IDENTIFIER;
 
