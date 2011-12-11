@@ -34,9 +34,12 @@ PostfixIf returns Expression:
 	Assignment (=>({PostfixIf.truePart=current} operator=(POST_IF | IF)) condition=Expression)?;
 
 Assignment returns Expression:
-	(=>(left=Assignable operator=(EQUAL | COMPOUND_ASSIGN)) right=Expression) |
+	(=>(left=Assignable operator=(EQUAL | COMPOUND_ASSIGN)) right=Assigned) |
 	LogicOp;
 
+Assigned returns Expression:
+	Expression | (INDENT Expression OUTDENT);
+	
 LogicOp returns Expression:
  	CompareOp (=>({BinaryExp.left=current} operator=LOGIC) right=CompareOp)*;
   
@@ -93,6 +96,7 @@ PrimaryExpression:
 	Parenthetical |
 	Literal |
 	Array |
+	Dictionary |
 	Id;
 	
 Block
@@ -118,6 +122,7 @@ Variable:
 
 Assignable:
     Variable |
+    Dictionary |
     Array;
 	/*
 	 * FIXME: handle more complex assignables
@@ -137,6 +142,26 @@ ArgList:
 	
 Array:
 	=>LBRACKET ArgList RBRACKET;
+	
+// Object in coffeescript
+Dictionary:
+	=>LCURLY DictItems RCURLY;
+	
+DictItems:
+	{DictItems} (dummy=ExplicitDictItems | (INDENT dummy=ExplicitDictItems OUTDENT))?;
+
+ExplicitDictItems:
+	lines+=DictLine ((TERMINATOR lines+=DictLine) | (INDENT lines+=DictLine OUTDENT))*;
+
+DictLine:
+	head=DictItem (COMMA tail+=DictItem)* COMMA?;
+
+DictItem:
+	{DictItem} key=DictKey (COLON (value=Expression | (INDENT value=Expression OUTDENT)))?;
+
+DictKey:
+	Literal |
+	Id;
 	
 NumberLiteral:
 	{NumberLiteral} NUMBER;
