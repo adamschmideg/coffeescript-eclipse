@@ -19,6 +19,7 @@ public abstract class Scanner
 {
 	public static class Exception extends java.lang.Exception
 	{
+		private static final long serialVersionUID = 1L;
 		public final int line;
 		public final int column;
 		

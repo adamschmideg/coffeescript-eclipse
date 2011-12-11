@@ -17,6 +17,8 @@ import csep.parser.antlr.internal.InternalCoffeeScriptLexer;
  *
  */
 public class BeaverToken extends CommonToken {
+
+	private static final long serialVersionUID = 1L;
 	/**
 	 * A mapping from Aptana terminal id to generated Antlr token id
 	 */
