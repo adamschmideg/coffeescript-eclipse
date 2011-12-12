@@ -38,4 +38,8 @@ indent = [1
 		]''')
 	}
 	
+	@Test
+	def void testRangeVsArray() {
+		ok('a = [1..3]')
+	}
 }

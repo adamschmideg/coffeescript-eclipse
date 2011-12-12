@@ -104,9 +104,9 @@ class ControlFlowTest extends ParserTestBase {
   @Test
   def void testForComprehension() {
   	ok('2*i for i in numbers')
-  	shouldBeOk('2*i for i in [0..5]')
+  	ok('2*i for i in [0..5]')
   	ok('2*i for i in numbers when i<4')
-  	shouldBeOk('2*i for i in [0..5] when i<4')
+  	ok('2*i for i in [0..5] when i<4')
   	ok('"${key} is ${value}" for key, value of foo: 1, bar: 2')
   }
   

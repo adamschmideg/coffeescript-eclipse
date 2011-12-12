@@ -117,12 +117,13 @@ Index:
 	(=>(start=Expression dots=DOT_DOT) end=Expression?) |
 	exp=Expression;
 	
+// Try Range before Array
 PrimaryExpression:
 	IfExp |
 	Parenthetical |
 	Literal |
-	Array |
 	Range |
+	Array |
 	Dictionary |
 	Lambda |
 	{For} (FOR loop=ForBody body=Block) |

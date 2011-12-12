@@ -31,7 +31,7 @@ class MissingFeaturesTest extends ParserTestBase {
 		// workaround
 		ok('''
 		  cnt = 0
-		  for i in numbers
+		  for i in [0..5]
 		    cnt += 1
 		''')
 	}
