@@ -26,13 +26,39 @@ ThrowStmt:
 	THROW exp=Expression;
 	
 Expression:
-	PostfixIf;
+	Postfix;
 	
 // right-assoc
 // Note: the lexer seems to know it should give a POST_IF token here
-PostfixIf returns Expression:
-	Assignment (=>({PostfixIf.truePart=current} operator=(POST_IF | IF)) condition=Expression)?;
+Postfix returns Expression:
+	//Assignment postfix+=(PostfixIf | ForBody)?;
+	Assignment
+		((=>POST_IF {If.dummy=current} condition=Expression) |
+		(=>FOR {For.dummy=current} body=ForBody))?;
 
+PostfixIf returns Expression:	
+	=>operator=POST_IF condition=Expression;
+
+ForBody returns Expression:
+	//FIXME: Range |
+	OWN? indexes+=ForValue (COMMA indexes+=ForValue)* source=ForSource;
+
+ForValue:
+	Id;//FIXME | Array | Dictionary;
+
+ForSource:
+	{ForSource}
+	(
+		(=>FOROF source=Expression (=>WHEN when=Expression)?) |
+		(=>FORIN source=Expression (
+			(=>WHEN when=Expression (=>BY by=Expression)?) |
+			(=>BY by=Expression (=>WHEN when=Expression)?)
+			)?)
+	);
+			
+Range:
+	=>(LBRACKET start=Expression (DOT_DOT | ELLIPSIS)) end=Expression RBRACKET;
+ 
 Assignment returns Expression:
 	(=>(left=Assignable operator=(EQUAL | COMPOUND_ASSIGN)) right=Assigned) |
 	LogicOp;
@@ -91,13 +117,16 @@ Index:
 	(=>(start=Expression dots=DOT_DOT) end=Expression?) |
 	exp=Expression;
 	
+// Try Range before Array
 PrimaryExpression:
 	IfExp |
 	Parenthetical |
 	Literal |
+	Range |
 	Array |
 	Dictionary |
 	Lambda |
+	{For} (FOR loop=ForBody body=Block) |
 	IdRef;
 	
 Block
