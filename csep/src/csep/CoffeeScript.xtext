@@ -130,6 +130,7 @@ PrimaryExpression:
 	{For} (FOR loop=ForBody body=Block) |
 	{While} (WHILE loop=Expression (WHEN when=Expression)? body=Block) |
 	{Until} (UNTIL loop=Expression (WHEN when=Expression)? body=Block) |
+	{Loop} (LOOP body=Block) |
 	IdRef;
 	
 Block

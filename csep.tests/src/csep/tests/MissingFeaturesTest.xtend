@@ -45,4 +45,15 @@ class MissingFeaturesTest extends ParserTestBase {
 		    [i, j] = elem
 		''')
 	}
+	
+	@Test
+	def void testLoopWithExpression() {
+		shouldBeOk('a = loop readInfo()')
+		// workarounds
+		ok('''
+		  a = loop
+		    readInfo()
+		''')
+		ok('a = readInfo() while true')
+	}
 }
