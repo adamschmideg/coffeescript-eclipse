@@ -154,4 +154,16 @@ class ControlFlowTest extends ParserTestBase {
   	  	cleanUp()
   	''')
   }
+  
+  @Test
+  def void testSwitch() {
+  	ok('''
+  	  switch day
+  	    when "Mon" then go work
+  	    when "Fri", "Sat"
+  	      if day is bingoDay
+  	        go bingo
+  	    else go work
+  	''')
+  }
 }

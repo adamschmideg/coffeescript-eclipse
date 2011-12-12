@@ -138,12 +138,19 @@ PrimaryExpression:
 			(FINALLY finallyBlock=Block)
 		)?
 	) |
+	{Switch}
+	(SWITCH exp=Expression?
+		INDENT cases+=Case* (ELSE elseBlock=Block)? OUTDENT) |
 	IdRef;
 	
 Block
   : {Block} INDENT Body? OUTDENT
   ;
   
+// a switch case (called When in coffeescript)
+Case:
+	LEADING_WHEN whens+=Expression (COMMA whens+=Expression)* then=Block TERMINATOR?;
+	
 IfExp
   : blocks+=CondBlock (ELSE blocks+=CondBlock)* (ELSE defaultBlock=Block)?
   ;
