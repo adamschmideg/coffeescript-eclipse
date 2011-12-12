@@ -24,9 +24,9 @@ class MissingFeaturesTest extends ParserTestBase {
 	@Test
 	def void testForComprehensionWithBareRange() {
 		// It parses, but into a wrong AST
-		ok('''
+		shouldBeOk('''
 		  cnt = 0
-		  cnt += 1 for numbers
+		  cnt += 1 for [0..5]
 		''')
 		// workaround
 		ok('''

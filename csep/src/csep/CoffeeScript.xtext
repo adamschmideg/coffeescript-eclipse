@@ -31,25 +31,30 @@ Expression:
 // right-assoc
 // Note: the lexer seems to know it should give a POST_IF token here
 Postfix returns Expression:
-	Assignment postfix+=(PostfixIf | ForBody)?;
+	//Assignment postfix+=(PostfixIf | ForBody)?;
+	Assignment
+		((=>POST_IF {If.dummy=current} condition=Expression) |
+		(=>FOR {For.dummy=current} body=ForBody))?;
 
 PostfixIf returns Expression:	
 	=>operator=POST_IF condition=Expression;
 
 ForBody returns Expression:
-	=>FOR
-		(//FIXME: =>Range |
-		(OWN? indexes+=ForValue (COMMA indexes+=ForValue)* source=ForSource));
+	//FIXME: Range |
+	OWN? indexes+=ForValue (COMMA indexes+=ForValue)* source=ForSource;
 
 ForValue:
 	Id;//FIXME | Array | Dictionary;
 
 ForSource:
 	{ForSource}
-	((=>FOROF source=Expression (=>WHEN when=Expression)?) |
-	(=>FORIN source=Expression
-		((=>WHEN when=Expression) (=>BY by=Expression)?)? |
-		((=>BY by=Expression) (=>WHEN when=Expression)?)?));
+	(
+		(=>FOROF source=Expression (=>WHEN when=Expression)?) |
+		(=>FORIN source=Expression (
+			(=>WHEN when=Expression (=>BY by=Expression)?) |
+			(=>BY by=Expression (=>WHEN when=Expression)?)
+			)?)
+	);
 			
 Range:
 	=>(LBRACKET start=Expression (DOT_DOT | ELLIPSIS)) end=Expression RBRACKET;
@@ -120,7 +125,7 @@ PrimaryExpression:
 	Range |
 	Dictionary |
 	Lambda |
-	{For} (loop=ForBody body=Block) |
+	{For} (FOR loop=ForBody body=Block) |
 	IdRef;
 	
 Block
