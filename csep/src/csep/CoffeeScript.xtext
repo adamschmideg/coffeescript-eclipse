@@ -17,7 +17,8 @@ Line:
 	
 Stmt:
 	ReturnStmt |
-	ThrowStmt;
+	ThrowStmt |
+	ClassDeclaration;
 	
 ReturnStmt:
 	RETURN exp=Expression;
@@ -25,6 +26,14 @@ ReturnStmt:
 ThrowStmt:
 	THROW exp=Expression;
 	
+ClassDeclaration:
+	{ClassDeclaration}
+	CLASS (
+		body=Block |
+		(EXTENDS extend=Expression body=Block?) |
+		(name=(Id | Property) (EXTENDS extend=Expression)? body=Block)
+	)?;
+
 Expression:
 	Postfix;
 	
@@ -324,7 +333,7 @@ terminal RETURN: 'return';
 terminal RPAREN: ')';
 terminal STATEMENT: 'dummy STATEMENT';
 terminal STRING: '"' (('a'..'z') | ' ')* '"';
-terminal SUPER: 'dummy SUPER';
+terminal SUPER: 'super';
 terminal SWITCH: 'dummy SWITCH';
 terminal TERMINATOR: '\n'+;
 terminal THEN: 'dummy THEN';

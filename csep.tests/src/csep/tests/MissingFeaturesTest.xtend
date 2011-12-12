@@ -56,4 +56,18 @@ class MissingFeaturesTest extends ParserTestBase {
 		''')
 		ok('a = readInfo() while true')
 	}
+	
+	@Test
+	def void testClass() {
+		// deeply nested class name
+		shouldBeOk('class a.b.c')
+		// class declaration as expression
+		shouldBeOk('c = class extends Foo') 
+		// class declaration as expression
+		shouldBeOk('class A extends B extends C')
+		// class name as property
+		shouldBeOk('class "str".length')
+		// class extends any expression
+		shouldBeOk('class A extends 3')
+	}
 }
