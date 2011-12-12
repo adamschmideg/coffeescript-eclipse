@@ -38,11 +38,11 @@ PostfixIf returns Expression:
 
 ForBody returns Expression:
 	=>FOR
-		(//=>Range |
+		(//FIXME: =>Range |
 		(OWN? val+=ForValue (COMMA val+=ForValue)* source=ForSource));
 
 ForValue:
-	Id;// | Array | Dictionary;
+	Id;//FIXME | Array | Dictionary;
 
 ForSource:
 	{ForSource}

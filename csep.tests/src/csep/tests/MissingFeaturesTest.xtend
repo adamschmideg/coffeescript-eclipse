@@ -20,4 +20,17 @@ class MissingFeaturesTest extends ParserTestBase {
 		shouldBeOk('f().a = 2')
 		shouldBeOk('(1 + 2).len = 3')		
 	}
+	
+	@Test
+	def void testForComprehensionWithBareRange() {
+		shouldBeOk('''
+		  cnt = 0
+		  cnt += 1 for [1..3]
+		''')
+	}
+	
+	@Test
+	def void testForComprehensionWithCompoundLoopVariable() {
+		shouldBeOk('i+j for [i, j] in matrix')
+	}
 }
