@@ -127,4 +127,13 @@ class ControlFlowTest extends ParserTestBase {
   	    2*i
   	''')
   }
+  
+  @Test
+  def void testWhile() {
+  	ok('''
+  	  while i>0
+  	  	i -= 1
+  	''')
+  	ok('buy() while supply > demand')
+  }
 }

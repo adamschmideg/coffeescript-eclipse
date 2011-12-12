@@ -32,12 +32,13 @@ Expression:
 // Note: the lexer seems to know it should give a POST_IF token here
 Postfix returns Expression:
 	//Assignment postfix+=(PostfixIf | ForBody)?;
-	Assignment
-		((=>POST_IF {If.dummy=current} condition=Expression) |
-		(=>FOR {For.dummy=current} body=ForBody))?;
-
-PostfixIf returns Expression:	
-	=>operator=POST_IF condition=Expression;
+	Assignment 
+		(
+			(=>POST_IF {If.dummy=current} condition=Expression) |
+			(=>FOR {For.dummy=current} body=ForBody) |
+			(=>WHILE {While.dummy=current} body=Expression (=>WHEN when=Expression)?) |
+			(=>UNTIL {Until.dummy=current} body=Expression (=>WHEN when=Expression)?)			
+		)?;
 
 ForBody returns Expression:
 	//FIXME: Range |
@@ -55,7 +56,7 @@ ForSource:
 			(=>BY by=Expression (=>WHEN when=Expression)?)
 			)?)
 	);
-			
+		
 Range:
 	=>(LBRACKET start=Expression (DOT_DOT | ELLIPSIS)) end=Expression RBRACKET;
  
@@ -127,6 +128,8 @@ PrimaryExpression:
 	Dictionary |
 	Lambda |
 	{For} (FOR loop=ForBody body=Block) |
+	{While} (WHILE loop=Expression (WHEN when=Expression)? body=Block) |
+	{Until} (UNTIL loop=Expression (WHEN when=Expression)? body=Block) |
 	IdRef;
 	
 Block
