@@ -109,4 +109,22 @@ class ControlFlowTest extends ParserTestBase {
   	shouldBeOk('2*i for i in [0..5] when i<4')
   	ok('"${key} is ${value}" for key, value of foo: 1, bar: 2')
   }
+  
+  @Test
+  def void testForLoop() {
+  	ok('''
+  	  sum = 0
+  	  for i in numbers
+  	    sum += i
+  	''')
+  	ok('''
+  	  positiveSum = 0
+  	  for i in numbers when i>0
+  	    positiveSum += i
+  	''')
+  	ok('''
+  	  doubles = for i in numbers
+  	    2*i
+  	''')
+  }
 }

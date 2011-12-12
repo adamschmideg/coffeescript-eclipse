@@ -23,14 +23,26 @@ class MissingFeaturesTest extends ParserTestBase {
 	
 	@Test
 	def void testForComprehensionWithBareRange() {
-		shouldBeOk('''
+		// It parses, but into a wrong AST
+		ok('''
 		  cnt = 0
-		  cnt += 1 for [1..3]
+		  cnt += 1 for numbers
+		''')
+		// workaround
+		ok('''
+		  cnt = 0
+		  for i in numbers
+		    cnt += 1
 		''')
 	}
 	
 	@Test
 	def void testForComprehensionWithCompoundLoopVariable() {
 		shouldBeOk('i+j for [i, j] in matrix')
+		// workaround
+		ok('''
+		  for elem in matrix
+		    [i, j] = elem
+		''')
 	}
 }

@@ -31,7 +31,7 @@ Expression:
 // right-assoc
 // Note: the lexer seems to know it should give a POST_IF token here
 Postfix returns Expression:
-	Assignment p+=(PostfixIf | ForBody)?;
+	Assignment postfix+=(PostfixIf | ForBody)?;
 
 PostfixIf returns Expression:	
 	=>operator=POST_IF condition=Expression;
@@ -39,7 +39,7 @@ PostfixIf returns Expression:
 ForBody returns Expression:
 	=>FOR
 		(//FIXME: =>Range |
-		(OWN? val+=ForValue (COMMA val+=ForValue)* source=ForSource));
+		(OWN? indexes+=ForValue (COMMA indexes+=ForValue)* source=ForSource));
 
 ForValue:
 	Id;//FIXME | Array | Dictionary;
@@ -120,6 +120,7 @@ PrimaryExpression:
 	Range |
 	Dictionary |
 	Lambda |
+	{For} (loop=ForBody body=Block) |
 	IdRef;
 	
 Block
