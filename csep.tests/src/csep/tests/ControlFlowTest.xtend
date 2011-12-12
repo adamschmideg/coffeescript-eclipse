@@ -136,4 +136,22 @@ class ControlFlowTest extends ParserTestBase {
   	''')
   	ok('buy() while supply > demand')
   }
+  
+  @Test
+  def void testTryCatch() {
+  	ok('''
+      content = try
+        readFile()
+      catch IOException
+        null
+  	''')
+  	ok('''
+  	  try
+  	  	missionImpossible()
+  	  catch error
+  	    print error
+  	  finally
+  	  	cleanUp()
+  	''')
+  }
 }

@@ -56,7 +56,7 @@ ForSource:
 			(=>BY by=Expression (=>WHEN when=Expression)?)
 			)?)
 	);
-		
+
 Range:
 	=>(LBRACKET start=Expression (DOT_DOT | ELLIPSIS)) end=Expression RBRACKET;
  
@@ -131,6 +131,13 @@ PrimaryExpression:
 	{While} (WHILE loop=Expression (WHEN when=Expression)? body=Block) |
 	{Until} (UNTIL loop=Expression (WHEN when=Expression)? body=Block) |
 	{Loop} (LOOP body=Block) |
+	{TryCatch}
+	(TRY body=Block
+		(
+			(CATCH exception=Id catchBlock=Block (FINALLY finallyBlock=Block)?) |
+			(FINALLY finallyBlock=Block)
+		)?
+	) |
 	IdRef;
 	
 Block
