@@ -154,6 +154,9 @@
   It shuts up linking problems and enables most coffeescript constructs.
   The only drawback for the moment seems to be that variables cannot be reassigned.
 
+* Testing with automatically generated sentences fed to `coffee`
+  See my question: http://stackoverflow.com/questions/8478320/generate-syntactically-correct-sentences-from-an-antlr-grammar
+
   [1]: http://jevopisdeveloperblog.blogspot.com/2011/03/implement-tostring-with-xtexts.html
   [2]: http://www.eclipse.org/Xtext/documentation/2_1_0/100-serialization.php#serializationcontract 
   [3]: http://stackoverflow.com/questions/8154790/visualize-lalr-grammar
