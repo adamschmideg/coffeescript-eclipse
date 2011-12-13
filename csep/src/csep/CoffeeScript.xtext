@@ -103,7 +103,8 @@ UnaryOp returns Expression:
 	
 // Nested function calls and property accesses -- I couldn't come up with a better name
 Application:
-	value=PrimaryExpression features+=FeatureCall*;
+	{SuperCall} (SUPER (CALL_START args=ArgList CALL_END)?) |
+	(value=PrimaryExpression features+=FeatureCall*);
 	
 FeatureCall:
 	FunctionCall |

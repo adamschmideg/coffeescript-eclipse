@@ -448,27 +448,27 @@ public class Showcase extends ParserTestBase {
     @Test
     def void test_classes() {
       ok('''
-        class Animal
-          constructor: (@name) ->
+       class Animal
+         constructor: (@name) ->
         
-          move: (meters) ->
-            alert @name + " moved #{meters}m."
-        
-        class Snake extends Animal
+         move: (meters) ->
+           alert @name + " moved #{meters}m."
+
+       class Snake extends Animal
           move: ->
             alert "Slithering..."
             super 5
         
-        class Horse extends Animal
+       class Horse extends Animal
           move: ->
             alert "Galloping..."
             super 45
+
+       sam = new Snake "Sammy the Python"
+       tom = new Horse "Tommy the Palomino"
         
-        sam = new Snake "Sammy the Python"
-        tom = new Horse "Tommy the Palomino"
-        
-        sam.move()
-        tom.move()
+       sam.move()
+       tom.move()
       ''')
     }
     

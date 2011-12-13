@@ -18,5 +18,10 @@ class LambdaTest extends ParserTestBase {
 		ok('''
 		  fun = ->
 		    3''')
+		ok('''
+		  fun = (x) ->
+		    print x
+		    2 * x
+		''')
 	}
 }

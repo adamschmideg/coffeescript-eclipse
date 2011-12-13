@@ -24,5 +24,12 @@ class ClassTest extends ParserTestBase {
 		  class A
 		    constructor: (@name) ->
 		''')
+		ok('''
+		  class Drinker extends Person
+		    drink: ->
+		      #print "gulp"
+		      @glasses += 1
+		      super 2
+		''')
 	}
 }
