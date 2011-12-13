@@ -115,7 +115,10 @@ FunctionCall:
 PropertyAccess:
 	NamedPropertyAccess |
 	IndexedPropertyAccess;
-	
+
+ThisProperty:
+	AT_SIGIL Id;
+		
 NamedPropertyAccess:	
 	(accessor=(DOT | QUESTION_DOT) name=Id) |
 	(accessor=DOUBLE_COLON name=Id?);
@@ -137,6 +140,8 @@ PrimaryExpression:
 	Array |
 	Dictionary |
 	Lambda |
+	ThisProperty |
+	{ThisAlone} THIS |
 	{For} (FOR loop=ForBody body=Block) |
 	{While} (WHILE loop=Expression (WHEN when=Expression)? body=Block) |
 	{Until} (UNTIL loop=Expression (WHEN when=Expression)? body=Block) |
@@ -178,6 +183,7 @@ Property:
 	
 Variable:
 	Id |
+	(AT_SIGIL | (THIS DOT)) Id (DOT props+=Id)* |
 	Property;
 
 Assignable:
