@@ -125,15 +125,14 @@ public class Showcase extends ParserTestBase {
 
     @Test
     def void test_heredocs() {
-      ok('''
-        html = \'\'\'
-               <strong>
-                 cup of coffeescript
-               </strong>
-               \'\'\'
-      ''')
+    	ok(
+        "html = " +
+        "  '''" + 
+        "    <strong>" +
+        "      cup of coffeescript" +
+        "    </strong>" +
+        "  '''")
     }
-    
 
     @Test
     def void test_patterns_and_splats() {
