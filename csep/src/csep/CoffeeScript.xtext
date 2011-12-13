@@ -235,7 +235,7 @@ Lambda:
 	(PARAM_START (params+=Param (COMMA params+=Param)*)? PARAM_END)? (FUNC_ARROW | BOUND_FUNC_ARROW) Block;
 	
 Param:
-	(Id | Array | Dictionary) (splat?=ELLIPSIS | (EQUAL defaultValue=Expression))?;
+	(Id | Array | Dictionary | ThisProperty) (splat?=ELLIPSIS | (EQUAL defaultValue=Expression))?;
 		
 NumberLiteral:
 	{NumberLiteral} NUMBER;
