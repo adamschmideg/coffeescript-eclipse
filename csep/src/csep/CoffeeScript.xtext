@@ -127,8 +127,8 @@ IndexedPropertyAccess:
 	INDEX_START index=Index INDEX_END;
 	
 Index:
-	(=>(dots=DOT_DOT) end=Expression) |
-	(=>(start=Expression dots=DOT_DOT) end=Expression?) |
+	(=>dots=(DOT_DOT | ELLIPSIS) end=Expression) |
+	(=>(start=Expression dots=(DOT_DOT | ELLIPSIS)) end=Expression?) |
 	exp=Expression;
 	
 // Try Range before Array
@@ -178,8 +178,9 @@ IdRef: val=[Id|IDENTIFIER];
 Id: name=IDENTIFIER;
 
 Property:
-	// FIXME: property is actually "Expression DOT Id"
-	Id accessor=(DOT | DOUBLE_COLON | QUESTION_DOT) prop=Id;
+	// FIXME: property is actually "Expression Accessor"
+	(=>(Id accessor=(DOT | DOUBLE_COLON | QUESTION_DOT)) prop=Id) |
+	(=>(Id INDEX_START) index=Index INDEX_END);
 	
 Variable:
 	Id |
