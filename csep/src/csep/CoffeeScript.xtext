@@ -12,6 +12,7 @@ Body:
 	lines+=Line (TERMINATOR lines+=Line?)*;
 
 Line:
+	{Empty} HERECOMMENT |
 	Stmt |
 	Expression;
 	
@@ -238,10 +239,18 @@ StringLiteral:
 BoolLiteral:
 	{BoolLiteral} BOOL;
 
+JSLiteral:
+	{JSLiteral} JS;
+	
+RegexLiteral:
+	{RegexLiteral} REGEX;
+	
 Literal
   : NumberLiteral
   | StringLiteral
   | BoolLiteral
+  | JSLiteral
+  | RegexLiteral
   ;
 
 Parenthetical:
