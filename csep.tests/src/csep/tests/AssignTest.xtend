@@ -41,4 +41,10 @@ class AssignTest extends ParserTestBase {
   	ok('@server.production.name = "local"')  	
   	ok('this.owner.age = 32')
   }
+  
+  @Test
+  def void testProperty() {
+  	ok('a.b = 1')
+  	ok('Clazz::counter = 1')
+  }
 }

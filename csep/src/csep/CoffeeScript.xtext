@@ -179,7 +179,7 @@ Id: name=IDENTIFIER;
 
 Property:
 	// FIXME: property is actually "Expression DOT Id"
-	Id DOT prop=Id;
+	Id accessor=(DOT | DOUBLE_COLON | QUESTION_DOT) prop=Id;
 	
 Variable:
 	Id |
