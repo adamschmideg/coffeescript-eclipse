@@ -20,7 +20,6 @@ public class CoffeeScriptScopeProvider extends AbstractDeclarativeScopeProvider 
 	@Override
 	public IScope getScope(EObject context, EReference reference) {
 		IScope parent = super.getScope(context, reference);
-		//return new DummyScope(parent);
-		return parent;
+		return new DummyScope(parent);
 	}
 }
