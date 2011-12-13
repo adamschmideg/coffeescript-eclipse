@@ -83,4 +83,9 @@ class OperatorsTest extends ParserTestBase {
     ok('a < b > c')
     ok('10 < 20 > 2+3 is 5')
   }
+  
+  @Test
+  def void testThisProperty() {
+  	ok('@foo + this.bar')
+  }
 }

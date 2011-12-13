@@ -17,4 +17,19 @@ class ClassTest extends ParserTestBase {
 		      print "Hello #{other}"
 		''')
 	}
+	
+	@Test
+	def void testMethods() {
+		ok('''
+		  class A
+		    constructor: (@name) ->
+		''')
+		ok('''
+		  class Drinker extends Person
+		    drink: ->
+		      #print "gulp"
+		      @glasses += 1
+		      super 2
+		''')
+	}
 }

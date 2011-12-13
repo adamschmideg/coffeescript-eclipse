@@ -12,6 +12,7 @@ Body:
 	lines+=Line (TERMINATOR lines+=Line?)*;
 
 Line:
+	{Empty} HERECOMMENT |
 	Stmt |
 	Expression;
 	
@@ -102,7 +103,8 @@ UnaryOp returns Expression:
 	
 // Nested function calls and property accesses -- I couldn't come up with a better name
 Application:
-	value=PrimaryExpression features+=FeatureCall*;
+	{SuperCall} (SUPER (CALL_START args=ArgList CALL_END)?) |
+	(value=PrimaryExpression features+=FeatureCall*);
 	
 FeatureCall:
 	FunctionCall |
@@ -114,7 +116,10 @@ FunctionCall:
 PropertyAccess:
 	NamedPropertyAccess |
 	IndexedPropertyAccess;
-	
+
+ThisProperty:
+	AT_SIGIL Id;
+		
 NamedPropertyAccess:	
 	(accessor=(DOT | QUESTION_DOT) name=Id) |
 	(accessor=DOUBLE_COLON name=Id?);
@@ -123,8 +128,8 @@ IndexedPropertyAccess:
 	INDEX_START index=Index INDEX_END;
 	
 Index:
-	(=>(dots=DOT_DOT) end=Expression) |
-	(=>(start=Expression dots=DOT_DOT) end=Expression?) |
+	(=>dots=(DOT_DOT | ELLIPSIS) end=Expression) |
+	(=>(start=Expression dots=(DOT_DOT | ELLIPSIS)) end=Expression?) |
 	exp=Expression;
 	
 // Try Range before Array
@@ -136,6 +141,8 @@ PrimaryExpression:
 	Array |
 	Dictionary |
 	Lambda |
+	ThisProperty |
+	{ThisAlone} THIS |
 	{For} (FOR loop=ForBody body=Block) |
 	{While} (WHILE loop=Expression (WHEN when=Expression)? body=Block) |
 	{Until} (UNTIL loop=Expression (WHEN when=Expression)? body=Block) |
@@ -172,11 +179,13 @@ IdRef: val=[Id|IDENTIFIER];
 Id: name=IDENTIFIER;
 
 Property:
-	// FIXME: property is actually "Expression DOT Id"
-	Id DOT prop=Id;
+	// FIXME: property is actually "Expression Accessor"
+	(=>(Id accessor=(DOT | DOUBLE_COLON | QUESTION_DOT)) prop=Id) |
+	(=>(Id INDEX_START) index=Index INDEX_END);
 	
 Variable:
 	Id |
+	(AT_SIGIL | (THIS DOT)) Id (DOT props+=Id)* |
 	Property;
 
 Assignable:
@@ -227,7 +236,7 @@ Lambda:
 	(PARAM_START (params+=Param (COMMA params+=Param)*)? PARAM_END)? (FUNC_ARROW | BOUND_FUNC_ARROW) Block;
 	
 Param:
-	(Id | Array | Dictionary) (splat?=ELLIPSIS | (EQUAL defaultValue=Expression))?;
+	(Id | Array | Dictionary | ThisProperty) (splat?=ELLIPSIS | (EQUAL defaultValue=Expression))?;
 		
 NumberLiteral:
 	{NumberLiteral} NUMBER;
@@ -238,13 +247,22 @@ StringLiteral:
 BoolLiteral:
 	{BoolLiteral} BOOL;
 
+JSLiteral:
+	{JSLiteral} JS;
+	
+RegexLiteral:
+	{RegexLiteral} REGEX;
+	
 Literal
   : NumberLiteral
   | StringLiteral
   | BoolLiteral
+  | JSLiteral
+  | RegexLiteral
   ;
 
 Parenthetical:
+	(=>(LPAREN INDENT) content=Body OUTDENT RPAREN) |
 	=>LPAREN content=Body RPAREN;
  
 // terminals {{{
@@ -295,9 +313,9 @@ terminal ELSE: 'else';
 terminal EQUAL: '=';
 terminal EXTENDS: 'dummy EXTENDS';
 terminal FINALLY: 'dummy FINALLY';
-terminal FOR: 'dummy FOR';
-terminal FORIN: 'dummy FORIN';
-terminal FOROF: 'dummy FOROF';
+terminal FOR: 'for';
+terminal FORIN: 'in';
+terminal FOROF: 'of';
 terminal FUNC_EXIST: 'dummy FUNC_EXIST';
 terminal HERECOMMENT: 'dummy HERECOMMENT';
 terminal IF: 'if' | 'unless';

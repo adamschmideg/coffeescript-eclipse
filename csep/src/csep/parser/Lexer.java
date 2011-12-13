@@ -52,11 +52,6 @@ public class Lexer extends csep.parser.antlr.internal.InternalCoffeeScriptLexer 
 			problem = e;
 		} catch (beaver.Scanner.Exception e) {
 			problem = e;
-		} catch (ArrayIndexOutOfBoundsException e) {
-			// XXX: Put an OUTDENT token here,
-			// the exception was probably thrown by CoffeeScanner.outdentToken
-			// when there are more indents than outdents
-			token = new CommonToken(RULE_OUTDENT);
 		}
 		// Common exception handling
 		if (problem != null) {

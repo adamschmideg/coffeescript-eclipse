@@ -30,6 +30,8 @@ class FunctionCallTest extends ParserTestBase {
 		ok('fun(2)')
 		ok('fun(2,3)')
 		ok('fun 4')
+		ok('print "Hi, " + @name')
+		ok('print @count + " pieces"')
 		error('fun 4 5')
 		ok('fun 4,5')
 		ok('''

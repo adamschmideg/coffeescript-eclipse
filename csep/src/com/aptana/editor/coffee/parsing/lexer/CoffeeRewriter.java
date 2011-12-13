@@ -337,7 +337,7 @@ public class CoffeeRewriter
 			if (EXPRESSION_START.contains(token.getId()))
 			{
 				short id;
-				if (Terminals.INDENT == token.getId() && Terminals.LCURLY == this.fTokens.get(i - 1).getId())
+				if (Terminals.INDENT == token.getId() && i > 0 && Terminals.LCURLY == this.fTokens.get(i - 1).getId())
 				{
 					id = Terminals.LCURLY;
 				}
