@@ -254,6 +254,7 @@ Literal
   ;
 
 Parenthetical:
+	(=>(LPAREN INDENT) content=Body OUTDENT RPAREN) |
 	=>LPAREN content=Body RPAREN;
  
 // terminals {{{
