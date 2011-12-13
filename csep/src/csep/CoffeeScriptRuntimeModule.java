@@ -3,6 +3,8 @@
  */
 package csep;
 
+import org.eclipse.xtext.resource.XtextResource;
+
 /**
  * Use this class to register components to be used at runtime / without the Equinox extension registry.
  */
@@ -18,5 +20,10 @@ public class CoffeeScriptRuntimeModule extends csep.AbstractCoffeeScriptRuntimeM
     public Class<? extends org.eclipse.xtext.parser.IParser> bindIParser() {
          return csep.parser.Parser.class ;
     }
+
+    @Override
+	public Class<? extends XtextResource> bindXtextResource() {
+		return csep.scoping.DummyLinkingResource.class;
+	}
 
 }

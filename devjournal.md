@@ -153,6 +153,9 @@
   Introduced `IdRef` and a dummy scoping mechanism.
   It shuts up linking problems and enables most coffeescript constructs.
   The only drawback for the moment seems to be that variables cannot be reassigned.
+  * It causes some tricky hidden problems (StringIndexOutOfBoundsException), so I'm going another way
+  See http://www.eclipse.org/forums/index.php?t=msg&th=172032&start=0&
+  and http://zarnekow.blogspot.com/2010/06/customizing-error-messages-in-xtext-10.html
 
 * Testing with automatically generated sentences fed to `coffee`
   See my question: http://stackoverflow.com/questions/8478320/generate-syntactically-correct-sentences-from-an-antlr-grammar
