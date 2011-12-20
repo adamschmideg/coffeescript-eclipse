@@ -349,7 +349,7 @@ terminal REGEX: 'dummy REGEX';
 terminal RELATION: 'in' | 'of' | 'instanceof'; 
 terminal RETURN: 'return';
 terminal RPAREN: ')';
-terminal STATEMENT: 'dummy STATEMENT';
+terminal STATEMENT: 'break' | 'continue' | 'debugger';
 terminal STRING: '"' (('a'..'z') | ' ')* '"';
 terminal SUPER: 'super';
 terminal SWITCH: 'dummy SWITCH';
