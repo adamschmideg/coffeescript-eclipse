@@ -160,6 +160,24 @@
 * Testing with automatically generated sentences fed to `coffee`
   See my question: http://stackoverflow.com/questions/8478320/generate-syntactically-correct-sentences-from-an-antlr-grammar
 
+* Syntax highlight of keywords.
+  It should be automatic, but it matters how terminals are defined in
+  the grammar, consider this:
+
+    ImportStatement: 'import' ID;
+
+    ExportStatement: EXPORT ID;
+    terminal EXPORT: 'export';
+
+  In the first case, `import` will be a Keyword object; in the second
+  case, it will be a `Terminal` object.
+
+  There is a way to assign a highlighting category to each token, see
+  http://www.eclipse.org/forums/index.php?t=msg&goto=479001&
+  This is what I just started.
+  `Regex` can be configured in the preferences now, but it doesn't get
+  highlighted in the source code.
+
   [1]: http://jevopisdeveloperblog.blogspot.com/2011/03/implement-tostring-with-xtexts.html
   [2]: http://www.eclipse.org/Xtext/documentation/2_1_0/100-serialization.php#serializationcontract 
   [3]: http://stackoverflow.com/questions/8154790/visualize-lalr-grammar

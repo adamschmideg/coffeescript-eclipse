@@ -4,6 +4,11 @@
 package csep.ui;
 
 import org.eclipse.ui.plugin.AbstractUIPlugin;
+import org.eclipse.xtext.ui.editor.syntaxcoloring.AbstractAntlrTokenToAttributeIdMapper;
+import org.eclipse.xtext.ui.editor.syntaxcoloring.IHighlightingConfiguration;
+
+import csep.ui.syntaxcoloring.AntlrTokenToAttributeIdMapper;
+import csep.ui.syntaxcoloring.LexicalHighlightingConfiguration;
 
 /**
  * Use this class to register components to be used within the IDE.
@@ -11,5 +16,13 @@ import org.eclipse.ui.plugin.AbstractUIPlugin;
 public class CoffeeScriptUiModule extends csep.ui.AbstractCoffeeScriptUiModule {
 	public CoffeeScriptUiModule(AbstractUIPlugin plugin) {
 		super(plugin);
+	}
+
+	public Class<? extends IHighlightingConfiguration> bindIHighlightingConfiguration() {
+		return LexicalHighlightingConfiguration.class;
+	}
+
+	public Class<? extends AbstractAntlrTokenToAttributeIdMapper> bindAbstractAntlrTokenToAttributeIdMapper() {
+		return AntlrTokenToAttributeIdMapper.class;
 	}
 }
