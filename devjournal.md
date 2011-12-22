@@ -184,6 +184,20 @@
  - how to handle string interpolation?  `"before #{ x } after"` is
    tokenized as `[( (] [STRING "before "] [+ +] [IDENTIFIER x] [+ +] [STRING " after"] [) )]`
 
+* Variable scoping.  The strategy is
+ - The left-hand side of assignment contains `Id`.
+   It causes a `Duplicate ForValue` error in case of reassignment.
+   Solution: simply hide this error.
+ - The right-hand side of assignment contains `IdRef`.
+   It causes a `Couldn't resolve reference to xxx` error when using an
+   imported or built-in object.
+   Solution: change this error to a warning.
+   Optionally, add built-in objects to global scope.
+ - Change compound left-hand sides to contain only `Id`s.
+   It means introducing new rules: AssignableArray and AssignableObject.
+   It wouldn't accept syntactically correct, but erroneous
+   expressions, such as `[a+1] = 3`
+
   [1]: http://jevopisdeveloperblog.blogspot.com/2011/03/implement-tostring-with-xtexts.html
   [2]: http://www.eclipse.org/Xtext/documentation/2_1_0/100-serialization.php#serializationcontract 
   [3]: http://stackoverflow.com/questions/8154790/visualize-lalr-grammar
