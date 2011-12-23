@@ -188,10 +188,20 @@ Variable:
 	(AT_SIGIL | (THIS DOT)) Id (DOT props+=Id)* |
 	Property;
 
+/** An array that can be on the left-hand side of an assignment */
+AssignableArray:
+	=>LBRACKET AssignableArgList RBRACKET;
+
+AssignableArgList:
+	args+=AssignableArg (COMMA args+=AssignableArg)*;
+
+AssignableArg:
+	arg=Assignable splat?=ELLIPSIS?;
+	
 Assignable:
     Variable |
     Dictionary |
-    Array;
+    AssignableArray;
 	/*
 	 * FIXME: handle more complex assignables
 	*/

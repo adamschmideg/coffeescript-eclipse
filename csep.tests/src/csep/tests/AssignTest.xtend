@@ -26,6 +26,11 @@ class AssignTest extends ParserTestBase {
   }
   
   @Test
+  def void testDestructure() {
+    ok('[a, b] = [1, 2]')	
+  }
+  
+  @Test
   def void testBoolean() {
     ok('a or= 2')
     ok('a ||= 1')
