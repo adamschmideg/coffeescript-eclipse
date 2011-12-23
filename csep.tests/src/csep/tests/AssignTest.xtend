@@ -13,6 +13,23 @@ class AssignTest extends ParserTestBase {
       ''')
   }
 
+  /**
+   * Unfortunately, checking is not called by the testing framework,
+   * so this one will succeed no matter what.
+   */
+  @Test
+  def void testReassign() {
+    ok('''
+      a = 2
+      a = 3
+    ''')	
+  }
+  
+  @Test
+  def void testDestructure() {
+    ok('[a, b] = [1, 2]')	
+  }
+  
   @Test
   def void testBoolean() {
     ok('a or= 2')

@@ -3,7 +3,10 @@
  */
 package csep;
 
+import org.eclipse.xtext.linking.ILinkingDiagnosticMessageProvider;
 import org.eclipse.xtext.resource.XtextResource;
+
+import csep.linking.SuppressingLinkingDiagnosticMessageProvider;
 
 /**
  * Use this class to register components to be used at runtime / without the Equinox extension registry.
@@ -25,5 +28,8 @@ public class CoffeeScriptRuntimeModule extends csep.AbstractCoffeeScriptRuntimeM
 	public Class<? extends XtextResource> bindXtextResource() {
 		return csep.scoping.DummyLinkingResource.class;
 	}
-
+    
+	public Class<? extends ILinkingDiagnosticMessageProvider> bindILinkingDiagnosticMessageProvider() {
+		return SuppressingLinkingDiagnosticMessageProvider.class;
+	}
 }

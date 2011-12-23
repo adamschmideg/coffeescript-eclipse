@@ -180,18 +180,28 @@ Id: name=IDENTIFIER;
 
 Property:
 	// FIXME: property is actually "Expression Accessor"
-	(=>(Id accessor=(DOT | DOUBLE_COLON | QUESTION_DOT)) prop=Id) |
-	(=>(Id INDEX_START) index=Index INDEX_END);
+	(=>(IdRef accessor=(DOT | DOUBLE_COLON | QUESTION_DOT)) prop=Id) |
+	(=>(IdRef INDEX_START) index=Index INDEX_END);
 	
 Variable:
 	Id |
 	(AT_SIGIL | (THIS DOT)) Id (DOT props+=Id)* |
 	Property;
 
+/** An array that can be on the left-hand side of an assignment */
+AssignableArray:
+	=>LBRACKET AssignableArgList RBRACKET;
+
+AssignableArgList:
+	args+=AssignableArg (COMMA args+=AssignableArg)*;
+
+AssignableArg:
+	arg=Assignable splat?=ELLIPSIS?;
+	
 Assignable:
     Variable |
     Dictionary |
-    Array;
+    AssignableArray;
 	/*
 	 * FIXME: handle more complex assignables
 	*/
