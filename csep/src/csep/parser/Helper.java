@@ -149,4 +149,15 @@ public class Helper {
 		}
 	}
 
+	/**
+	 * Check whether an indented block should start after <var>line</var>
+	 * @param line
+	 * @return if it's a special line
+	 */
+	public static boolean isBlockContainer(String line) {
+		if (line.endsWith("="))
+			return true;
+		return false;
+	}
+	
 }
