@@ -17,7 +17,8 @@ public class IndentLineAutoEditStrategy extends
 	 */
 	public void customizeDocumentCommand(IDocument d, DocumentCommand c) {
 		super.customizeDocumentCommand(d, c);
-		if (c.length == 0 && c.text != null && TextUtilities.endsWith(d.getLegalLineDelimiters(), c.text) != -1)
+		// c.text now may be "\n\t\t", because tabs were appended
+		if (c.length == 0 && c.text != null && TextUtilities.startsWith(d.getLegalLineDelimiters(), c.text) != -1)
 			indentBlock(d, c);
 	}	
 	

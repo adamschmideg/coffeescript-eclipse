@@ -135,10 +135,10 @@ public class Helper {
 	public static String getNameAndText(Token token) {
 		if (token == null) {
 			return null;
-		} 
-		else {
+		} else {
 			String value = token.getText();
-			String name = Helper.getFieldNameForId(InternalCoffeeScriptLexer.class, token.getType());
+			String name = Helper.getFieldNameForId(
+					InternalCoffeeScriptLexer.class, token.getType());
 			if (name == null)
 				name = "<" + token.getType() + ">";
 			if (name.startsWith("RULE_"))
@@ -151,13 +151,35 @@ public class Helper {
 
 	/**
 	 * Check whether an indented block should start after <var>line</var>
+	 * 
 	 * @param line
 	 * @return if it's a special line
 	 */
 	public static boolean isBlockContainer(String line) {
-		if (line.endsWith("="))
+		String raw = line.trim();
+		if (raw.endsWith("=") 
+				|| raw.endsWith(":") 
+				|| raw.endsWith("->")
+				|| raw.endsWith("=>"))
+			return true;
+		if (raw.startsWith("if ") 
+				|| raw.startsWith("unless ")
+				|| raw.startsWith("else if ") 
+				|| raw.startsWith("when ")) {
+			return !raw.contains(" then ");
+		}
+		if (raw.startsWith("for ") 
+				|| raw.startsWith("while ")
+				|| raw.startsWith("class ") 
+				|| raw.startsWith("catch ")
+				|| raw.startsWith("switch "))
+			return true;
+		if (raw.equals("else") 
+				|| raw.equals("try") 
+				|| raw.equals("finally")
+				|| raw.equals("catch"))
 			return true;
 		return false;
 	}
-	
+
 }

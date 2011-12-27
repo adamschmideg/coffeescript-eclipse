@@ -5,7 +5,6 @@ package csep.formatting;
 
 import csep.services.CoffeeScriptGrammarAccess;
 
-import org.apache.log4j.Logger;
 import org.eclipse.xtext.formatting.impl.AbstractDeclarativeFormatter;
 import org.eclipse.xtext.formatting.impl.FormattingConfig;
 
