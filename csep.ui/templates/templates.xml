@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates>
+    <template name="If" description="If block"
+        id="csep.CoffeeScript.IfExp"
+        context="csep.CoffeeScript.IfExp"
+        enabled="true">if ${condition} 
+    ${cursor}
+else
+ 	${elseBlock}   
+</template>
+</templates>
