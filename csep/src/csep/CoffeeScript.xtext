@@ -12,14 +12,17 @@ Body:
 	lines+=Line (TERMINATOR lines+=Line?)*;
 
 Line:
-	{Empty} HERECOMMENT |
 	Stmt |
 	Expression;
 	
 Stmt:
 	ReturnStmt |
 	ThrowStmt |
+	Comment |
 	ClassDeclaration;
+
+Comment:
+	comment=HERECOMMENT;
 	
 ReturnStmt:
 	RETURN exp=Expression;

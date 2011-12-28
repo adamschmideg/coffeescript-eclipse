@@ -56,6 +56,24 @@ TERMINATOR:
 ''')
     }
     
+    @Test
+    def void testHerecomment() {
+    	check('''
+before
+###
+Comment
+###
+after''', '''
+IDENTIFIER:before
+TERMINATOR:
+HERECOMMENT:Comment
+
+TERMINATOR:
+IDENTIFIER:after
+TERMINATOR:
+''')
+    }
+    
 	def void check(CharSequence input, CharSequence expectedStr) {
 		val lexer = new Lexer(input)
 		val tokens = lexer.tokenizeToStrings()
