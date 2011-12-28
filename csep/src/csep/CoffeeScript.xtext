@@ -363,7 +363,11 @@ terminal RELATION: 'in' | 'of' | 'instanceof';
 terminal RETURN: 'return';
 terminal RPAREN: ')';
 terminal STATEMENT: 'break' | 'continue' | 'debugger';
-terminal STRING: '"' (('a'..'z') | ' ')* '"';
+terminal STRING:
+	"'''" -> "'''" |
+	"'" -> !('\\')"'" |
+	'"""' -> '"""' |
+	'"' -> !('\\')'"';
 terminal SUPER: 'super';
 terminal SWITCH: 'switch';
 terminal TERMINATOR: '\n'+;
