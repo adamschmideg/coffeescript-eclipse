@@ -49,7 +49,8 @@ public class AntlrTokenToAttributeIdMapper extends
 			return LexicalHighlightingConfiguration.STRING_ID;
 		if (InternalCoffeeScriptLexer.RULE_REGEX == tokenType)
 			return LexicalHighlightingConfiguration.REGEX_ID;
-		if (InternalCoffeeScriptLexer.RULE_HERECOMMENT == tokenType)
+		if (InternalCoffeeScriptLexer.RULE_SL_COMMENT == tokenType
+				|| InternalCoffeeScriptLexer.RULE_ML_COMMENT == tokenType)
 			return LexicalHighlightingConfiguration.COMMENT_ID;
 		return LexicalHighlightingConfiguration.DEFAULT_ID;
 	}

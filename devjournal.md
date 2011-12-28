@@ -203,6 +203,8 @@
    to ignore the lexer and to use the xtext grammar directly.
    I asked about it: http://www.eclipse.org/forums/index.php/m/772060/#msg_772060
    I may check out semantic highlighting instead.
+ - It was easier to change the terminals in the xtext grammar and stay
+   with the current lexical highlighter.
 
   [1]: http://jevopisdeveloperblog.blogspot.com/2011/03/implement-tostring-with-xtexts.html
   [2]: http://www.eclipse.org/Xtext/documentation/2_1_0/100-serialization.php#serializationcontract 
