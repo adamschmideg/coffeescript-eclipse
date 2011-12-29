@@ -120,7 +120,12 @@ public class Helper {
 			try {
 				Object fieldValue = f.get(null);
 				if (fieldValue.equals(id)) {
-					return f.getName();
+					String name = f.getName();
+					// We are interested only in rule names
+					if (name.startsWith("RULE_"))
+						return name;
+					else
+						continue;
 				}
 			} catch (Exception e) {
 				// ignore

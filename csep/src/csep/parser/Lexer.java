@@ -33,39 +33,37 @@ public class Lexer extends csep.parser.antlr.internal.InternalCoffeeScriptLexer 
 		this(str.toString());
 	}
 
+	/**
+	 * Get next token.  If an exception is thrown by the underlying lexer,
+	 * keep calling it, and append an invalid token at the very end.
+	 */
 	@Override
 	public Token nextToken() {
 		Token token = null;
 		CoffeeSymbol symbol = null;
-		Exception problem = null;
 		try {
 			symbol = aptanaScanner.nextToken();
 			if (symbol == null) {
 				// XXX: why do we get a null symbol?
 				token = CommonToken.INVALID_TOKEN;
-			} else if (symbol.getId() == Terminals.EOF) {
+			}
+			else if (symbol.getId() == Terminals.EOF) {
 				token = new CommonToken(CommonToken.EOF);
-			} else {
+			}
+			else {
 				token = new BeaverToken(symbol);
 			}
-		} catch (IOException e) {
-			problem = e;
-		} catch (beaver.Scanner.Exception e) {
-			problem = e;
-		} catch (Exception e) {
-			problem = e;
 		}
-		// Common exception handling
-		if (problem != null) {
-			logger.warn("Cannot get next token ", problem);
-			token = new CommonToken(Token.INVALID_TOKEN_TYPE, problem.getLocalizedMessage());
+		catch (Exception e) {
+			token = new CommonToken(Token.INVALID_TOKEN_TYPE,
+					e.getLocalizedMessage());
 		}
 		// Token superToken = super.nextToken();
 		logger.debug("token: " + token);
-		//return super.nextToken();
+		// return super.nextToken();
 		return token;
 	}
-
+	
 	/**
 	 * Read the whole input and tokenize it
 	 * 
