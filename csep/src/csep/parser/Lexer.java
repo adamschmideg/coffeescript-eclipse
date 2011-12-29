@@ -9,20 +9,29 @@ import org.antlr.runtime.ANTLRStringStream;
 import org.antlr.runtime.CharStream;
 import org.antlr.runtime.CommonToken;
 import org.antlr.runtime.Token;
+import org.eclipse.emf.ecore.resource.Resource.Diagnostic;
+import org.eclipse.xtext.diagnostics.ExceptionDiagnostic;
+import org.eclipse.xtext.resource.XtextResource;
 
 import com.aptana.editor.coffee.parsing.Terminals;
 import com.aptana.editor.coffee.parsing.lexer.CoffeeScanner;
 import com.aptana.editor.coffee.parsing.lexer.CoffeeSymbol;
+import com.google.inject.Guice;
+
+import csep.CoffeeScriptRuntimeModule;
 
 public class Lexer extends csep.parser.antlr.internal.InternalCoffeeScriptLexer {
 	private final static Logger logger = Logger.getLogger(Lexer.class);
 	private CoffeeScanner aptanaScanner;
+	XtextResource xtextResource;
 
 	public Lexer(CharStream in) {
 		super(in);
 		aptanaScanner = new CoffeeScanner();
 		String content = in.substring(0, in.size() - 1);
 		aptanaScanner.setSource(content);
+		xtextResource = Guice.createInjector(new CoffeeScriptRuntimeModule())
+				.getInstance(XtextResource.class);
 	}
 
 	public Lexer(String str) {
@@ -48,13 +57,15 @@ public class Lexer extends csep.parser.antlr.internal.InternalCoffeeScriptLexer 
 				token = CommonToken.INVALID_TOKEN;
 			}
 			else if (symbol.getId() == Terminals.EOF) {
-				token = new CommonToken(CommonToken.EOF);
+				token = CommonToken.EOF_TOKEN;
 			}
 			else {
 				token = new BeaverToken(symbol);
 			}
 		}
 		catch (Exception e) {
+			Diagnostic diagnostic = new LexerDiagnostic(e);
+			xtextResource.getErrors().add(diagnostic);
 			token = new CommonToken(Token.INVALID_TOKEN_TYPE,
 					e.getLocalizedMessage());
 		}
@@ -98,5 +109,15 @@ public class Lexer extends csep.parser.antlr.internal.InternalCoffeeScriptLexer 
 			}
 		}
 		return strings;
+	}
+	
+	public class LexerDiagnostic extends ExceptionDiagnostic {
+		public LexerDiagnostic(Exception e) {
+			super(e);
+		}
+		@Override
+		public int getLine() {
+			return 3;
+		}
 	}
 }
