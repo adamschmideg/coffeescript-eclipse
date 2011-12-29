@@ -365,9 +365,9 @@ terminal RPAREN: ')';
 terminal STATEMENT: 'break' | 'continue' | 'debugger';
 terminal STRING:
 	"'''" -> "'''" |
-	"'" -> !('\\')"'" |
+	"'"!("'") -> !('\\')"'" |
 	'"""' -> '"""' |
-	'"' -> !('\\')'"';
+	'"'!('"') -> !('\\')'"';
 terminal SUPER: 'super';
 terminal SWITCH: 'switch';
 terminal TERMINATOR: '\n'+;
