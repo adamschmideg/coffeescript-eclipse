@@ -52,11 +52,13 @@ public class Lexer extends csep.parser.antlr.internal.InternalCoffeeScriptLexer 
 			problem = e;
 		} catch (beaver.Scanner.Exception e) {
 			problem = e;
+		} catch (Exception e) {
+			problem = e;
 		}
 		// Common exception handling
 		if (problem != null) {
 			logger.warn("Cannot get next token ", problem);
-			token = CommonToken.INVALID_TOKEN;
+			token = new CommonToken(Token.INVALID_TOKEN_TYPE, problem.getLocalizedMessage());
 		}
 		// Token superToken = super.nextToken();
 		logger.debug("token: " + token);

@@ -45,6 +45,38 @@ TERMINATOR:
     }
     
     @Test
+    def void testErrorInRewriter() {
+    	check('''
+    	  before = 0
+    	  wrong = ]
+    	  unreached = 42
+    	''', '''
+    	  IDENTIFIER:before
+    	  EQUAL:=
+    	  NUMBER:0
+    	  TERMINATOR:
+    	  IDENTIFIER:wrong
+    	  EQUAL:=
+    	  INVALID_TOKEN_TYPE:
+    	''')
+    }
+    
+    @Test
+    def void testErrorInScanner() {
+    	check('''
+    	  before = 0
+    	  case = 1
+    	  unreached = 42
+    	''', '''
+    	  IDENTIFIER:before
+    	  EQUAL:=
+    	  NUMBER:0
+    	  TERMINATOR:
+    	  INVALID_TOKEN_TYPE:
+    	''')
+    }
+    
+    @Test
     def void testPostfixIf() {
     	check('num = 2 if even', '''
 IDENTIFIER:num

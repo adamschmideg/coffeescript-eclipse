@@ -206,6 +206,17 @@
  - It was easier to change the terminals in the xtext grammar and stay
    with the current lexical highlighter.
 
+* Display tokenization errors correctly.
+ - An exception may be thrown either by the scanner, or by the rewriter.
+   In the first case, we have a stream of valid tokens up to the point
+   where the exception was thrown.
+   In the second case, the rewriter iterates over the tokens, so we need
+   to throw an exception containing the index of the problematic token.
+   Eclipse doesn't treat INVALID_TOKEN_TYPE in a special way, just
+   passes it on to the parser.
+   So it would be correct if the Lexer added a Diagnostic error directly to the
+   XtextResource.
+
   [1]: http://jevopisdeveloperblog.blogspot.com/2011/03/implement-tostring-with-xtexts.html
   [2]: http://www.eclipse.org/Xtext/documentation/2_1_0/100-serialization.php#serializationcontract 
   [3]: http://stackoverflow.com/questions/8154790/visualize-lalr-grammar

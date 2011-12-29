@@ -26,6 +26,10 @@ class AssignTest extends ParserTestBase {
   }
   
   @Test
+  def void testErrorInRewriter() {
+  	error('a = ]')
+  }
+  @Test
   def void testDestructure() {
     ok('[a, b] = [1, 2]')	
   }
