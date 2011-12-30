@@ -31,8 +31,11 @@ class AssignTest extends ParserTestBase {
   }
   
   @Test
+  /**
+   * To really test it, change error to ok, and check if the error is in the second line
+   */
   def void testErrorInScanner() {
-  	ok('''
+  	error('''
   	  before = 1
   	  case = 2
   	  unreached = 3

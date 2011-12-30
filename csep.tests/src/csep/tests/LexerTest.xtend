@@ -57,7 +57,6 @@ TERMINATOR:
     	  TERMINATOR:
     	  IDENTIFIER:wrong
     	  EQUAL:=
-    	  INVALID_TOKEN_TYPE:
     	''')
     }
     
@@ -72,7 +71,6 @@ TERMINATOR:
     	  EQUAL:=
     	  NUMBER:0
     	  TERMINATOR:
-    	  <0>:Reserved word "case" on fLine 2
     	''')
     }
     

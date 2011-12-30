@@ -1,8 +1,6 @@
 package csep.scoping;
 
 import org.apache.log4j.Logger;
-import org.eclipse.emf.common.util.WrappedException;
-import org.eclipse.emf.ecore.EObject;
 import org.eclipse.xtext.linking.lazy.LazyLinkingResource;
 
 /**

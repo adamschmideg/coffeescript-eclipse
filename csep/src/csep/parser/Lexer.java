@@ -1,43 +1,38 @@
 package csep.parser;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.log4j.Logger;
 import org.antlr.runtime.ANTLRStringStream;
 import org.antlr.runtime.CharStream;
 import org.antlr.runtime.CommonToken;
 import org.antlr.runtime.Token;
-import org.eclipse.emf.ecore.resource.Resource.Diagnostic;
-import org.eclipse.xtext.diagnostics.ExceptionDiagnostic;
-import org.eclipse.xtext.resource.XtextResource;
+import org.apache.log4j.Logger;
 
 import com.aptana.editor.coffee.parsing.Terminals;
 import com.aptana.editor.coffee.parsing.lexer.CoffeeScanner;
 import com.aptana.editor.coffee.parsing.lexer.CoffeeSymbol;
-import com.google.inject.Guice;
-
-import csep.CoffeeScriptRuntimeModule;
 
 public class Lexer extends csep.parser.antlr.internal.InternalCoffeeScriptLexer {
 	private final static Logger logger = Logger.getLogger(Lexer.class);
 	private CoffeeScanner aptanaScanner;
-	XtextResource xtextResource;
+	private CommonToken prevToken = null;
 
 	public Lexer(CharStream in) {
 		super(in);
 		aptanaScanner = new CoffeeScanner();
 		String content = in.substring(0, in.size() - 1);
 		aptanaScanner.setSource(content);
-		xtextResource = Guice.createInjector(new CoffeeScriptRuntimeModule())
-				.getInstance(XtextResource.class);
 	}
 
 	public Lexer(String str) {
 		this(new ANTLRStringStream(str));
 	}
 
+	/**
+	 * To enable xtend test cases with multiline strings
+	 * @param str
+	 */
 	public Lexer(CharSequence str) {
 		this(str.toString());
 	}
@@ -60,18 +55,25 @@ public class Lexer extends csep.parser.antlr.internal.InternalCoffeeScriptLexer 
 				token = CommonToken.EOF_TOKEN;
 			}
 			else {
-				token = new BeaverToken(symbol);
+				prevToken = new BeaverToken(symbol);
+				token = prevToken;
 			}
 		}
 		catch (Exception e) {
-			Diagnostic diagnostic = new LexerDiagnostic(e);
-			xtextResource.getErrors().add(diagnostic);
-			token = new CommonToken(Token.INVALID_TOKEN_TYPE,
+			// Xtext wants token to be CommonToken, INVALID_TOKEN_TYPE, and HIDDEN_CHANNEL
+			CommonToken ct = new CommonToken(Token.INVALID_TOKEN_TYPE,
 					e.getLocalizedMessage());
+			ct.setChannel(Token.HIDDEN_CHANNEL);
+			if (prevToken != null) {
+				int start = prevToken.getStopIndex() + 1;
+				int stop = start + 1; // TODO: get more informative errors with length of token
+				ct.setStartIndex(start);
+				ct.setStopIndex(stop);
+			}
+			prevToken = ct;
+			token = ct;
 		}
-		// Token superToken = super.nextToken();
 		logger.debug("token: " + token);
-		// return super.nextToken();
 		return token;
 	}
 	
@@ -110,14 +112,15 @@ public class Lexer extends csep.parser.antlr.internal.InternalCoffeeScriptLexer 
 		}
 		return strings;
 	}
-	
-	public class LexerDiagnostic extends ExceptionDiagnostic {
-		public LexerDiagnostic(Exception e) {
-			super(e);
-		}
-		@Override
-		public int getLine() {
-			return 3;
-		}
+
+	@Override
+	/**
+	 * Because super gets the message from an empty map
+	 */
+	public String getErrorMessage(Token t) {
+		String message = super.getErrorMessage(t);
+		if (message == null)
+			message = t.getText();
+		return message;
 	}
 }
