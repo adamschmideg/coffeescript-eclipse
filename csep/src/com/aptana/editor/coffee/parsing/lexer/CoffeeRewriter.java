@@ -738,6 +738,7 @@ public class CoffeeRewriter
 	{
 		Map<Short, Integer> levels = new HashMap<Short, Integer>();
 		Map<Short, Integer> openLine = new HashMap<Short, Integer>();
+		Map<Integer, Integer> offsetToTokenIndex = new HashMap<Integer, Integer>();
 		for (int i = 0; i < fTokens.size(); i++)
 		{
 			CoffeeSymbol token = fTokens.get(i);
@@ -756,6 +757,7 @@ public class CoffeeRewriter
 					{
 						// FIXME Put line as value, not offset!
 						openLine.put(open, token.getStart());
+						offsetToTokenIndex.put(token.getStart(), i);
 					}
 					level++;
 					levels.put(open, level);
@@ -781,8 +783,10 @@ public class CoffeeRewriter
 			if (level > 0)
 			{
 				Short open = entry.getKey();
-				throw new IllegalStateException(MessageFormat.format("unclosed {0} at offset {1}",
-						getTerminalNameForShort(open), openLine.get(open)));
+				int offset = openLine.get(open);
+				int tokenIndex = offsetToTokenIndex.get(offset);
+				errorAtToken(MessageFormat.format("unclosed {0} at offset {1}",
+						getTerminalNameForShort(open), offset), tokenIndex);
 			}
 		}
 	}
