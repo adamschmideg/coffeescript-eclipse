@@ -10,8 +10,8 @@ import org.eclipse.xtext.linking.lazy.LazyLinkingResource;
  * @author adam
  *
  */
-public class DummyLinkingResource extends LazyLinkingResource {
-	private final static Logger logger = Logger.getLogger(DummyLinkingResource.class);
+public class SuppressingLinkingResource extends LazyLinkingResource {
+	private final static Logger logger = Logger.getLogger(SuppressingLinkingResource.class);
 
 	/**
 	 * Sorry, but it only hides exceptions thrown by {@link LazyLinkingResource}
@@ -29,5 +29,4 @@ public class DummyLinkingResource extends LazyLinkingResource {
 		}
 		return object;
 	}
-	
 }

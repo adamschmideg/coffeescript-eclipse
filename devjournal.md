@@ -216,6 +216,8 @@
    passes it on to the parser.
    So it would be correct if the Lexer added a Diagnostic error directly to the
    XtextResource.
+ - The errors in XtextResource are cleared in the parsing phase, so
+   adding a Diagnostic error by the lexer would be lost.
 
   [1]: http://jevopisdeveloperblog.blogspot.com/2011/03/implement-tostring-with-xtexts.html
   [2]: http://www.eclipse.org/Xtext/documentation/2_1_0/100-serialization.php#serializationcontract 

@@ -48,16 +48,28 @@ TERMINATOR:
     def void testErrorInRewriter() {
     	check('''
     	  before = 0
-    	  wrong = ]
+    	  tooManyParens = )
     	  unreached = 42
     	''', '''
     	  IDENTIFIER:before
     	  EQUAL:=
     	  NUMBER:0
     	  TERMINATOR:
-    	  IDENTIFIER:wrong
+    	  IDENTIFIER:tooManyParens
     	  EQUAL:=
-    	  INVALID_TOKEN_TYPE:
+    	''')
+
+    	check('''
+    	  before = 0
+    	  unclosedParen = (
+    	  unreached = 42
+    	''', '''
+    	  IDENTIFIER:before
+    	  EQUAL:=
+    	  NUMBER:0
+    	  TERMINATOR:
+    	  IDENTIFIER:unclosedParen
+    	  EQUAL:=
     	''')
     }
     
@@ -72,7 +84,14 @@ TERMINATOR:
     	  EQUAL:=
     	  NUMBER:0
     	  TERMINATOR:
-    	  <0>:Reserved word "case" on fLine 2
+    	''')
+    	check('unclosedCurlyBrace = "before #{ interpolation "', '''
+    	  IDENTIFIER:unclosedCurlyBrace
+    	  EQUAL:=
+    	''')
+    	check('unfinishedString = "before #{ interpolation', '''
+    	  IDENTIFIER:unfinishedString
+    	  EQUAL:=
     	''')
     }
     

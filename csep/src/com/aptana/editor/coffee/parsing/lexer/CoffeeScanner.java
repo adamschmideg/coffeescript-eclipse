@@ -1261,7 +1261,7 @@ public class CoffeeScanner extends Scanner
 				+ " can't be assigned");
 	}
 
-	private String balancedString(String str, char end)
+	private String balancedString(String str, char end) throws SyntaxError
 	{
 		Stack<Character> stack = new Stack<Character>();
 		stack.push(end);
@@ -1303,7 +1303,7 @@ public class CoffeeScanner extends Scanner
 			}
 			prev = letter;
 		}
-		throw new Error("missing " + (stack.pop()) + ", starting on fLine " + (this.fLine + 1));
+		throw new SyntaxError("missing " + (stack.pop()) + ", starting on fLine " + (this.fLine + 1));
 	}
 
 	@SuppressWarnings("unchecked")

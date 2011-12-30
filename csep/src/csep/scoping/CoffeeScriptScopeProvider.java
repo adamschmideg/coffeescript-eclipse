@@ -3,9 +3,6 @@
  */
 package csep.scoping;
 
-import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.ecore.EReference;
-import org.eclipse.xtext.scoping.IScope;
 import org.eclipse.xtext.scoping.impl.AbstractDeclarativeScopeProvider;
 
 /**
@@ -17,10 +14,4 @@ import org.eclipse.xtext.scoping.impl.AbstractDeclarativeScopeProvider;
  */
 public class CoffeeScriptScopeProvider extends AbstractDeclarativeScopeProvider {
 
-	@Override
-	public IScope getScope(EObject context, EReference reference) {
-		IScope parent = super.getScope(context, reference);
-		return parent;
-		//return new DummyScope(parent);
-	}
 }
