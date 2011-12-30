@@ -61,8 +61,11 @@ public class Lexer extends csep.parser.antlr.internal.InternalCoffeeScriptLexer 
 		}
 		catch (Exception e) {
 			// Xtext wants token to be CommonToken, INVALID_TOKEN_TYPE, and HIDDEN_CHANNEL
+			String text = e.getLocalizedMessage();
+			if (text == null)
+				text = "simply " + e.getClass().getSimpleName();
 			CommonToken ct = new CommonToken(Token.INVALID_TOKEN_TYPE,
-					e.getLocalizedMessage());
+					text);
 			ct.setChannel(Token.HIDDEN_CHANNEL);
 			if (prevToken != null) {
 				int start = prevToken.getStopIndex() + 1;
@@ -121,6 +124,8 @@ public class Lexer extends csep.parser.antlr.internal.InternalCoffeeScriptLexer 
 		String message = super.getErrorMessage(t);
 		if (message == null)
 			message = t.getText();
+		if (message == null)
+			message = t.toString();
 		return message;
 	}
 }

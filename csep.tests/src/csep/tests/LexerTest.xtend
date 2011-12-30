@@ -48,14 +48,27 @@ TERMINATOR:
     def void testErrorInRewriter() {
     	check('''
     	  before = 0
-    	  wrong = ]
+    	  tooManyParens = )
     	  unreached = 42
     	''', '''
     	  IDENTIFIER:before
     	  EQUAL:=
     	  NUMBER:0
     	  TERMINATOR:
-    	  IDENTIFIER:wrong
+    	  IDENTIFIER:tooManyParens
+    	  EQUAL:=
+    	''')
+
+    	check('''
+    	  before = 0
+    	  unclosedParen = (
+    	  unreached = 42
+    	''', '''
+    	  IDENTIFIER:before
+    	  EQUAL:=
+    	  NUMBER:0
+    	  TERMINATOR:
+    	  IDENTIFIER:unclosedParen
     	  EQUAL:=
     	''')
     }

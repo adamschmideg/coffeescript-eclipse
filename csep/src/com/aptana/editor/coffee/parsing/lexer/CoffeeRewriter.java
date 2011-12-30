@@ -201,7 +201,7 @@ public class CoffeeRewriter
 	private List<CoffeeSymbol> fTokens;
 	private boolean seenSingle;
 
-	List<CoffeeSymbol> rewrite(List<CoffeeSymbol> tokens)
+	List<CoffeeSymbol> rewrite(List<CoffeeSymbol> tokens) throws SyntaxError
 	{
 		this.fTokens = tokens;
 		removeLeadingNewlines();
@@ -327,7 +327,7 @@ public class CoffeeRewriter
 		}
 	}
 
-	private void addImplicitBraces()
+	private void addImplicitBraces() throws SyntaxError
 	{
 		Stack<CoffeeSymbol> stack = new Stack<CoffeeSymbol>();
 		// scanTokens
@@ -352,9 +352,17 @@ public class CoffeeRewriter
 			}
 			if (EXPRESSION_END.contains(token.getId()))
 			{
-				stack.pop();
-				i++;
-				continue;
+				if (stack.isEmpty())
+				{
+					errorAtToken(MessageFormat.format("Closing {0} without opening pair",
+							getTerminalNameForShort(token.getId())), i);
+				}
+				else
+				{
+					stack.pop();
+					i++;
+					continue;
+				}
 			}
 
 			short endOfStack = -1;
@@ -726,12 +734,13 @@ public class CoffeeRewriter
 		}
 	}
 
-	private void ensureBalance(Map<Short, Short> pairs)
+	private void ensureBalance(Map<Short, Short> pairs) throws SyntaxError
 	{
 		Map<Short, Integer> levels = new HashMap<Short, Integer>();
 		Map<Short, Integer> openLine = new HashMap<Short, Integer>();
-		for (CoffeeSymbol token : fTokens)
+		for (int i = 0; i < fTokens.size(); i++)
 		{
+			CoffeeSymbol token = fTokens.get(i);
 			for (Map.Entry<Short, Short> pair : pairs.entrySet())
 			{
 				short open = pair.getKey();
@@ -759,8 +768,8 @@ public class CoffeeRewriter
 					if (level < 0)
 					{
 						// FIXME When we store lines, spit out line number here, not offset
-						throw new IllegalStateException(MessageFormat.format("too many {0} at offset {1}",
-								getTerminalNameForShort(close), token.getStart()));
+						errorAtToken(MessageFormat.format("too many {0} at offset {1}",
+								getTerminalNameForShort(close), token.getStart()), i);
 					}
 				}
 			}
@@ -844,5 +853,15 @@ public class CoffeeRewriter
 			}
 			i++;
 		}
+	}
+	
+	/**
+	 * Remove all tokens starting at <var>tokenIndex</var>, then throw an exception with <var>errorMessage</var>
+	 * @throws SyntaxError 
+	 */
+	private void errorAtToken(String errorMessage, int tokenIndex) throws SyntaxError
+	{
+		fTokens.subList(tokenIndex, fTokens.size()).clear();
+		throw new SyntaxError(errorMessage);
 	}
 }
