@@ -85,6 +85,14 @@ TERMINATOR:
     	  NUMBER:0
     	  TERMINATOR:
     	''')
+    	check('unclosedCurlyBrace = "before #{ interpolation "', '''
+    	  IDENTIFIER:unclosedCurlyBrace
+    	  EQUAL:=
+    	''')
+    	check('unfinishedString = "before #{ interpolation', '''
+    	  IDENTIFIER:unfinishedString
+    	  EQUAL:=
+    	''')
     }
     
     @Test
