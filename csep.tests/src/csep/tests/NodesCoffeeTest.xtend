@@ -1,0 +1,431 @@
+package csep.tests
+
+import org.junit.Test
+
+class NodesCoffeeTest extends ParserTestBase {
+
+  @Test def void testClosure() {
+    ok('''#### Closure
+
+# A faux-node used to wrap an expressions body in a closure.
+Closure =
+
+  # Wrap the expressions body, unless it contains a pure statement,
+  # in which case, no dice. If the body mentions `this` or `arguments`,
+  # then make sure that the closure wrapper preserves the original values.
+  wrap: (expressions, statement, noReturn) ->
+    return expressions if expressions.jumps()
+    func = new Code [], Block.wrap [expressions]
+    args = []
+    if (mentionsArgs = expressions.contains @literalArgs) or expressions.contains @literalThis
+      meth = new Literal if mentionsArgs then 'apply' else 'call'
+      args = [new Literal 'this']
+      args.push new Literal 'arguments' if mentionsArgs
+      func = new Value func, [new Access meth]
+    func.noReturn = noReturn
+    call = new Call func, args
+    if statement then Block.wrap [call] else call
+
+  literalArgs: (node) ->
+    node instanceof Literal and node.value is 'arguments' and not node.asKey
+  literalThis: (node) ->
+    (node instanceof Literal and node.value is 'this' and not node.asKey) or
+      (node instanceof Code and node.bound)
+
+# Unfold a node's child if soak, then tuck the node under created `If`
+unfoldSoak = (o, parent, name) ->
+  return unless ifn = parent[name].unfoldSoak o
+  parent[name] = ifn.body
+  ifn.body = new Value parent
+  ifn
+
+# Constants
+# ---------
+
+UTILITIES =
+
+  # Correctly set up a prototype chain for inheritance, including a reference
+  # to the superclass for `super()` calls, and copies of any static properties.
+  extends: -> """
+    function(child, parent) { for (var key in parent) { if (#{utility 'hasProp'}.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor; child.__super__ = parent.prototype; return child; }
+  """
+
+  # Create a function bound to the current value of "this".
+  bind: -> """
+    function(fn, me){ return function(){ return fn.apply(me, arguments); }; }
+  """
+
+  # Discover if an item is in an array.
+  indexOf: -> """
+    Array.prototype.indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (#{utility 'hasProp'}.call(this, i) && this[i] === item) return i; } return -1; }
+  """
+
+  # Shortcuts to speed up the lookup time for native functions.
+  hasProp: -> 'Object.prototype.hasOwnProperty'
+  slice  : -> 'Array.prototype.slice'
+
+# Levels indicate a node's position in the AST. Useful for knowing if
+# parens are necessary or superfluous.
+LEVEL_TOP    = 1  # ...;
+LEVEL_PAREN  = 2  # (...)
+LEVEL_LIST   = 3  # [...]
+LEVEL_COND   = 4  # ... ? x : y
+LEVEL_OP     = 5  # !...
+LEVEL_ACCESS = 6  # ...[0]
+
+# Tabs are two spaces for pretty printing.
+TAB = '  '
+
+IDENTIFIER_STR = "[$A-Za-z_\\x7f-\\uffff][$\\w\\x7f-\\uffff]*"
+IDENTIFIER = /// ^ #{IDENTIFIER_STR} $ ///
+SIMPLENUM  = /^[+-]?\d+$/
+METHOD_DEF = ///
+  ^
+    (?:
+      (#{IDENTIFIER_STR})
+      \.prototype
+      (?:
+        \.(#{IDENTIFIER_STR})
+      | \[("(?:[^\\"\r\n]|\\.)*"|'(?:[^\\'\r\n]|\\.)*')\]
+      | \[(0x[\da-fA-F]+ | \d*\.?\d+ (?:[eE][+-]?\d+)?)\]
+      )
+    )
+  |
+    (#{IDENTIFIER_STR})
+  $
+///
+
+# Is a literal value a string?
+IS_STRING = /^['"]/
+
+# Utility Functions
+# -----------------
+
+# Helper for ensuring that utility functions are assigned at the top level.
+utility = (name) ->
+  ref = "__#{name}"
+  Scope.root.assign ref, UTILITIES[name]()
+  ref
+
+multident = (code, tab) ->
+  code = code.replace /\n/g, '$&' + tab
+  code.replace /\s+$/, ''
+    ''')
+  }
+
+  @Test def void testOp() {
+    ok('''#### Op
+
+# Simple Arithmetic and logical operations. Performs some conversion from
+# CoffeeScript operations into their JavaScript equivalents.
+exports.Op = class Op extends Base
+  constructor: (op, first, second, flip ) ->
+    return new In first, second if op is 'in'
+    if op is 'do'
+      call = new Call first, first.params or []
+      call.do = yes
+      return call
+    if op is 'new'
+      return first.newInstance() if first instanceof Call and not first.do and not first.isNew
+      first = new Parens first   if first instanceof Code and first.bound or first.do
+    @operator = CONVERSIONS[op] or op
+    @first    = first
+    @second   = second
+    @flip     = !!flip
+    return this
+
+  # The map of conversions from CoffeeScript to JavaScript symbols.
+  CONVERSIONS =
+    '==': '==='
+    '!=': '!=='
+    'of': 'in'
+
+  # The map of invertible operators.
+  INVERSIONS =
+    '!==': '==='
+    '===': '!=='
+
+  children: ['first', 'second']
+
+  isSimpleNumber: NO
+
+  isUnary: ->
+    not @second
+
+  isComplex: ->
+    not (@isUnary() and (@operator in ['+', '-'])) or @first.isComplex()
+
+  # Am I capable of
+  # [Python-style comparison chaining](http://docs.python.org/reference/expressions.html#notin)?
+  isChainable: ->
+    @operator in ['<', '>', '>=', '<=', '===', '!==']
+
+  invert: ->
+    if @isChainable() and @first.isChainable()
+      allInvertable = yes
+      curr = this
+      while curr and curr.operator
+        allInvertable and= (curr.operator of INVERSIONS)
+        curr = curr.first
+      return new Parens(this).invert() unless allInvertable
+      curr = this
+      while curr and curr.operator
+        curr.invert = !curr.invert
+        curr.operator = INVERSIONS[curr.operator]
+        curr = curr.first
+      this
+    else if op = INVERSIONS[@operator]
+      @operator = op
+      if @first.unwrap() instanceof Op
+        @first.invert()
+      this
+    else if @second
+      new Parens(this).invert()
+    else if @operator is '!' and (fst = @first.unwrap()) instanceof Op and
+                                  fst.operator in ['!', 'in', 'instanceof']
+      fst
+    else
+      new Op '!', this
+
+  unfoldSoak: (o) ->
+    @operator in ['++', '--', 'delete'] and unfoldSoak o, this, 'first'
+
+  compileNode: (o) ->    
+    isChain = @isChainable() and @first.isChainable()
+    # In chains, there's no need to wrap bare obj literals in parens, 
+    # as the chained expression is wrapped.
+    @first.front = @front unless isChain
+    return @compileUnary     o if @isUnary()
+    return @compileChain     o if isChain
+    return @compileExistence o if @operator is '?'
+    code = @first.compile(o, LEVEL_OP) + ' ' + @operator + ' ' +
+           @second.compile(o, LEVEL_OP)
+    if o.level <= LEVEL_OP then code else "(#{code})"
+
+  # Mimic Python's chained comparisons when multiple comparison operators are
+  # used sequentially. For example:
+  #
+  #     bin/coffee -e 'console.log 50 < 65 > 10'
+  #     true
+  compileChain: (o) ->
+    [@first.second, shared] = @first.second.cache o
+    fst = @first.compile o, LEVEL_OP
+    code = "#{fst} #{if @invert then '&&' else '||'} #{ shared.compile o } #{@operator} #{ @second.compile o, LEVEL_OP }"
+    "(#{code})"
+
+  compileExistence: (o) ->
+    if @first.isComplex()
+      ref = new Literal o.scope.freeVariable 'ref'
+      fst = new Parens new Assign ref, @first
+    else
+      fst = @first
+      ref = fst
+    new If(new Existence(fst), ref, type: 'if').addElse(@second).compile o
+
+  # Compile a unary **Op**.
+  compileUnary: (o) ->
+    parts = [op = @operator]
+    plusMinus = op in ['+', '-']
+    parts.push ' ' if op in ['new', 'typeof', 'delete'] or
+                      plusMinus and @first instanceof Op and @first.operator is op
+    if (plusMinus && @first instanceof Op) or (op is 'new' and @first.isStatement o)
+      @first = new Parens @first 
+    parts.push @first.compile o, LEVEL_OP
+    parts.reverse() if @flip
+    parts.join ''
+
+  toString: (idt) ->
+    super idt, @constructor.name + ' ' + @operator
+
+''')}
+
+  @Test def void testArr() {
+    ok('''#### Arr
+
+# An array literal.
+exports.Arr = class Arr extends Base
+  constructor: (objs) ->
+    @objects = objs or []
+
+  children: ['objects']
+
+  filterImplicitObjects: Call::filterImplicitObjects
+
+  compileNode: (o) ->
+    return '[]' unless @objects.length
+    o.indent += TAB
+    objs = @filterImplicitObjects @objects
+    return code if code = Splat.compileSplattedArray o, objs
+    code = (obj.compile o, LEVEL_LIST for obj in objs).join ', '
+    if code.indexOf('\n') >= 0
+      "[\n#{o.indent}#{code}\n#{@tab}]"
+    else
+      "[#{code}]"
+
+  assigns: (name) ->
+    for obj in @objects when obj.assigns name then return yes
+    no
+
+''')}
+	
+  @Test def void testObj() {
+    ok('''#### Obj
+
+# An object literal, nothing fancy.
+exports.Obj = class Obj extends Base
+  constructor: (props, @generated = false) ->
+    @objects = @properties = props or []
+
+  children: ['properties']
+
+  compileNode: (o) ->
+    props = @properties
+    return (if @front then '({})' else '{}') unless props.length
+    if @generated
+      for node in props when node instanceof Value
+        throw new Error 'cannot have an implicit value in an implicit object'
+    idt         = o.indent += TAB
+    lastNoncom  = @lastNonComment @properties
+    props = for prop, i in props
+      join = if i is props.length - 1
+        ''
+      else if prop is lastNoncom or prop instanceof Comment
+        '\n'
+      else
+        ',\n'
+      indent = if prop instanceof Comment then '' else idt
+      if prop instanceof Value and prop.this
+        prop = new Assign prop.properties[0].name, prop, 'object'
+      if prop not instanceof Comment
+        if prop not instanceof Assign
+          prop = new Assign prop, prop, 'object'
+        (prop.variable.base or prop.variable).asKey = yes
+      indent + prop.compile(o, LEVEL_TOP) + join
+    props = props.join ''
+    obj   = "{#{ props and '\n' + props + '\n' + @tab }}"
+    if @front then "(#{obj})" else obj
+
+  assigns: (name) ->
+    for prop in @properties when prop.assigns name then return yes
+    no
+
+''')}
+
+  @Test def void testClass() {
+    ok('''#### Class
+
+# The CoffeeScript class definition.
+# Initialize a **Class** with its name, an optional superclass, and a
+# list of prototype property assignments.
+exports.Class = class Class extends Base
+  constructor: (@variable, @parent, @body = new Block) ->
+    @boundFuncs = []
+    @body.classBody = yes
+
+  children: ['variable', 'parent', 'body']
+
+  # Figure out the appropriate name for the constructor function of this class.
+  determineName: ->
+    return null unless @variable
+    decl = if tail = last @variable.properties
+      tail instanceof Access and tail.name.value
+    else
+      @variable.base.value
+    decl and= IDENTIFIER.test(decl) and decl
+
+  # For all `this`-references and bound functions in the class definition,
+  # `this` is the Class being constructed.
+  setContext: (name) ->
+    @body.traverseChildren false, (node) ->
+      return false if node.classBody
+      if node instanceof Literal and node.value is 'this'
+        node.value    = name
+      else if node instanceof Code
+        node.klass    = name
+        node.context  = name if node.bound
+
+  # Ensure that all functions bound to the instance are proxied in the
+  # constructor.
+  addBoundFunctions: (o) ->
+    if @boundFuncs.length
+      for bvar in @boundFuncs
+        lhs = (new Value (new Literal "this"), [new Access bvar]).compile o
+        @ctor.body.unshift new Literal "#{lhs} = #{utility 'bind'}(#{lhs}, this)"
+
+  # Merge the properties from a top-level object as prototypal properties
+  # on the class.
+  addProperties: (node, name, o) ->
+    props = node.base.properties[0..]
+    exprs = while assign = props.shift()
+      if assign instanceof Assign
+        base = assign.variable.base
+        delete assign.context
+        func = assign.value
+        if base.value is 'constructor'
+          if @ctor
+            throw new Error 'cannot define more than one constructor in a class'
+          if func.bound
+            throw new Error 'cannot define a constructor as a bound function'
+          if func instanceof Code
+            assign = @ctor = func
+          else
+            @externalCtor = o.scope.freeVariable 'class'
+            assign = new Assign new Literal(@externalCtor), func
+        else
+          if assign.variable.this
+            func.static = yes
+          else
+            assign.variable = new Value(new Literal(name), [(new Access new Literal 'prototype'), new Access base ])
+            if func instanceof Code and func.bound
+              @boundFuncs.push base
+              func.bound = no
+      assign
+    compact exprs
+
+  # Walk the body of the class, looking for prototype properties to be converted.
+  walkBody: (name, o) ->
+    @traverseChildren false, (child) =>
+      return false if child instanceof Class
+      if child instanceof Block
+        for node, i in exps = child.expressions
+          if node instanceof Value and node.isObject(true)
+            exps[i] = @addProperties node, name, o
+        child.expressions = exps = flatten exps
+
+  # Make sure that a constructor is defined for the class, and properly
+  # configured.
+  ensureConstructor: (name) ->
+    if not @ctor
+      @ctor = new Code
+      @ctor.body.push new Literal "#{name}.__super__.constructor.apply(this, arguments)" if @parent
+      @ctor.body.push new Literal "#{@externalCtor}.apply(this, arguments)" if @externalCtor
+      @body.expressions.unshift @ctor
+    @ctor.ctor     = @ctor.name = name
+    @ctor.klass    = null
+    @ctor.noReturn = yes
+
+  # Instead of generating the JavaScript string directly, we build up the
+  # equivalent syntax tree and compile that, in pieces. You can see the
+  # constructor, property assignments, and inheritance getting built out below.
+  compileNode: (o) ->
+    decl  = @determineName()
+    name  = decl or @name or '_Class'
+    name = "_#{name}" if name.reserved
+    lname = new Literal name
+
+    @setContext name
+    @walkBody name, o
+    @ensureConstructor name
+    @body.spaced = yes
+    @body.expressions.unshift new Extends lname, @parent if @parent
+    @body.expressions.unshift @ctor unless @ctor instanceof Code
+    @body.expressions.push lname
+    @addBoundFunctions o
+
+    klass = new Parens Closure.wrap(@body), true
+    klass = new Assign @variable, klass if @variable
+    klass.compile o
+
+''')}
+
+}
