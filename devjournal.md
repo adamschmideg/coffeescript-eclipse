@@ -219,6 +219,21 @@
  - The errors in XtextResource are cleared in the parsing phase, so
    adding a Diagnostic error by the lexer would be lost.
 
+* Issues
+ - One-character long string not recognized in editor
+ - Double quotation mark within singly quoted string
+ - Add standard objects and functions (Array, String, Math, console, etc) to global scope 
+ - Add function parameters to local scope, they should be Id-s rather
+   than IdRef-s
+ - Explore StringIndexOutOfBoundsException problem when resolving an
+   xtext link
+ - `break` keyword
+ - Comments are ignored by lexer, so error locations are shifted by the
+   length of preceding comment
+ - Weird reconciler exception when opening `nodes.coffee`
+ - Use `.coffee` as file extension
+ - Accept empty file
+
   [1]: http://jevopisdeveloperblog.blogspot.com/2011/03/implement-tostring-with-xtexts.html
   [2]: http://www.eclipse.org/Xtext/documentation/2_1_0/100-serialization.php#serializationcontract 
   [3]: http://stackoverflow.com/questions/8154790/visualize-lalr-grammar

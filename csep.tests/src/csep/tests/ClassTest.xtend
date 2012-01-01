@@ -32,4 +32,23 @@ class ClassTest extends ParserTestBase {
 		      super 2
 		''')
 	}
+	
+	@Test
+	def void testAssign() {
+		shouldBeOk('''
+		  exports.Scope = class Scope
+		    @root: null
+		''')
+	}
+	
+	@Test
+	def void testConstructor() {
+		ok('''
+		  class Scope
+		  
+		    # Comment
+		    constructor: (@param) ->
+		      @bar = 0
+		''')
+	}
 }
