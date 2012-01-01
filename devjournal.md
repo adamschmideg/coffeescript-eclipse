@@ -234,6 +234,8 @@
  - Use `.coffee` as file extension
  - Accept empty file
 
+* The file has to be modified to activate xtext grammar check
+
   [1]: http://jevopisdeveloperblog.blogspot.com/2011/03/implement-tostring-with-xtexts.html
   [2]: http://www.eclipse.org/Xtext/documentation/2_1_0/100-serialization.php#serializationcontract 
   [3]: http://stackoverflow.com/questions/8154790/visualize-lalr-grammar
