@@ -236,6 +236,16 @@
 
 * The file has to be modified to activate xtext grammar check
 
+* Problems with tokens got from Aptana scanner
+ - It uses short numbers internally which easily overflows, resulting
+   token positions restarted after 4095
+ - The rewriter calculates wrong positions for inserted tokens,
+   sometimes resulting in a token with startIndex > stopIndex
+ - Comments get ignored, since it can't use a hidden channel (probably
+   unsupported by the Beaver API)
+ - It doesn't seem to keep track of line number and positions within
+   line
+
   [1]: http://jevopisdeveloperblog.blogspot.com/2011/03/implement-tostring-with-xtexts.html
   [2]: http://www.eclipse.org/Xtext/documentation/2_1_0/100-serialization.php#serializationcontract 
   [3]: http://stackoverflow.com/questions/8154790/visualize-lalr-grammar

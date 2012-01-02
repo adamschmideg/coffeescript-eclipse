@@ -17,6 +17,10 @@ public class Lexer extends csep.parser.antlr.internal.InternalCoffeeScriptLexer 
 	private final static Logger logger = Logger.getLogger(Lexer.class);
 	private CoffeeScanner aptanaScanner;
 	private CommonToken prevToken = null;
+	/**
+	 * We have to keep a track of it, because the aptana scanner doesn't do that
+	 */
+	private int tokenIndex = 0;
 
 	public Lexer(CharStream in) {
 		super(in);
@@ -55,8 +59,7 @@ public class Lexer extends csep.parser.antlr.internal.InternalCoffeeScriptLexer 
 				token = CommonToken.EOF_TOKEN;
 			}
 			else {
-				prevToken = new BeaverToken(symbol);
-				token = prevToken;
+				token = new BeaverToken(symbol);
 			}
 		}
 		catch (Exception e) {
@@ -73,8 +76,13 @@ public class Lexer extends csep.parser.antlr.internal.InternalCoffeeScriptLexer 
 				ct.setStartIndex(start);
 				ct.setStopIndex(stop);
 			}
-			prevToken = ct;
 			token = ct;
+		}
+		token.setTokenIndex(tokenIndex);
+		tokenIndex++;
+		if (token instanceof CommonToken) {
+			assert ((CommonToken)token).getStartIndex() >= prevToken.getStopIndex();
+			prevToken = (CommonToken)token;
 		}
 		logger.debug("token: " + token);
 		return token;
