@@ -247,6 +247,15 @@
  - It doesn't seem to keep track of line number and positions within
    line
 
+* The case of the ugly StringIndexOutOfBoundsException:
+  When an issue is raised, its content is calculated from the whole
+  text indexed by the token where occurred.
+  But the whole text is calculated by taking the input char stream and
+  reading it from the first token.
+  If the first token was hidden, the beginning of the text is chopped,
+  and we'll get a shorter full text.
+  So a substring with the proper indexes will fail.
+
   [1]: http://jevopisdeveloperblog.blogspot.com/2011/03/implement-tostring-with-xtexts.html
   [2]: http://www.eclipse.org/Xtext/documentation/2_1_0/100-serialization.php#serializationcontract 
   [3]: http://stackoverflow.com/questions/8154790/visualize-lalr-grammar
