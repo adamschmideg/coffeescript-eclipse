@@ -220,18 +220,18 @@
    adding a Diagnostic error by the lexer would be lost.
 
 * Issues
- - One-character long string not recognized in editor
- - Double quotation mark within singly quoted string
+ - One-character long string not recognized in editor -- Done
+ - Double quotation mark within singly quoted string -- Done
  - Add standard objects and functions (Array, String, Math, console, etc) to global scope 
  - Add function parameters to local scope, they should be Id-s rather
    than IdRef-s
  - Explore StringIndexOutOfBoundsException problem when resolving an
-   xtext link
+   xtext link -- Done
  - `break` keyword
  - Comments are ignored by lexer, so error locations are shifted by the
-   length of preceding comment
- - Weird reconciler exception when opening `nodes.coffee`
- - Use `.coffee` as file extension
+   length of preceding comment -- Done
+ - Weird reconciler exception when opening `nodes.coffee` -- Done
+ - Use `.coffee` as file extension -- Done
  - Accept empty file
 
 * The file has to be modified to activate xtext grammar check
@@ -255,6 +255,16 @@
   If the first token was hidden, the beginning of the text is chopped,
   and we'll get a shorter full text.
   So a substring with the proper indexes will fail.
+
+* Most annoying issue:
+  The editor works inconsistently.
+  - Sometimes `No viable alternative at EOF` for an empty or almost
+    empty file
+  - When opening a file, it's not checked, only after it's been modified
+  - Saving a file removes warnings
+  - The warnings are not shown in the `Problems` window
+
+* Hovering sometimes throws an NPE, maybe when I hover over a missing crossref
 
   [1]: http://jevopisdeveloperblog.blogspot.com/2011/03/implement-tostring-with-xtexts.html
   [2]: http://www.eclipse.org/Xtext/documentation/2_1_0/100-serialization.php#serializationcontract 
