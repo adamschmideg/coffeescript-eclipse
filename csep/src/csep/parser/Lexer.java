@@ -81,7 +81,13 @@ public class Lexer extends csep.parser.antlr.internal.InternalCoffeeScriptLexer 
 		token.setTokenIndex(tokenIndex);
 		tokenIndex++;
 		if (token instanceof CommonToken) {
-			assert ((CommonToken)token).getStartIndex() >= prevToken.getStopIndex();
+			if (prevToken != null && token.getType() > 0) {
+				/*
+				TODO: Ensure that token positions are increasing
+				assert ((CommonToken)token).getStartIndex() >= prevToken.getStopIndex():
+					"Position not follows, prevToken: " + prevToken + ", token: " + token;
+				*/
+			}
 			prevToken = (CommonToken)token;
 		}
 		logger.debug("token: " + token);

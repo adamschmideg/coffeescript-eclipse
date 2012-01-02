@@ -238,7 +238,8 @@
 
 * Problems with tokens got from Aptana scanner
  - It uses short numbers internally which easily overflows, resulting
-   token positions restarted after 4095
+   token positions restarted after 4095 -- oops, not true, it simply
+   uses offsets
  - The rewriter calculates wrong positions for inserted tokens,
    sometimes resulting in a token with startIndex > stopIndex
  - Comments get ignored, since it can't use a hidden channel (probably
