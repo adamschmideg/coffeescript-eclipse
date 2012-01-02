@@ -383,7 +383,7 @@ terminal WHILE: 'while';
 // Put it at the end, so keywords will be matched earlier
 terminal IDENTIFIER: '^'?('a'..'z'|'A'..'Z'|'_') ('a'..'z'|'A'..'Z'|'_'|'0'..'9')*;
 // These tokens are used only by syntax coloring
-terminal ML_COMMENT	: '###' -> '###';
+terminal ML_COMMENT	: '###' !('#') -> '###';
 terminal SL_COMMENT 	: '#' !('\n'|'\r')* ('\r'? '\n')?;
 terminal WS			: (' '|'\t')+;
 // }}} end of terminals
