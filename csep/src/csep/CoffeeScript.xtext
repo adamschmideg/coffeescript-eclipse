@@ -19,8 +19,8 @@ Stmt:
 	ReturnStmt |
 	ThrowStmt |
 	Comment |
-	statement=STATEMENT |
-	ClassDeclaration;
+	ClassDeclaration |
+	statement=STATEMENT;
 
 Comment:
 	comment=HERECOMMENT;
@@ -31,13 +31,30 @@ ReturnStmt:
 ThrowStmt:
 	THROW exp=Expression;
 	
+/**
+ * Coffeescript is permissive, it can be any expression, but we want to be able to check it as crossref
+ */
+SuperClass:
+	IdRef | Property;
+	
 ClassDeclaration:
 	{ClassDeclaration}
 	CLASS (
 		body=Block |
-		(EXTENDS extend=Expression body=Block?) |
-		(name=(Id | Property) (EXTENDS extend=Expression)? body=Block)
+		(EXTENDS extend=SuperClass body=Block?) |
+		(name=(Id | Property) (EXTENDS extend=SuperClass)? body=Block)
 	)?;
+
+/**
+ * FIXME: it should be the same as ClassDeclaration, but it would result in a non-LL decision,
+ * so I just removed the problematic options (a class body and a name or a superclass is required).
+ */
+AssignedClassDeclaration:
+	{ClassDeclaration}
+	CLASS (
+		(EXTENDS extend=SuperClass body=Block) |
+		(name=(Id | Property) (EXTENDS extend=SuperClass)? body=Block)
+	)?;	
 
 Expression:
 	Postfix;
@@ -79,7 +96,7 @@ Assignment returns Expression:
 	LogicOp;
 
 Assigned returns Expression:
-	Expression | (INDENT Expression OUTDENT);
+	Expression | (INDENT Expression OUTDENT) | AssignedClassDeclaration;
 	
 LogicOp returns Expression:
  	CompareOp (=>({BinaryExp.left=current} operator=LOGIC) right=CompareOp)*;

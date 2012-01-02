@@ -35,9 +35,9 @@ class ClassTest extends ParserTestBase {
 	
 	@Test
 	def void testAssign() {
-		shouldBeOk('''
+		ok('''
 		  exports.Scope = class Scope
-		    @root: null
+		    root: null
 		''')
 	}
 	

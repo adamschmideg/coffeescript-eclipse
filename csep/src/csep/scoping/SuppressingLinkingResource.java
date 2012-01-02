@@ -1,6 +1,5 @@
 package csep.scoping;
 
-import org.apache.log4j.Logger;
 import org.eclipse.xtext.linking.lazy.LazyLinkingResource;
 
 /**
