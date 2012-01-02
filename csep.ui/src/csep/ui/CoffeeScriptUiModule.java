@@ -4,11 +4,13 @@
 package csep.ui;
 
 import org.eclipse.ui.plugin.AbstractUIPlugin;
+import org.eclipse.xtext.resource.IGlobalServiceProvider;
 import org.eclipse.xtext.ui.editor.autoedit.AbstractEditStrategyProvider;
 import org.eclipse.xtext.ui.editor.syntaxcoloring.AbstractAntlrTokenToAttributeIdMapper;
 import org.eclipse.xtext.ui.editor.syntaxcoloring.IHighlightingConfiguration;
 
 import csep.ui.autoedit.AutoEditStrategyProvider;
+import csep.ui.hover.NullSafeResourceServiceProvider;
 import csep.ui.syntaxcoloring.AntlrTokenToAttributeIdMapper;
 import csep.ui.syntaxcoloring.LexicalHighlightingConfiguration;
 
@@ -31,5 +33,9 @@ public class CoffeeScriptUiModule extends csep.ui.AbstractCoffeeScriptUiModule {
 	@Override
 	public Class<? extends AbstractEditStrategyProvider> bindAbstractEditStrategyProvider() {
 		return AutoEditStrategyProvider.class;
+	}
+	
+	public Class<? extends IGlobalServiceProvider> bindIGlobalServiceProvider() {
+		return NullSafeResourceServiceProvider.class;
 	}
 }
