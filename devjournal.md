@@ -198,6 +198,79 @@
    It wouldn't accept syntactically correct, but erroneous
    expressions, such as `[a+1] = 3`
 
+* Syntax highlight of comments
+ - Xtext uses `TokenScanner` when doing syntax highlighting which seems
+   to ignore the lexer and to use the xtext grammar directly.
+   I asked about it: http://www.eclipse.org/forums/index.php/m/772060/#msg_772060
+   I may check out semantic highlighting instead.
+ - It was easier to change the terminals in the xtext grammar and stay
+   with the current lexical highlighter.
+
+* Display tokenization errors correctly.
+ - An exception may be thrown either by the scanner, or by the rewriter.
+   In the first case, we have a stream of valid tokens up to the point
+   where the exception was thrown.
+   In the second case, the rewriter iterates over the tokens, so we need
+   to throw an exception containing the index of the problematic token.
+   Eclipse doesn't treat INVALID_TOKEN_TYPE in a special way, just
+   passes it on to the parser.
+   So it would be correct if the Lexer added a Diagnostic error directly to the
+   XtextResource.
+ - The errors in XtextResource are cleared in the parsing phase, so
+   adding a Diagnostic error by the lexer would be lost.
+
+* Issues
+ - One-character long string not recognized in editor -- Done
+ - Double quotation mark within singly quoted string -- Done
+ - Add standard objects and functions (Array, String, Math, console, etc) to global scope 
+ - Add function parameters to local scope, they should be Id-s rather
+   than IdRef-s
+ - Explore StringIndexOutOfBoundsException problem when resolving an
+   xtext link -- Done
+ - `break` keyword -- Done
+ - Comments are ignored by lexer, so error locations are shifted by the
+   length of preceding comment -- Done
+ - Weird reconciler exception when opening `nodes.coffee` -- Done
+ - Use `.coffee` as file extension -- Done
+ - Accept empty file
+
+* The file has to be modified to activate xtext grammar check
+
+* Problems with tokens got from Aptana scanner
+ - It uses short numbers internally which easily overflows, resulting
+   token positions restarted after 4095 -- oops, not true, it simply
+   uses offsets
+ - The rewriter calculates wrong positions for inserted tokens,
+   sometimes resulting in a token with startIndex > stopIndex
+ - Comments get ignored, since it can't use a hidden channel (probably
+   unsupported by the Beaver API)
+ - It doesn't seem to keep track of line number and positions within
+   line
+
+* The case of the ugly StringIndexOutOfBoundsException:
+  When an issue is raised, its content is calculated from the whole
+  text indexed by the token where occurred.
+  But the whole text is calculated by taking the input char stream and
+  reading it from the first token.
+  If the first token was hidden, the beginning of the text is chopped,
+  and we'll get a shorter full text.
+  So a substring with the proper indexes will fail.
+
+* Most annoying issue:
+  The editor works inconsistently.
+  - Sometimes `No viable alternative at EOF` for an empty or almost
+    empty file
+  - When opening a file, it's not checked, only after it's been modified
+  - Saving a file removes warnings
+  - The warnings are not shown in the `Problems` window
+
+* Hovering sometimes throws an NPE, maybe when I hover over a missing crossref
+
+* Scoping, second round.
+  Reading this series of posts: http://blogs.itemis.de/stundzig/archives/773
+  I just realized that functions have dynamic scoping, but loops seem to
+  have lexical scoping.
+
   [1]: http://jevopisdeveloperblog.blogspot.com/2011/03/implement-tostring-with-xtexts.html
   [2]: http://www.eclipse.org/Xtext/documentation/2_1_0/100-serialization.php#serializationcontract 
   [3]: http://stackoverflow.com/questions/8154790/visualize-lalr-grammar

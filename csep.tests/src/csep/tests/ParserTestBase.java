@@ -1,11 +1,16 @@
 package csep.tests;
 
+import java.io.InputStream;
 import java.util.List;
 
 import junit.framework.AssertionFailedError;
 
 import org.apache.log4j.Logger;
+import org.eclipse.emf.common.util.EList;
+import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.resource.Resource;
+import org.eclipse.emf.ecore.resource.Resource.Diagnostic;
 import org.eclipse.xtext.junit.AbstractXtextTests;
 import org.eclipse.xtext.resource.XtextResource;
 
@@ -36,13 +41,29 @@ public abstract class ParserTestBase extends AbstractXtextTests {
 	protected boolean shouldTestSerializer(XtextResource resource) {
 		return false;
 	}
-
-	protected void expect(CharSequence input, int errors) {
+	
+	/**
+	 * Parse and check for errors and warnings
+	 * @param warningCount -1 means don't care about warnings
+	 */
+	protected void expect(CharSequence input, int errorCount, int warningCount) {
 		List<String> tokens = null;
+		//Assert::assertEquals('warnings ' + resource.warnings, 0, resource.warnings.size)
+		//Assert::assertEquals('errors ' + resource.errors, 0, resource.errors.size)
+
 		try {
 			Lexer lexer = new Lexer(input);
 			tokens = lexer.tokenizeToStrings();
-			EObject parseResult = getModelAndExpect(input.toString(), errors);
+			InputStream in = getAsStream("" + input);
+			URI uri = URI.createURI("mytestmodel." + getCurrentFileExtension());
+			XtextResource resource = doGetResource(in, uri);
+			EList<Diagnostic> errors = resource.getErrors();
+			assert errorCount == errors.size(): "Errors: " + errors;
+			if (warningCount >= 0) {
+				EList<Diagnostic> warnings = resource.getWarnings();
+				assert warningCount == warnings.size(): "Warnings: " + warnings;
+			}
+			EObject parseResult = getModel(resource);
 			if (logger.isDebugEnabled()) {
 				logger.debug("Parsed " + this.getClass().getSimpleName() + " '" + input + "'\n" +Helper.stringify(parseResult));
 			}
@@ -59,7 +80,7 @@ public abstract class ParserTestBase extends AbstractXtextTests {
 	 * @param input typically a String or a multiline xtend String
 	 */
 	public void ok(CharSequence input) {
-		expect(input, 0);
+		expect(input, 0, -1);
 	}
 
 	/**
@@ -67,7 +88,7 @@ public abstract class ParserTestBase extends AbstractXtextTests {
 	 * @param input
 	 */
 	public void error(CharSequence input) {
-		expect(input, 1);
+		expect(input, 1, -1);
 	}
 	
 	/**
@@ -86,5 +107,13 @@ public abstract class ParserTestBase extends AbstractXtextTests {
 		 if (wasOk) {
 			 fail("Expected an error, but parsed successfully '" + input + "'");
 		 }
+	 }
+	 
+	 /**
+	  * It parses and has no warnings
+	  * @param input
+	  */
+	 public void okNoWarning(CharSequence input) {
+		 expect(input, 0, 0);
 	 }
 }
