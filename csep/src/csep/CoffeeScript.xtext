@@ -312,7 +312,7 @@ terminal PLUS_PLUS: '++';
 terminal MINUS_MINUS: '--';
 
 terminal AT_SIGIL: '@';
-terminal BOOL: 'true' | 'false' | 'undefined' | 'null';
+terminal BOOL: 'true' | 'false' | 'undefined' | 'null' | 'on' | 'no' | 'yes' | 'off';
 terminal BY: 'by';
 terminal CALL_END: '*)';
 terminal CALL_START: '(*';
@@ -375,16 +375,20 @@ terminal THEN: 'then';
 terminal THIS: 'this';
 terminal THROW: 'throw';
 terminal TRY: 'try';
-terminal UNARY: '!' | '~' | 'new';
+terminal UNARY: '!' | '~';
 terminal UNTIL: 'until';
 terminal WHEN: 'when';
 terminal WHILE: 'while';
 
-// Put it at the end, so keywords will be matched earlier
-terminal IDENTIFIER: '^'?('a'..'z'|'A'..'Z'|'_') ('a'..'z'|'A'..'Z'|'_'|'0'..'9')*;
 // These tokens are used only by syntax coloring
+terminal LOGIC_WORD: 'and' | 'or';
+terminal COMPARE_WORD: 'isnt' | 'is';
+terminal UNARY_WORD: 'new' | 'do' | 'not';
 terminal ML_COMMENT	: '###' !('#') -> '###';
 terminal SL_COMMENT 	: '#' !('\n'|'\r')* ('\r'? '\n')?;
 terminal WS			: (' '|'\t')+;
+
+// Put it at the end, so keywords will be matched earlier
+terminal IDENTIFIER: '^'?('a'..'z'|'A'..'Z'|'_') ('a'..'z'|'A'..'Z'|'_'|'0'..'9')*;
 // }}} end of terminals
 // vim: set fdm=marker:

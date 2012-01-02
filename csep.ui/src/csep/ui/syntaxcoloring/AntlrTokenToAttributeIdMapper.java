@@ -34,11 +34,13 @@ public class AntlrTokenToAttributeIdMapper extends
 					InternalCoffeeScriptLexer.RULE_THIS,
 					InternalCoffeeScriptLexer.RULE_THROW,
 					InternalCoffeeScriptLexer.RULE_TRY,
-					InternalCoffeeScriptLexer.RULE_UNARY,
 					InternalCoffeeScriptLexer.RULE_UNTIL,
 					InternalCoffeeScriptLexer.RULE_WHEN,
 					// Not keywords in the coffeescript spec
+					InternalCoffeeScriptLexer.RULE_COMPARE_WORD,
+					InternalCoffeeScriptLexer.RULE_LOGIC_WORD,
 					InternalCoffeeScriptLexer.RULE_THEN,
+					InternalCoffeeScriptLexer.RULE_UNARY_WORD,
 			}));
 			
 	@Override
