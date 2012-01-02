@@ -227,7 +227,7 @@
    than IdRef-s
  - Explore StringIndexOutOfBoundsException problem when resolving an
    xtext link -- Done
- - `break` keyword
+ - `break` keyword -- Done
  - Comments are ignored by lexer, so error locations are shifted by the
    length of preceding comment -- Done
  - Weird reconciler exception when opening `nodes.coffee` -- Done
