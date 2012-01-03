@@ -4,6 +4,12 @@ import org.junit.Test
 
 class ScopeTest extends ParserTestBase {
 	
+	@Test
+	def void testBuiltIn() {
+		expect('missing.log 3', 0, 1)
+		okNoWarning('console.log 3')	
+	}
+	
   	@Test
   	def void testAssignment() {
     	okNoWarning('''
