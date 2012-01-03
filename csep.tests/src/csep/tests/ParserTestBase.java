@@ -69,7 +69,7 @@ public abstract class ParserTestBase extends AbstractXtextTests {
 			}
 		} catch (AssertionFailedError afe) {
 			logger.warn("Tokens of '" + input + "' -> " + tokens);
-			throw afe;
+			throw new AssertionError(afe);
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
@@ -101,7 +101,7 @@ public abstract class ParserTestBase extends AbstractXtextTests {
 			 ok(input);	
 			 wasOk = true;			
 		 }
-		 catch (AssertionFailedError afe) {
+		 catch (AssertionError afe) {
 			 logger.warn("Expected to successfully parse " + clazz + " '" + input + "', but " + afe.getMessage());
 		 }
 		 if (wasOk) {

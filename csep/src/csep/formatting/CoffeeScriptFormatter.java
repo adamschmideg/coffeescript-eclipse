@@ -3,6 +3,8 @@
  */
 package csep.formatting;
 
+import csep.services.CoffeeScriptGrammarAccess;
+
 import org.eclipse.xtext.formatting.impl.AbstractDeclarativeFormatter;
 import org.eclipse.xtext.formatting.impl.FormattingConfig;
 
@@ -18,6 +20,16 @@ public class CoffeeScriptFormatter extends AbstractDeclarativeFormatter {
 	
 	@Override
 	protected void configureFormatting(FormattingConfig c) {
+		CoffeeScriptGrammarAccess g = (CoffeeScriptGrammarAccess)getGrammarAccess();
+		/* 
+		// Not working properly:
+		 * 
+		 */
+		c.setIndentationIncrement().after(g.getAssignmentAccess().getOperatorEQUALTerminalRuleCall_0_0_0_1_0_0());
+		c.setLinewrap().after(g.getAssignmentAccess().getOperatorEQUALTerminalRuleCall_0_0_0_1_0_0());
+		c.setIndentationDecrement().after(g.getELSERule());
+		c.setLinewrap().after(g.getELSERule());
+		
 // It's usually a good idea to activate the following three statements.
 // They will add and preserve newlines around comments
 //		c.setLinewrap(0, 1, 2).before(getGrammarAccess().getSL_COMMENTRule());

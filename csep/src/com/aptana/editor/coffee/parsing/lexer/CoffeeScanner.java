@@ -303,17 +303,39 @@ public class CoffeeScanner extends Scanner
 	private List<Integer> fIndents;
 	private List<CoffeeCommentNode> fComments;
 	private int fOffset;
+	private SyntaxError fSyntaxError = null;
 
 	@Override
+	/**
+	 * Get tokens until the end of file is reached or an exception is thrown.
+	 * It can be called repeatedly after an exception to reach the end of file
+	 * (conforming to the Beaver Scanner API)
+	 */
 	public synchronized CoffeeSymbol nextToken() throws IOException, Exception
 	{
 		if (this.fTokens == null)
 		{
-			tokenize(fCode, null);
+			try
+			{
+				tokenize(fCode, null);
+			}
+			catch (SyntaxError e)
+			{
+				fSyntaxError = e;
+			}
 		}
 		if (this.fTokens.isEmpty())
 		{
-			return new CoffeeSymbol(Terminals.EOF, null);
+			if (fSyntaxError == null)
+			{
+				return new CoffeeSymbol(Terminals.EOF, null);
+			}
+			else
+			{
+				SyntaxError e = fSyntaxError;
+				fSyntaxError = null;
+				throw e;
+			}
 		}
 		return this.fTokens.remove(0);
 	}
@@ -1239,7 +1261,7 @@ public class CoffeeScanner extends Scanner
 				+ " can't be assigned");
 	}
 
-	private String balancedString(String str, char end)
+	private String balancedString(String str, char end) throws SyntaxError
 	{
 		Stack<Character> stack = new Stack<Character>();
 		stack.push(end);
@@ -1281,7 +1303,7 @@ public class CoffeeScanner extends Scanner
 			}
 			prev = letter;
 		}
-		throw new Error("missing " + (stack.pop()) + ", starting on fLine " + (this.fLine + 1));
+		throw new SyntaxError("missing " + (stack.pop()) + ", starting on fLine " + (this.fLine + 1));
 	}
 
 	@SuppressWarnings("unchecked")

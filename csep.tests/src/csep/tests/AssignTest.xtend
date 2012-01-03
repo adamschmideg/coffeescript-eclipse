@@ -26,6 +26,23 @@ class AssignTest extends ParserTestBase {
   }
   
   @Test
+  def void testErrorInRewriter() {
+  	error('a = ]')
+  }
+  
+  @Test
+  /**
+   * To really test it, change error to ok, and check if the error is in the second line
+   */
+  def void testErrorInScanner() {
+  	error('''
+  	  before = 1
+  	  case = 2
+  	  unreached = 3
+  	''')	
+  }
+  
+  @Test
   def void testDestructure() {
     ok('[a, b] = [1, 2]')	
   }

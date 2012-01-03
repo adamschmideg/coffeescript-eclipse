@@ -1,4 +1,4 @@
-grammar csep.CoffeeScript hidden(WS)//with csep.Tokens
+grammar csep.CoffeeScript hidden(WS, ML_COMMENT, SL_COMMENT)
 import "http://www.eclipse.org/emf/2002/Ecore" as ecore
 
 generate coffeeScript "http://www.coffeescript.org/eclipse"
@@ -10,14 +10,18 @@ Body:
 	lines+=Line (TERMINATOR lines+=Line?)*;
 
 Line:
-	{Empty} HERECOMMENT |
 	Stmt |
 	Expression;
 	
 Stmt:
 	ReturnStmt |
 	ThrowStmt |
-	ClassDeclaration;
+	Comment |
+	ClassDeclaration |
+	statement=STATEMENT;
+
+Comment:
+	comment=HERECOMMENT;
 	
 ReturnStmt:
 	RETURN exp=Expression;
@@ -25,13 +29,30 @@ ReturnStmt:
 ThrowStmt:
 	THROW exp=Expression;
 	
+/**
+ * Coffeescript is permissive, it can be any expression, but we want to be able to check it as crossref
+ */
+SuperClass:
+	IdRef | Property;
+	
 ClassDeclaration:
 	{ClassDeclaration}
 	CLASS (
 		body=Block |
-		(EXTENDS extend=Expression body=Block?) |
-		(name=(Id | Property) (EXTENDS extend=Expression)? body=Block)
+		(EXTENDS extend=SuperClass body=Block?) |
+		(name=(Id | Property) (EXTENDS extend=SuperClass)? body=Block)
 	)?;
+
+/**
+ * FIXME: it should be the same as ClassDeclaration, but it would result in a non-LL decision,
+ * so I just removed the problematic options (a class body and a name or a superclass is required).
+ */
+AssignedClassDeclaration:
+	{ClassDeclaration}
+	CLASS (
+		(EXTENDS extend=SuperClass body=Block) |
+		(name=(Id | Property) (EXTENDS extend=SuperClass)? body=Block)
+	)?;	
 
 Expression:
 	Postfix;
@@ -73,7 +94,7 @@ Assignment returns Expression:
 	LogicOp;
 
 Assigned returns Expression:
-	Expression | (INDENT Expression OUTDENT);
+	Expression | (INDENT Expression OUTDENT) | AssignedClassDeclaration;
 	
 LogicOp returns Expression:
  	CompareOp (=>({BinaryExp.left=current} operator=LOGIC) right=CompareOp)*;
@@ -307,20 +328,20 @@ terminal PLUS_PLUS: '++';
 terminal MINUS_MINUS: '--';
 
 terminal AT_SIGIL: '@';
-terminal BOOL: 'true' | 'false' | 'undefined' | 'null';
-terminal BY: 'dummy BY';
+terminal BOOL: 'true' | 'false' | 'undefined' | 'null' | 'on' | 'no' | 'yes' | 'off';
+terminal BY: 'by';
 terminal CALL_END: '*)';
 terminal CALL_START: '(*';
-terminal CATCH: 'dummy CATCH';
+terminal CATCH: 'catch';
 terminal CLASS: 'class';
 terminal COLON: ':';
 terminal COLON_SLASH: 'dummy COLON_SLASH';
-terminal COMMA: 'dummy COMMA';
+terminal COMMA: ',';
 terminal DOT: '.';
 terminal ELSE: 'else';
 terminal EQUAL: '=';
-terminal EXTENDS: 'dummy EXTENDS';
-terminal FINALLY: 'dummy FINALLY';
+terminal EXTENDS: 'extends';
+terminal FINALLY: 'finally';
 terminal FOR: 'for';
 terminal FORIN: 'in';
 terminal FOROF: 'of';
@@ -337,14 +358,14 @@ terminal LBRACKET: '[';
 terminal LCURLY: 'dummy LCURLY';
 terminal LEADING_WHEN: 'dummy LEADING_WHEN';
 terminal LOGIC: '&&' | '||';
-terminal LOOP: 'dummy LOOP';
+terminal LOOP: 'loop';
 terminal LPAREN: '(';
 terminal MATH: '*' | '/';
 terminal MINUS: '-';
-terminal NEW: 'dummy NEW';
+terminal NEW: 'new';
 terminal NUMBER returns ecore::EInt: ('0'..'9')+;
 terminal OUTDENT: '*}';
-terminal OWN: 'dummy OWN';
+terminal OWN: 'own';
 terminal PARAM_END: 'dummy PARAM_END';
 terminal PARAM_START: 'dummy PARAM_START';
 terminal PLUS: '+';
@@ -353,26 +374,37 @@ terminal QUESTION: '?';
 terminal QUESTION_DOT: '?.';
 terminal RBRACKET: ']';
 terminal RCURLY: 'dummy RCURLY';
-terminal REGEX: 'dummy REGEX';
+terminal REGEX: '///' -> '///';
 terminal RELATION: 'in' | 'of' | 'instanceof'; 
 terminal RETURN: 'return';
 terminal RPAREN: ')';
 terminal STATEMENT: 'break' | 'continue' | 'debugger';
-terminal STRING: '"' (('a'..'z') | ' ')* '"';
+terminal STRING:
+	"'''" -> "'''" |
+	"'" (!("'") ('\\' ('b'|'t'|'n'|'f'|'r'|'u'|'"'|"'"|'\\') | !('\\'|"'"))*)? "'" |
+	'"""' -> '"""' |
+	'"' (!('"') ('\\' ('b'|'t'|'n'|'f'|'r'|'u'|'"'|"'"|'\\') | !('\\'|'"'))*)? '"';
 terminal SUPER: 'super';
-terminal SWITCH: 'dummy SWITCH';
+terminal SWITCH: 'switch';
 terminal TERMINATOR: '\n'+;
-terminal THEN: 'dummy THEN';
-terminal THIS: 'dummy THIS';
+terminal THEN: 'then';
+terminal THIS: 'this';
 terminal THROW: 'throw';
-terminal TRY: 'dummy TRY';
-terminal UNARY: '!' | '~' | 'new';
-terminal UNTIL: 'dummy UNTIL';
-terminal WHEN: 'dummy WHEN';
-terminal WHILE: 'dummy WHILE';
+terminal TRY: 'try';
+terminal UNARY: '!' | '~';
+terminal UNTIL: 'until';
+terminal WHEN: 'when';
+terminal WHILE: 'while';
+
+// These tokens are used only by syntax coloring
+terminal LOGIC_WORD: 'and' | 'or';
+terminal COMPARE_WORD: 'isnt' | 'is';
+terminal UNARY_WORD: 'new' | 'do' | 'not';
+terminal ML_COMMENT	: '###' !('#') -> '###';
+terminal SL_COMMENT 	: '#' !('\n'|'\r')* ('\r'? '\n')?;
+terminal WS			: (' '|'\t')+;
 
 // Put it at the end, so keywords will be matched earlier
 terminal IDENTIFIER: '^'?('a'..'z'|'A'..'Z'|'_') ('a'..'z'|'A'..'Z'|'_'|'0'..'9')*;
-terminal WS			: (' '|'\t')+;
 // }}} end of terminals
 // vim: set fdm=marker:

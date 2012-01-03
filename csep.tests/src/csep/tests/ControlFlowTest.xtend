@@ -166,4 +166,16 @@ class ControlFlowTest extends ParserTestBase {
   	    else go work
   	''')
   }
+  
+  @Test
+  def void testBreakContinue() {
+  	ok('''
+  	  while true
+  	  	if somethingHappened()
+  	  	  break
+  	  	else if goOn()
+  	  	  continue
+  	  	justWait()
+  	''')
+  }
 }

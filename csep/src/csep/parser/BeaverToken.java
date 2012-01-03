@@ -107,16 +107,9 @@ public class BeaverToken extends CommonToken {
 		super(mapId(symbol.getId()));
 		if (symbol.value != null)
 			setText("" + symbol.value);
-		int packedStart = symbol.getStart();
-		int startLine = Symbol.getLine(packedStart) + 1;
-		int startPosition = Symbol.getColumn(packedStart);
-		int packedStop = symbol.getEnd();
-		int stopPosition = Symbol.getColumn(packedStop) - 1;
-		setStartIndex(startPosition);
-		setStopIndex(stopPosition);
-		// FIXME: Aptana scanner doesn't seem to keep track of lines and position within a line
-		setLine(startLine);
-		setCharPositionInLine(startPosition);
+		setStartIndex(symbol.getStart());
+		setStopIndex(symbol.getEnd());
+		// TODO: Aptana scanner doesn't seem to keep track of lines and position within a line
 	}
 	
 	/**

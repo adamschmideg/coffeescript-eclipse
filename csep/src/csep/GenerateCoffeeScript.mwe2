@@ -5,7 +5,7 @@ import org.eclipse.xtext.generator.*
 import org.eclipse.xtext.ui.generator.*
 
 var grammarURI = "classpath:/csep/CoffeeScript.xtext"
-var file.extensions = "cs"
+var file.extensions = "coffee"
 var projectName = "csep"
 var runtimeProject = "../${projectName}"
 

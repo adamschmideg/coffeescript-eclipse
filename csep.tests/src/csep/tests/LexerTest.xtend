@@ -45,6 +45,57 @@ TERMINATOR:
     }
     
     @Test
+    def void testErrorInRewriter() {
+    	check('''
+    	  before = 0
+    	  tooManyParens = )
+    	  unreached = 42
+    	''', '''
+    	  IDENTIFIER:before
+    	  EQUAL:=
+    	  NUMBER:0
+    	  TERMINATOR:
+    	  IDENTIFIER:tooManyParens
+    	  EQUAL:=
+    	''')
+
+    	check('''
+    	  before = 0
+    	  unclosedParen = (
+    	  unreached = 42
+    	''', '''
+    	  IDENTIFIER:before
+    	  EQUAL:=
+    	  NUMBER:0
+    	  TERMINATOR:
+    	  IDENTIFIER:unclosedParen
+    	  EQUAL:=
+    	''')
+    }
+    
+    @Test
+    def void testErrorInScanner() {
+    	check('''
+    	  before = 0
+    	  case = 1
+    	  unreached = 42
+    	''', '''
+    	  IDENTIFIER:before
+    	  EQUAL:=
+    	  NUMBER:0
+    	  TERMINATOR:
+    	''')
+    	check('unclosedCurlyBrace = "before #{ interpolation "', '''
+    	  IDENTIFIER:unclosedCurlyBrace
+    	  EQUAL:=
+    	''')
+    	check('unfinishedString = "before #{ interpolation', '''
+    	  IDENTIFIER:unfinishedString
+    	  EQUAL:=
+    	''')
+    }
+    
+    @Test
     def void testPostfixIf() {
     	check('num = 2 if even', '''
 IDENTIFIER:num
@@ -52,6 +103,24 @@ EQUAL:=
 NUMBER:2
 POST_IF:if
 IDENTIFIER:even
+TERMINATOR:
+''')
+    }
+    
+    @Test
+    def void testHerecomment() {
+    	check('''
+before
+###
+Comment
+###
+after''', '''
+IDENTIFIER:before
+TERMINATOR:
+HERECOMMENT:Comment
+
+TERMINATOR:
+IDENTIFIER:after
 TERMINATOR:
 ''')
     }
