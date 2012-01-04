@@ -128,9 +128,8 @@ TERMINATOR:
     @Test
     def void testComment() {
     	check('''
-    	  	# before
+    	  	# remark
     	  	a = 1
-    	  	# after
     		''', '''
 			IDENTIFIER:a
 			EQUAL:=
