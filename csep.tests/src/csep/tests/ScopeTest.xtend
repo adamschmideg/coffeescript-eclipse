@@ -6,8 +6,16 @@ class ScopeTest extends ParserTestBase {
 	
 	@Test
 	def void testBuiltIn() {
-		expect('missing.log 3', 0, 1)
-		okNoWarning('console.log 3')	
+		okNoWarning('console.log 3')
+		expect('missing.log 3', 0, 1)			
+	}
+	
+	@Test
+	def void testRequire() {
+		okNoWarning('''
+		  foo = require('./foo')
+		  foo.bar()
+		''')	
 	}
 	
   	@Test

@@ -282,9 +282,18 @@
      a = 0
      b = a + 1
 
+  - Built-in namespaces/objects.
+  I have to make import (aka. require) work in the first place.
+  Then I can think about default global imports.
+  Well, it seems to much work to do it properly, resolve exports in the
+  imported file, etc.
+  It would add only a limited autocompletion support, anyway, since we
+  can't infer the return type of a function call.
+
 * Read original coffeescript source files.
   There seems to be some errors with scanner which cannot handle all of
   them properly.
+
 
   [1]: http://jevopisdeveloperblog.blogspot.com/2011/03/implement-tostring-with-xtexts.html
   [2]: http://www.eclipse.org/Xtext/documentation/2_1_0/100-serialization.php#serializationcontract 
