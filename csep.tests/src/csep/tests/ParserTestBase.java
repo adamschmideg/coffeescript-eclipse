@@ -43,6 +43,7 @@ public abstract class ParserTestBase extends AbstractXtextTests {
 	
 	/**
 	 * Parse and check for errors and warnings
+	 * @param errorCount 1 means expect error(s)
 	 * @param warningCount -1 means don't care about warnings
 	 */
 	protected void expect(CharSequence input, int errorCount, int warningCount) {
@@ -61,7 +62,10 @@ public abstract class ParserTestBase extends AbstractXtextTests {
 			parseResult = getModel(resource);
 			errors = resource.getErrors();
 			warnings = resource.getWarnings();
-			assertEquals("Errors: " + errors, errorCount, errors.size());			
+			if (errorCount == 0)
+				assertEquals("Errors: " + errors, 0, errors.size());
+			else if (errorCount > 0)
+				assertTrue("No errors", errors.size() > 0);					
 			if (warningCount >= 0) {				
 				assertEquals("Warnings: " + warnings, warningCount, warnings.size());
 			}			
@@ -70,10 +74,10 @@ public abstract class ParserTestBase extends AbstractXtextTests {
 				String debug = "" + this.getClass().getSimpleName() + " input: \n" + input + "\n";
 				debug += "Tokens: " + tokens + "\n" + Helper.stringify(parseResult);
 				for (Diagnostic d: errors) {
-					debug += "\t" + d + "\n";
+					debug += "\tError: " + d + "\n";
 				}
 				for (Diagnostic d: warnings) {
-					debug += "\t" + d + "\n";
+					debug += "\tWarning: " + d + "\n";
 				}
 				logger.debug(debug);
 			}
