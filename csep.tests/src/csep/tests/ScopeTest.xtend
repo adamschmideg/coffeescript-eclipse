@@ -40,8 +40,8 @@ class ScopeTest extends ParserTestBase {
 		expect('''
 		  fun = (x) ->
 		    2 * x
-		  fun y
-		''', 0, 1)
+		  x
+		''', 0, 1)		
 	}
 	
 	@Test

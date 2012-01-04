@@ -294,6 +294,12 @@
   There seems to be some errors with scanner which cannot handle all of
   them properly.
 
+* Probably interdependent issues
+  - Files don't get validated automatically (http://www.eclipse.org/forums/index.php/m/774437/#msg_774437)
+  - Errors are not displayed in the Problems tab
+  - Saving or modifying a file may change whether or not problems are
+    shown in the editor
+
 
   [1]: http://jevopisdeveloperblog.blogspot.com/2011/03/implement-tostring-with-xtexts.html
   [2]: http://www.eclipse.org/Xtext/documentation/2_1_0/100-serialization.php#serializationcontract 
