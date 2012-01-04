@@ -12,14 +12,14 @@ class ScopeTest extends ParserTestBase {
 	
   	@Test
   	def void testAssignment() {
-    	okNoWarning('''
-      	  a = 1
-      	  a = 2
-      	''')
       	okNoWarning('''
       	  a = 0
       	  b = a + 1
     	''')
+    	okNoWarning('''
+      	  a = 1
+      	  a = 2
+      	''')
   	}
 
 	@Test

@@ -49,25 +49,26 @@ public abstract class ParserTestBase extends AbstractXtextTests {
 		List<String> tokens = null;
 		//Assert::assertEquals('warnings ' + resource.warnings, 0, resource.warnings.size)
 		//Assert::assertEquals('errors ' + resource.errors, 0, resource.errors.size)
-
+		EObject parseResult = null;
 		try {
 			Lexer lexer = new Lexer(input);
 			tokens = lexer.tokenizeToStrings();
 			InputStream in = getAsStream("" + input);
 			URI uri = URI.createURI("mytestmodel." + getCurrentFileExtension());
 			XtextResource resource = doGetResource(in, uri);
+			parseResult = getModel(resource);
 			EList<Diagnostic> errors = resource.getErrors();
-			assert errorCount == errors.size(): "Errors: " + errors;
+			assertEquals("Errors: " + errors, errorCount, errors.size());
 			if (warningCount >= 0) {
 				EList<Diagnostic> warnings = resource.getWarnings();
-				assert warningCount == warnings.size(): "Warnings: " + warnings;
-			}
-			EObject parseResult = getModel(resource);
+				assertEquals("Warnings: " + warnings, warningCount, warnings.size());
+			}			
+		} catch (AssertionFailedError afe) {			
 			if (logger.isDebugEnabled()) {
-				logger.debug("Parsed " + this.getClass().getSimpleName() + " '" + input + "'\n" +Helper.stringify(parseResult));
+				logger.debug("" + this.getClass().getSimpleName() + " input: " + input + "\n" +
+						"Tokens: " + tokens + "\n" +
+						Helper.stringify(parseResult));
 			}
-		} catch (AssertionFailedError afe) {
-			logger.warn("Tokens of '" + input + "' -> " + tokens);
 			throw new AssertionError(afe);
 		} catch (Exception e) {
 			throw new RuntimeException(e);

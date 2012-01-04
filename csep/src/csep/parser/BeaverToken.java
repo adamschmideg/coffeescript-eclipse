@@ -108,7 +108,16 @@ public class BeaverToken extends CommonToken {
 		if (symbol.value != null)
 			setText("" + symbol.value);
 		setStartIndex(symbol.getStart());
-		setStopIndex(symbol.getEnd());
+		int end = -1;
+		if (symbol.getStart() == symbol.getEnd()) {
+			// Tokens inserted by the rewriter may have zero length
+			end = symbol.getEnd();
+		}
+		else {
+			// XXX: AbstractInternalAntlrParser.createLeafNode will add 1 to length
+			end = symbol.getEnd() - 1;
+		}
+		setStopIndex(end);
 		// TODO: Aptana scanner doesn't seem to keep track of lines and position within a line
 	}
 	
