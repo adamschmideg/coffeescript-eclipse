@@ -286,6 +286,11 @@
   I have to make import (aka. require) work in the first place.
   Then I can think about default global imports.
 
+* Read original coffeescript source files.
+  There seems to be some errors with scanner which cannot handle all of
+  them properly.
+
+
   [1]: http://jevopisdeveloperblog.blogspot.com/2011/03/implement-tostring-with-xtexts.html
   [2]: http://www.eclipse.org/Xtext/documentation/2_1_0/100-serialization.php#serializationcontract 
   [3]: http://stackoverflow.com/questions/8154790/visualize-lalr-grammar

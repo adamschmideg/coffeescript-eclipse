@@ -50,7 +50,7 @@ public class Lexer extends csep.parser.antlr.internal.InternalCoffeeScriptLexer 
 		Token token = null;
 		CoffeeSymbol symbol = null;
 		try {
-			symbol = aptanaScanner.nextToken();
+			symbol = aptanaScanner.nextAnyToken();
 			if (symbol == null) {
 				// XXX: why do we get a null symbol?
 				token = CommonToken.INVALID_TOKEN;
@@ -79,6 +79,8 @@ public class Lexer extends csep.parser.antlr.internal.InternalCoffeeScriptLexer 
 			token = ct;
 		}
 		token.setTokenIndex(tokenIndex);
+		if (symbol != null && symbol.hidden)
+			token.setChannel(Token.HIDDEN_CHANNEL);
 		tokenIndex++;
 		if (token instanceof CommonToken) {
 			if (prevToken != null && token.getType() > 0) {

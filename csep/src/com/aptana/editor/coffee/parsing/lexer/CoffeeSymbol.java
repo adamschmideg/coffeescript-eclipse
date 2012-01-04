@@ -8,6 +8,7 @@
 package com.aptana.editor.coffee.parsing.lexer;
 
 import java.text.MessageFormat;
+import java.util.Comparator;
 
 import beaver.Symbol;
 
@@ -22,6 +23,7 @@ public class CoffeeSymbol extends Symbol
 	public boolean generated;
 	public boolean fromThen;
 	public boolean call;
+	public boolean hidden;
 
 	public CoffeeSymbol(short id, Object value)
 	{
@@ -83,5 +85,19 @@ public class CoffeeSymbol extends Symbol
 			name = Terminals.getNameForValue(id);
 		}
 		return MessageFormat.format("[{0} {1}]", name, tmpValue); //$NON-NLS-1$
+	}
+	
+	/**
+	 * Compare two symbols by their start offset
+	 */
+	public static class StartOffsetComparator implements Comparator<CoffeeSymbol>
+	{
+		@Override
+		public int compare(CoffeeSymbol first, CoffeeSymbol second)
+		{
+			Integer firstStart = first.getStart();
+			return firstStart.compareTo(second.getStart());
+		}
+		
 	}
 }
