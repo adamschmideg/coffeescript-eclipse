@@ -18,7 +18,7 @@ public class SuppressingLinkingDiagnosticMessageProvider extends
 	public DiagnosticMessage getUnresolvedProxyMessage(final ILinkingDiagnosticContext context) {
 		DiagnosticMessage msg = super.getUnresolvedProxyMessage(context);
 		DiagnosticMessage diagnostic = new DiagnosticMessage(msg.getMessage(), Severity.WARNING, msg.getIssueCode(), msg.getIssueData());
-		return diagnostic;
+		return null;
 	}
 
 	@Override
