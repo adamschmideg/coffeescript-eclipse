@@ -8,77 +8,6 @@ class NodesCoffeeTest extends ParserTestBase {
     ok('''#### Closure
 
 # A faux-node used to wrap an expressions body in a closure.
-Closure =
-
-  # Wrap the expressions body, unless it contains a pure statement,
-  # in which case, no dice. If the body mentions `this` or `arguments`,
-  # then make sure that the closure wrapper preserves the original values.
-  wrap: (expressions, statement, noReturn) ->
-    return expressions if expressions.jumps()
-    func = new Code [], Block.wrap [expressions]
-    args = []
-    if (mentionsArgs = expressions.contains @literalArgs) or expressions.contains @literalThis
-      meth = new Literal if mentionsArgs then 'apply' else 'call'
-      args = [new Literal 'this']
-      args.push new Literal 'arguments' if mentionsArgs
-      func = new Value func, [new Access meth]
-    func.noReturn = noReturn
-    call = new Call func, args
-    if statement then Block.wrap [call] else call
-
-  literalArgs: (node) ->
-    node instanceof Literal and node.value is 'arguments' and not node.asKey
-  literalThis: (node) ->
-    (node instanceof Literal and node.value is 'this' and not node.asKey) or
-      (node instanceof Code and node.bound)
-
-# Unfold a node's child if soak, then tuck the node under created `If`
-unfoldSoak = (o, parent, name) ->
-  return unless ifn = parent[name].unfoldSoak o
-  parent[name] = ifn.body
-  ifn.body = new Value parent
-  ifn
-
-# Constants
-# ---------
-
-UTILITIES =
-
-  # Correctly set up a prototype chain for inheritance, including a reference
-  # to the superclass for `super()` calls, and copies of any static properties.
-  extends: -> """
-    function(child, parent) { for (var key in parent) { if (#{utility 'hasProp'}.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor; child.__super__ = parent.prototype; return child; }
-  """
-
-  # Create a function bound to the current value of "this".
-  bind: -> """
-    function(fn, me){ return function(){ return fn.apply(me, arguments); }; }
-  """
-
-  # Discover if an item is in an array.
-  indexOf: -> """
-    Array.prototype.indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (#{utility 'hasProp'}.call(this, i) && this[i] === item) return i; } return -1; }
-  """
-
-  # Shortcuts to speed up the lookup time for native functions.
-  hasProp: -> 'Object.prototype.hasOwnProperty'
-  slice  : -> 'Array.prototype.slice'
-
-# Levels indicate a node's position in the AST. Useful for knowing if
-# parens are necessary or superfluous.
-LEVEL_TOP    = 1  # ...;
-LEVEL_PAREN  = 2  # (...)
-LEVEL_LIST   = 3  # [...]
-LEVEL_COND   = 4  # ... ? x : y
-LEVEL_OP     = 5  # !...
-LEVEL_ACCESS = 6  # ...[0]
-
-# Tabs are two spaces for pretty printing.
-TAB = '  '
-
-IDENTIFIER_STR = "[$A-Za-z_\\x7f-\\uffff][$\\w\\x7f-\\uffff]*"
-IDENTIFIER = /// ^ #{IDENTIFIER_STR} $ ///
-SIMPLENUM  = /^[+-]?\d+$/
 METHOD_DEF = ///
   ^
     (?:
@@ -94,22 +23,6 @@ METHOD_DEF = ///
     (#{IDENTIFIER_STR})
   $
 ///
-
-# Is a literal value a string?
-IS_STRING = /^['"]/
-
-# Utility Functions
-# -----------------
-
-# Helper for ensuring that utility functions are assigned at the top level.
-utility = (name) ->
-  ref = "__#{name}"
-  Scope.root.assign ref, UTILITIES[name]()
-  ref
-
-multident = (code, tab) ->
-  code = code.replace /\n/g, '$&' + tab
-  code.replace /\s+$/, ''
     ''')
   }
 
