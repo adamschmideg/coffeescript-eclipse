@@ -50,6 +50,8 @@ public abstract class ParserTestBase extends AbstractXtextTests {
 		//Assert::assertEquals('warnings ' + resource.warnings, 0, resource.warnings.size)
 		//Assert::assertEquals('errors ' + resource.errors, 0, resource.errors.size)
 		EObject parseResult = null;
+		EList<Diagnostic> errors = null;
+		EList<Diagnostic> warnings = null;
 		try {
 			Lexer lexer = new Lexer(input);
 			tokens = lexer.tokenizeToStrings();
@@ -57,17 +59,23 @@ public abstract class ParserTestBase extends AbstractXtextTests {
 			URI uri = URI.createURI("mytestmodel." + getCurrentFileExtension());
 			XtextResource resource = doGetResource(in, uri);
 			parseResult = getModel(resource);
-			EList<Diagnostic> errors = resource.getErrors();
-			assertEquals("Errors: " + errors, errorCount, errors.size());
-			if (warningCount >= 0) {
-				EList<Diagnostic> warnings = resource.getWarnings();
+			errors = resource.getErrors();
+			warnings = resource.getWarnings();
+			assertEquals("Errors: " + errors, errorCount, errors.size());			
+			if (warningCount >= 0) {				
 				assertEquals("Warnings: " + warnings, warningCount, warnings.size());
 			}			
 		} catch (AssertionFailedError afe) {			
 			if (logger.isDebugEnabled()) {
-				logger.debug("" + this.getClass().getSimpleName() + " input: " + input + "\n" +
-						"Tokens: " + tokens + "\n" +
-						Helper.stringify(parseResult));
+				String debug = "" + this.getClass().getSimpleName() + " input: \n" + input + "\n";
+				debug += "Tokens: " + tokens + "\n" + Helper.stringify(parseResult);
+				for (Diagnostic d: errors) {
+					debug += "\t" + d + "\n";
+				}
+				for (Diagnostic d: warnings) {
+					debug += "\t" + d + "\n";
+				}
+				logger.debug(debug);
 			}
 			throw new AssertionError(afe);
 		} catch (Exception e) {

@@ -262,7 +262,7 @@ DictKey:
 
 // Code in coffeescript
 Lambda:
-	(PARAM_START (params+=Param (COMMA params+=Param)*)? PARAM_END)? (FUNC_ARROW | BOUND_FUNC_ARROW) Block;
+	(PARAM_START (params+=Param (COMMA params+=Param)*)? PARAM_END)? (FUNC_ARROW | BOUND_FUNC_ARROW) body=Block;
 	
 Param:
 	(Id | Array | Dictionary | ThisProperty) (splat?=ELLIPSIS | (EQUAL defaultValue=Expression))?;
@@ -326,6 +326,8 @@ terminal COMPARE : '<' | '==' | '>' | '<=' | '>=' | '!=';
 terminal COMPOUND_ASSIGN: '+=' | '-=';
 terminal PLUS_PLUS: '++';
 terminal MINUS_MINUS: '--';
+terminal PARAM_END: '**)';
+terminal PARAM_START: '(**';
 
 terminal AT_SIGIL: '@';
 terminal BOOL: 'true' | 'false' | 'undefined' | 'null' | 'on' | 'no' | 'yes' | 'off';
@@ -366,8 +368,6 @@ terminal NEW: 'new';
 terminal NUMBER returns ecore::EInt: ('0'..'9')+;
 terminal OUTDENT: '*}';
 terminal OWN: 'own';
-terminal PARAM_END: 'dummy PARAM_END';
-terminal PARAM_START: 'dummy PARAM_START';
 terminal PLUS: '+';
 terminal POST_IF: 'dummy POST_IF'; // practically the same as IF
 terminal QUESTION: '?';

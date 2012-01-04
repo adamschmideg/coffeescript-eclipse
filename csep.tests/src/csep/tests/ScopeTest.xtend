@@ -24,14 +24,24 @@ class ScopeTest extends ParserTestBase {
 
 	@Test
 	def void testLambdaParameter() {
+		okNoWarning('fun = (x) -> 2 * x')
+		okNoWarning('''
+		  fun = (x) ->
+		    2 * x
+		''')		
 		expect('''
 		  fun = (x) ->
 		    2 * x
 		  fun y
 		''', 0, 1)
+	}
+	
+	@Test
+	def void testForLoopParameter() {
 		okNoWarning('''
-		  fun = (x) ->
-		    2 * x
-		''')		
+		  a = 0
+		  for i in [1..10]
+		    a += i
+		''')
 	}
 }
