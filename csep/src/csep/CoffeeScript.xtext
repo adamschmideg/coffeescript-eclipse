@@ -16,13 +16,20 @@ Line:
 Stmt:
 	ReturnStmt |
 	ThrowStmt |
+	RequireStmt |
 	Comment |
 	ClassDeclaration |
 	statement=STATEMENT;
 
 Comment:
 	comment=HERECOMMENT;
-	
+
+/**
+ * Treat it a special way, because it takes care of import
+ */
+RequireStmt:
+  =>(importedNamespace=Id EQUAL 'require') CALL_START uri=STRING CALL_END;
+  
 ReturnStmt:
 	RETURN exp=Expression;
 	
