@@ -266,6 +266,22 @@
 
 * Hovering sometimes throws an NPE, maybe when I hover over a missing crossref
 
+* Scoping, second round.
+  Reading this series of posts: http://blogs.itemis.de/stundzig/archives/773
+  I just realized that functions have dynamic scoping, but loops seem to
+  have lexical scoping.
+
+  - Debugging into `AbstractDeclarativeScopeProvider` and
+    `ImportedNamespaceAwareLocalScopeProvider` makes me think that
+    scopes are queries based on how AST nodes are nested.
+    I suspect that my `IdRef` references are hidden in a side-branch in
+    the AST, so their referees cannot be found by simply querying
+    upwards.
+    My next step could be just to make this work properly
+
+     a = 0
+     b = a + 1
+
   [1]: http://jevopisdeveloperblog.blogspot.com/2011/03/implement-tostring-with-xtexts.html
   [2]: http://www.eclipse.org/Xtext/documentation/2_1_0/100-serialization.php#serializationcontract 
   [3]: http://stackoverflow.com/questions/8154790/visualize-lalr-grammar

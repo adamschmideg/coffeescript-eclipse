@@ -26,6 +26,8 @@ public class FirstCommentIncludingXtextTokenStream extends XtextTokenStream {
 			fillBuffer();
 		}	
 		if (tokenSource instanceof Lexer) {
+			if (tokens.isEmpty())
+				return "";
 			Token lastToken = (Token) tokens.get(tokens.size() - 1);
 			if (lastToken instanceof CommonToken) {
 				CommonToken commonStop = (CommonToken) lastToken;

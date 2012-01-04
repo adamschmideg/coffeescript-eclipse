@@ -30,4 +30,12 @@ public class CoffeeScriptRuntimeModule extends csep.AbstractCoffeeScriptRuntimeM
 	public Class<? extends ILinkingDiagnosticMessageProvider> bindILinkingDiagnosticMessageProvider() {
 		return csep.linking.SuppressingLinkingDiagnosticMessageProvider.class;
 	}
+	
+	@Override
+	public void configureIScopeProviderDelegate(com.google.inject.Binder binder) {
+		binder.bind(org.eclipse.xtext.scoping.IScopeProvider.class).annotatedWith(
+				com.google.inject.name.Names.named(
+						org.eclipse.xtext.scoping.impl.AbstractDeclarativeScopeProvider.NAMED_DELEGATE)).to(
+								csep.scoping.DefaultGlobalScopeProvider.class);
+	}
 }
