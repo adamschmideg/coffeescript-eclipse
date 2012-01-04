@@ -27,7 +27,6 @@ class ClassTest extends ParserTestBase {
 		ok('''
 		  class Drinker extends Person
 		    drink: ->
-		      #print "gulp"
 		      @glasses += 1
 		      super 2
 		''')

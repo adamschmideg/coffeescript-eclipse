@@ -84,6 +84,7 @@ public class Terminals
 	// Added manually by me after generation!
 	public static final short THEN = 74;
 	public static final short NEW = 75;
+	public static final short HIDDEN_COMMENT = 76;
 
 	/**
 	 * Get the Terminal name/constant for the given id. i.e. RCURLY.

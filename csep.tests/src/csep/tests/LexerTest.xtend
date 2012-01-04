@@ -125,6 +125,28 @@ TERMINATOR:
 ''')
     }
     
+    @Test
+    def void testComment() {
+    	check('''
+    	  	# remark
+    	  	a = 1
+    		''', '''
+			IDENTIFIER:a
+			EQUAL:=
+			NUMBER:1
+			TERMINATOR:    	
+    		''')
+    	check('''
+    	  	#### Important remark, not herecomment
+    	  	a = 1
+    		''', '''
+			IDENTIFIER:a
+			EQUAL:=
+			NUMBER:1
+			TERMINATOR:    	
+    		''')    		
+    }
+    
 	def void check(CharSequence input, CharSequence expectedStr) {
 		val lexer = new Lexer(input)
 		val tokens = lexer.tokenizeToStrings()

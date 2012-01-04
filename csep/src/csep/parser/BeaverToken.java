@@ -22,7 +22,7 @@ public class BeaverToken extends CommonToken {
 	/**
 	 * A mapping from Aptana terminal id to generated Antlr token id
 	 */
-	public final static int[] TOKEN_MAP = new int[76];
+	public final static int[] TOKEN_MAP = new int[77];
 
 	static {
 		TOKEN_MAP[Terminals.EOF] = InternalCoffeeScriptLexer.EOF;
@@ -101,6 +101,7 @@ public class BeaverToken extends CommonToken {
 		TOKEN_MAP[Terminals.CATCH] = InternalCoffeeScriptLexer.RULE_CATCH;
 		TOKEN_MAP[Terminals.THEN] = InternalCoffeeScriptLexer.RULE_THEN;
 		TOKEN_MAP[Terminals.NEW] = InternalCoffeeScriptLexer.RULE_NEW;
+		TOKEN_MAP[Terminals.HIDDEN_COMMENT] = InternalCoffeeScriptLexer.RULE_SL_COMMENT;
 	}
 
 	public BeaverToken(Symbol symbol) {
