@@ -29,6 +29,19 @@ class LiteralTest extends ParserTestBase {
 	}
 	
 	@Test
+	def void testComment() {
+		ok('''
+		# remark
+		a = 1
+		''')
+		ok('''
+		if good
+		  # do it
+		  doIt()
+		''')
+	}
+	
+	@Test
 	def void testStringInterpolation() {
 		ok('"I am #{ name }"')
 		error('"It is #{ ++1 }"')

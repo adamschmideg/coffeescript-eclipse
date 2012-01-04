@@ -305,13 +305,10 @@ public class CoffeeScanner extends Scanner
 	private int fOffset;
 	private SyntaxError fSyntaxError = null;
 
-	@Override
 	/**
-	 * Get tokens until the end of file is reached or an exception is thrown.
-	 * It can be called repeatedly after an exception to reach the end of file
-	 * (conforming to the Beaver Scanner API)
+	 * Get next token even if it's hidden
 	 */
-	public synchronized CoffeeSymbol nextToken() throws IOException, Exception
+	public synchronized CoffeeSymbol nextAnyToken() throws IOException, Exception
 	{
 		if (this.fTokens == null)
 		{
@@ -338,6 +335,24 @@ public class CoffeeScanner extends Scanner
 			}
 		}
 		return this.fTokens.remove(0);
+	}
+	
+	@Override
+	/**
+	 * Get tokens until the end of file is reached or an exception is thrown.
+	 * It can be called repeatedly after an exception to reach the end of file
+	 * (conforming to the Beaver Scanner API).  Skip hidden tokens.
+	 */
+	public synchronized CoffeeSymbol nextToken() throws IOException, Exception
+	{
+		while (true)
+		{
+			CoffeeSymbol token = nextAnyToken();
+			if (! token.hidden)
+			{
+				return token;
+			}
+		}
 	}
 
 	private List<CoffeeSymbol> tokenize(String code, Map<String, Object> opts) throws SyntaxError
@@ -812,14 +827,19 @@ public class CoffeeScanner extends Scanner
 		}
 		String comment = m.group(0);
 		String here = m.group(1);
+		int addOffset = comment.indexOf('#');
+		int startOffset = this.fOffset + addOffset;
 		if (here != null)
 		{
 			this.token(Terminals.HERECOMMENT, this.sanitizeHeredoc(here, makeIndent(this.fIndent), false),
 					comment.length() - 1);
 			this.token(Terminals.TERMINATOR, "\n", 1);
 		}
-		int addOffset = comment.indexOf('#');
-		int startOffset = this.fOffset + addOffset;
+		else
+		{
+			CoffeeSymbol commentToken = this.token(Terminals.HIDDEN_COMMENT, comment, startOffset, comment.length());
+			commentToken.hidden = true;
+		}
 		// TODO Does this properly chop down the source chunk so it doesn't point to underlying char array from fCode?
 		this.fComments.add(new CoffeeCommentNode(comment.substring(addOffset), startOffset, this.fOffset
 				+ comment.length()));

@@ -22,6 +22,7 @@ public class CoffeeSymbol extends Symbol
 	public boolean generated;
 	public boolean fromThen;
 	public boolean call;
+	public boolean hidden;
 
 	public CoffeeSymbol(short id, Object value)
 	{
