@@ -297,8 +297,20 @@
 * Probably interdependent issues
   - Files don't get validated automatically (http://www.eclipse.org/forums/index.php/m/774437/#msg_774437)
   - Errors are not displayed in the Problems tab
+    - Well, maybe a workaround, but you can manually validate the file
+      selecting Validate from the context menu.
   - Saving or modifying a file may change whether or not problems are
     shown in the editor
+
+* An ugly bug that took me hours to hunt down: when there's an error in
+ the file, any change to the file will generate a number of errors
+ without any message.
+ This is due to the bug that somewhere deep down trailing zero bytes are
+ appended to the source text to be parsed.
+ My hunch is it's related to replacing the text from the previous parse
+ result using a replace region.
+ I couldn't find the exact source of the problem, but could make a
+ simple workaround.
 
 
   [1]: http://jevopisdeveloperblog.blogspot.com/2011/03/implement-tostring-with-xtexts.html

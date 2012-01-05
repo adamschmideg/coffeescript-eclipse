@@ -25,7 +25,7 @@ public class Lexer extends csep.parser.antlr.internal.InternalCoffeeScriptLexer 
 	public Lexer(CharStream in) {
 		super(in);
 		aptanaScanner = new CoffeeScanner();
-		String content = in.substring(0, in.size() - 1);
+		String content = removeTrailingZeroBytes(in.substring(0, in.size() - 1));
 		aptanaScanner.setSource(content);
 	}
 
@@ -42,6 +42,15 @@ public class Lexer extends csep.parser.antlr.internal.InternalCoffeeScriptLexer 
 	}
 
 	/**
+	 * Workaround for a probable bug somewhere in the xtext-aptana toolchain:
+	 * we may get a string with trailing zero bytes
+	 */
+	protected String removeTrailingZeroBytes(String buggyString) {
+		int startZeroes = buggyString.indexOf(0);
+		return startZeroes == -1 ? buggyString : buggyString.substring(0, startZeroes - 1);
+	}
+
+	/**
 	 * Get next token.  If an exception is thrown by the underlying lexer,
 	 * keep calling it, and append an invalid token at the very end.
 	 */
@@ -51,8 +60,8 @@ public class Lexer extends csep.parser.antlr.internal.InternalCoffeeScriptLexer 
 		CoffeeSymbol symbol = null;
 		try {
 			symbol = aptanaScanner.nextAnyToken();
-			if (symbol == null) {
-				// XXX: why do we get a null symbol?
+			if (symbol == null || symbol.getId() < 0) {
+				logger.warn("Unexpected symbol " + symbol, new Exception());
 				token = CommonToken.INVALID_TOKEN;
 			}
 			else if (symbol.getId() == Terminals.EOF) {
