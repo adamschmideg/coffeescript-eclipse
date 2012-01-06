@@ -3,10 +3,28 @@
 */
 package csep.ui.contentassist;
 
-import csep.ui.contentassist.AbstractCoffeeScriptProposalProvider;
-/**
- * see http://www.eclipse.org/Xtext/documentation/latest/xtext.html#contentAssist on how to customize content assistant
- */
-public class CoffeeScriptProposalProvider extends AbstractCoffeeScriptProposalProvider {
+import org.eclipse.xtext.Assignment;
+import org.eclipse.xtext.ui.editor.contentassist.ContentAssistContext;
+import org.eclipse.xtext.ui.editor.contentassist.ICompletionProposalAcceptor;
 
+import csep.coffeeScript.Application;
+import csep.coffeeScript.IdRef;
+
+public class CoffeeScriptProposalProvider extends AbstractCoffeeScriptProposalProvider {
+	private final static String[] COMMON_FEATURES = new String[]{
+		"constructor",
+		"toString()",
+		"valueOf()",
+	};
+	
+	public void completeProperty_Prop(Application model, Assignment assignment, ContentAssistContext context, ICompletionProposalAcceptor acceptor) {
+		super.completeProperty_Prop(model, assignment, context, acceptor);
+		IdRef idRef = (IdRef)model.getValue();
+		String idName = idRef.getVal().getName();
+		for (String proposal: COMMON_FEATURES) {
+			acceptor.accept(createCompletionProposal(proposal, context));
+		}
+		String proposal = idName + "Dummy";
+		acceptor.accept(createCompletionProposal(proposal, context));
+	}
 }
