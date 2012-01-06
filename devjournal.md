@@ -312,6 +312,11 @@
  I couldn't find the exact source of the problem, but could make a
  simple workaround.
 
+* Auto-completion
+  - The tricky thing is: when we try to give a completion for `Math.`,
+  the context is an IdRef, but it can't find any referee named `Math`.
+  So we have no name for the lookup.
+
 
   [1]: http://jevopisdeveloperblog.blogspot.com/2011/03/implement-tostring-with-xtexts.html
   [2]: http://www.eclipse.org/Xtext/documentation/2_1_0/100-serialization.php#serializationcontract 

@@ -7,29 +7,18 @@ import org.eclipse.xtext.naming.QualifiedName;
 import org.eclipse.xtext.scoping.impl.ImportNormalizer;
 import org.eclipse.xtext.scoping.impl.ImportedNamespaceAwareLocalScopeProvider;
 
+import com.google.inject.Inject;
+
 public class DefaultGlobalScopeProvider extends
 		ImportedNamespaceAwareLocalScopeProvider {
-	public final static String[] BUILT_INS = new String[]{
-		// TODO: get an exhaustive (?) list of built-in javascript/coffeescript/nodejs objects
-		"console",
-		"global",
-		"module",
-		"process",
-		"require",
-		"Array",
-		"Boolean",
-		"Date",
-		"Math",
-		"Number",
-		"Object",
-		"String",
-		"RegExp",
-	};
+	
+	@Inject
+	protected CoffeescriptBuiltins builtins;
 	
 	@Override
 	protected List<ImportNormalizer> getImplicitImports(boolean ignoreCase) {
 		List<ImportNormalizer> temp = new ArrayList<ImportNormalizer>();
-		for (String name: BUILT_INS) {
+		for (String name: builtins.getPrefixes()) {
 			temp.add(new ImportNormalizer(QualifiedName.create(name), true, ignoreCase));
 		}
 		return temp;

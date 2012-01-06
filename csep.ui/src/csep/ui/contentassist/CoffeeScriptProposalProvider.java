@@ -3,28 +3,41 @@
 */
 package csep.ui.contentassist;
 
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
+
 import org.eclipse.xtext.Assignment;
 import org.eclipse.xtext.ui.editor.contentassist.ContentAssistContext;
 import org.eclipse.xtext.ui.editor.contentassist.ICompletionProposalAcceptor;
 
+import com.google.inject.Inject;
+
 import csep.coffeeScript.Application;
 import csep.coffeeScript.IdRef;
+import csep.scoping.CoffeescriptBuiltins;
 
 public class CoffeeScriptProposalProvider extends AbstractCoffeeScriptProposalProvider {
-	private final static String[] COMMON_FEATURES = new String[]{
+	@Inject
+	protected CoffeescriptBuiltins builtins;
+	
+	private final static Set<String> COMMON_FEATURES = new HashSet<String>(Arrays.asList(new String[]{
 		"constructor",
-		"toString()",
-		"valueOf()",
-	};
+		"toString",
+		"valueOf",
+	}));
 	
 	public void completeProperty_Prop(Application model, Assignment assignment, ContentAssistContext context, ICompletionProposalAcceptor acceptor) {
 		super.completeProperty_Prop(model, assignment, context, acceptor);
 		IdRef idRef = (IdRef)model.getValue();
 		String idName = idRef.getVal().getName();
-		for (String proposal: COMMON_FEATURES) {
+		// TODO: if idName is null, no reference was found
+		Set<String> proposals = builtins.getCompletions(idName);
+		if (proposals.isEmpty()) {
+			proposals = COMMON_FEATURES;
+		}
+		for (String proposal: proposals) {
 			acceptor.accept(createCompletionProposal(proposal, context));
 		}
-		String proposal = idName + "Dummy";
-		acceptor.accept(createCompletionProposal(proposal, context));
 	}
 }

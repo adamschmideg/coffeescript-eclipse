@@ -7,6 +7,7 @@ class ScopeTest extends ParserTestBase {
 	@Test
 	def void testBuiltIn() {
 		okNoWarning('console.log 3')
+		okNoWarning('Math.PI')
 		expect('missing.log 3', 0, 1)			
 	}
 	

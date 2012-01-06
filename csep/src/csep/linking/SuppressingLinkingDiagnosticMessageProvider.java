@@ -10,6 +10,9 @@ import org.eclipse.xtext.diagnostics.Severity;
 import org.eclipse.xtext.linking.impl.IllegalNodeException;
 import org.eclipse.xtext.linking.impl.LinkingDiagnosticMessageProvider;
 
+import com.google.inject.Inject;
+
+import csep.scoping.CoffeescriptBuiltins;
 import csep.scoping.DefaultGlobalScopeProvider;
 
 /**
@@ -19,8 +22,9 @@ import csep.scoping.DefaultGlobalScopeProvider;
  */
 public class SuppressingLinkingDiagnosticMessageProvider extends
 		LinkingDiagnosticMessageProvider {
-	private final static Set<String> BUILT_INS = 
-			new HashSet<String>(Arrays.asList(DefaultGlobalScopeProvider.BUILT_INS));
+
+	@Inject
+	protected CoffeescriptBuiltins builtins;
 	
 	@Override
 	/**
@@ -28,8 +32,8 @@ public class SuppressingLinkingDiagnosticMessageProvider extends
 	 * and don't forward it
 	 */
 	public DiagnosticMessage getUnresolvedProxyMessage(final ILinkingDiagnosticContext context) {
-		boolean builtIn = isBuiltIn(context.getLinkText());
-		if (builtIn) {
+		if (builtins.getPrefixes().contains(context.getLinkText())) {
+			// No problem, it's a builtin
 			return null;
 		}
 		else {
@@ -45,7 +49,4 @@ public class SuppressingLinkingDiagnosticMessageProvider extends
 		return new DiagnosticMessage("oops " + message, Severity.ERROR, Diagnostic.LINKING_DIAGNOSTIC);
 	}
 	
-	protected boolean isBuiltIn(String name) {
-		return BUILT_INS.contains(name);
-	}
 }
