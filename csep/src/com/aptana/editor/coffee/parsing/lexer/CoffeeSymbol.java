@@ -27,7 +27,8 @@ public class CoffeeSymbol extends Symbol
 
 	public CoffeeSymbol(short id, Object value)
 	{
-		super(id, value);
+		//super(id, value);
+		throw new UnsupportedOperationException("" + value);
 	}
 
 	/**
@@ -64,9 +65,44 @@ public class CoffeeSymbol extends Symbol
 	@Override
 	public String toString()
 	{
-		return coffeeToken();
+		//return coffeeToken();
+		return debugString();
+	}
+	
+	/**
+	 * A more detailed string representation including location
+	 */
+	public String debugString()
+	{
+		return MessageFormat.format("[{0}:{1} {2} {3}]", getStart(), getEnd(), getTokenName(), getEscapedValue());
 	}
 
+	/**
+	 * Get a friendlier representation of value with newlines escaped
+	 */
+	public String getEscapedValue()
+	{
+		Object tmpValue = getValue();
+		if ("\n".equals(tmpValue)) //$NON-NLS-1$
+		{
+			tmpValue = "\\n"; //$NON-NLS-1$
+		}		
+		return "" + tmpValue;
+	}
+	
+	/**
+	 * Get a human-understandable name of the token id, based on Terminals
+	 */
+	public String getTokenName()
+	{
+		String name = Terminals.getTokenID(getId());
+		if (name == null)
+		{
+			name = Terminals.getNameForValue(id);
+		}
+		return name;
+	}
+	
 	/**
 	 * Spit out the exact text that coffee -t does so we can easily compare the token list between our lexer and theirs.
 	 * 
@@ -74,17 +110,18 @@ public class CoffeeSymbol extends Symbol
 	 */
 	public String coffeeToken()
 	{
-		Object tmpValue = getValue();
-		if ("\n".equals(tmpValue)) //$NON-NLS-1$
-		{
-			tmpValue = "\\n"; //$NON-NLS-1$
-		}
-		String name = Terminals.getTokenID(getId());
-		if (name == null)
-		{
-			name = Terminals.getNameForValue(id);
-		}
-		return MessageFormat.format("[{0} {1}]", name, tmpValue); //$NON-NLS-1$
+		return MessageFormat.format("[{0} {1}]", getTokenName(), getEscapedValue()); //$NON-NLS-1$
+	}
+	
+	/**
+	 * Move position, that is start and end values
+	 */
+	public void move(int offset)
+	{
+		int newStart = getStart() + offset;
+		int newEnd = getEnd() + offset;
+		assert newStart >= 0: "Negative start " + getStart() + "+" + offset;
+		setLocation(newStart, newEnd);
 	}
 	
 	/**
