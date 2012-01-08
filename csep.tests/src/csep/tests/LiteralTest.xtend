@@ -57,7 +57,7 @@ class LiteralTest extends ParserTestBase {
 	
 	@Test
 	def void testStringInterpolation() {
-		ok(' "I am #{firstName} #{lastName}"')
-		//error('"It is #{ ++1 }"')
+		ok('me = "I am #{firstName} #{lastName}"')
+		error('"It is #{ ++1 }" exactly')
 	}
 }

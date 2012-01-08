@@ -27,8 +27,7 @@ public class CoffeeSymbol extends Symbol
 
 	public CoffeeSymbol(short id, Object value)
 	{
-		//super(id, value);
-		throw new UnsupportedOperationException("" + value);
+		super(id, value);
 	}
 
 	/**
