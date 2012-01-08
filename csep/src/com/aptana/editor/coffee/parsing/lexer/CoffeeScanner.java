@@ -297,11 +297,23 @@ public class CoffeeScanner extends Scanner {
 	private List<CoffeeCommentNode> fComments;
 	private int fOffset;
 	private SyntaxError fSyntaxError = null;
+	private boolean fIncludeHiddenTokens;
 
+	public CoffeeScanner()
+	{
+		super();
+	}
+	
+	public CoffeeScanner(boolean includeHiddenTokens)
+	{
+		this();
+		this.fIncludeHiddenTokens = includeHiddenTokens;
+	}
+	
 	/**
 	 * Get next token even if it's hidden
 	 */
-	public synchronized CoffeeSymbol nextAnyToken() throws IOException,
+	private CoffeeSymbol  internalNextToken() throws IOException,
 			Exception {
 		if (this.fTokens == null) {
 			try {
@@ -330,8 +342,8 @@ public class CoffeeScanner extends Scanner {
 	 */
 	public synchronized CoffeeSymbol nextToken() throws IOException, Exception {
 		while (true) {
-			CoffeeSymbol token = nextAnyToken();
-			if (!token.hidden) {
+			CoffeeSymbol token = internalNextToken();
+			if (this.fIncludeHiddenTokens || !token.hidden) {
 				return token;
 			}
 		}
@@ -361,6 +373,13 @@ public class CoffeeScanner extends Scanner {
 				}
 			}
 		}
+		@SuppressWarnings("unused")
+		boolean rewrite = true;
+		Object rewriteOpt = opts.get("rewrite");
+		if (rewriteOpt != null && rewriteOpt instanceof Boolean)
+		{
+			rewrite = ((Boolean)rewriteOpt).booleanValue();
+		}		
 		this.fIndent = 0;
 		this.fIndebt = 0;
 		this.fOutdebt = 0;
@@ -967,9 +986,10 @@ public class CoffeeScanner extends Scanner {
 				this.assignmentError();
 			}
 			if (prev.getValue().equals("||") || prev.getValue().equals("&&")) {
-				this.fTokens.remove(this.fTokens.size() - 1);
-				prev = new CoffeeSymbol(Terminals.COMPOUND_ASSIGN, ""
-						+ prev.getValue() + '=');
+				CoffeeSymbol removed = this.fTokens.remove(this.fTokens.size() - 1);
+				prev = new CoffeeSymbol(Terminals.COMPOUND_ASSIGN,
+						removed.getStart(), removed.getEnd() + 1,
+						"" + prev.getValue() + '=');
 				this.fTokens.add(prev);
 				return value.length();
 			}
@@ -1138,65 +1158,75 @@ public class CoffeeScanner extends Scanner {
 				continue;
 			}
 			if (pi < i) {
+				String substr = str.substring(pi, i);
+				int exprOffset = this.fOffset + pi;
 				tmpTokens
-						.push(new CoffeeSymbol(NEOSTRING, str.substring(pi, i)));
+						.push(new CoffeeSymbol(NEOSTRING, exprOffset, exprOffset + substr.length(), substr));
 			}
 			String inner = expr.substring(1, expr.length() - 1);
 			if (inner.length() > 0) {
+				int exprOffset = this.fOffset + i + 1;
 				Map<String, Object> newOptions = new HashMap<String, Object>();
 				newOptions.put("fLine", this.fLine);
 				newOptions.put("rewrite", false);
 				List<CoffeeSymbol> nested = new CoffeeScanner().tokenize(inner,
 						newOptions);
 				nested.remove(nested.size() - 1);
+				for (CoffeeSymbol symbol: nested)
+				{
+					symbol.move(exprOffset);
+				}
 				if (nested.get(0) != null
 						&& nested.get(0).getId() == Terminals.TERMINATOR) {
 					nested.remove(0);
 				}
 				if (!nested.isEmpty()) {
 					if (nested.size() > 1) {
-						nested.add(0, new CoffeeSymbol(Terminals.LPAREN, "("));
-						nested.add(new CoffeeSymbol(Terminals.RPAREN, ")"));
+						nested.add(0, new CoffeeSymbol(Terminals.LPAREN, exprOffset, exprOffset, "((("));
+						nested.add(new CoffeeSymbol(Terminals.RPAREN, exprOffset + expr.length(), exprOffset + expr.length() , "))"));
 					}
-					tmpTokens.push(new CoffeeSymbol(TOKENS, nested));
+					tmpTokens.push(new CoffeeSymbol(TOKENS, exprOffset, exprOffset, nested));
 				}
 			}
 			i += expr.length();
 			pi = i + 1;
 		}
 		if ((i > pi && pi < str.length())) {
-			tmpTokens.push(new CoffeeSymbol(NEOSTRING, str.substring(pi)));
+			int offset = this.fOffset + pi;
+			String substr = str.substring(pi);
+			tmpTokens.push(new CoffeeSymbol(NEOSTRING, offset, offset + substr.length(), substr));
 		}
 		if (regex) {
 			return tmpTokens;
 		}
 		if (tmpTokens.isEmpty()) {
-			tmpTokens.push(this.token(Terminals.STRING, "\"\""));
+			tmpTokens.push(this.token(Terminals.STRING, "\"\"", this.fOffset, 0));
 			return tmpTokens;
 		}
 		if (tmpTokens.get(0).getId() != NEOSTRING) {
-			tmpTokens.add(0, new CoffeeSymbol(EMPTY, ""));
+			tmpTokens.add(0, new CoffeeSymbol(EMPTY, this.fOffset, this.fOffset, ""));
 		}
 		int interpolated = tmpTokens.size();
 		if (interpolated > 1) {
-			this.token(Terminals.LPAREN, "(");
+			this.token(Terminals.LPAREN, "(", this.fOffset, 0);
 		}
 		for (int x = 0; x < interpolated; x++) {
 			CoffeeSymbol token = tmpTokens.get(x);
 			short tag = token.getId();
 			Object value = token.getValue();
 			if (x != 0) {
-				this.token(Terminals.PLUS, "+");
+				this.token(Terminals.PLUS, "+", token.getStart(), 0);
 			}
 			if (tag == TOKENS) {
 				this.fTokens.addAll((List<CoffeeSymbol>) value);
 			} else {
-				this.token(Terminals.STRING,
-						this.makeString((String) value, "\"", heredoc));
+				this.token(Terminals.STRING,						
+						this.makeString((String) value, "\"", heredoc),
+						token.getStart(), token.getEnd() - token.getStart());
 			}
 		}
 		if (interpolated != 0) {
-			this.token(Terminals.RPAREN, ")");
+			this.token(Terminals.RPAREN, ")", this.fOffset + str.length(), 0);
 		}
 		return tmpTokens;
 	}

@@ -24,7 +24,7 @@ public class Lexer extends csep.parser.antlr.internal.InternalCoffeeScriptLexer 
 
 	public Lexer(CharStream in) {
 		super(in);
-		aptanaScanner = new CoffeeScanner();
+		aptanaScanner = new CoffeeScanner(true);
 		String content = removeTrailingZeroBytes(in.substring(0, in.size() - 1));
 		aptanaScanner.setSource(content);
 	}
@@ -59,7 +59,7 @@ public class Lexer extends csep.parser.antlr.internal.InternalCoffeeScriptLexer 
 		Token token = null;
 		CoffeeSymbol symbol = null;
 		try {
-			symbol = aptanaScanner.nextAnyToken();
+			symbol = aptanaScanner.nextToken();
 			if (symbol == null || symbol.getId() < 0) {
 				logger.warn("Unexpected symbol " + symbol, new Exception());
 				token = CommonToken.INVALID_TOKEN;
@@ -93,11 +93,8 @@ public class Lexer extends csep.parser.antlr.internal.InternalCoffeeScriptLexer 
 		tokenIndex++;
 		if (token instanceof CommonToken) {
 			if (prevToken != null && token.getType() > 0) {
-				/*
-				TODO: Ensure that token positions are increasing
-				assert ((CommonToken)token).getStartIndex() >= prevToken.getStopIndex():
-					"Position not follows, prevToken: " + prevToken + ", token: " + token;
-				*/
+				if (((CommonToken)token).getStartIndex() < prevToken.getStartIndex())
+					logger.warn("Position not follows, prevToken: " + prevToken + ", token: " + token);
 			}
 			prevToken = (CommonToken)token;
 		}

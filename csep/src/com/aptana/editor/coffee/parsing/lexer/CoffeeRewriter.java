@@ -462,8 +462,8 @@ public class CoffeeRewriter
 	private List<CoffeeSymbol> indentation(CoffeeSymbol token)
 	{
 		List<CoffeeSymbol> symbols = new ArrayList<CoffeeSymbol>();
-		symbols.add(new CoffeeSymbol(Terminals.INDENT, token.getEnd(), token.getEnd(), 2));
-		symbols.add(new CoffeeSymbol(Terminals.OUTDENT, token.getEnd(), token.getEnd(), 2));
+		symbols.add(new CoffeeSymbol(Terminals.INDENT, token.getStart(), token.getStart(), 2));
+		symbols.add(new CoffeeSymbol(Terminals.OUTDENT, token.getStart(), token.getStart(), 2));
 		return symbols;
 	}
 
@@ -518,7 +518,7 @@ public class CoffeeRewriter
 							index = j - 1;
 						}
 						// Fix the outdent offsets!
-						outdent.setLocation(innerToken.getEnd(), innerToken.getEnd());
+						outdent.setLocation(innerToken.getStart(), innerToken.getStart());
 						this.fTokens.add(index, outdent);
 						break;
 					}
@@ -624,15 +624,15 @@ public class CoffeeRewriter
 				if (levels == 0 && addImplicitParens(innerToken, j))
 				{
 					int idx = (Terminals.OUTDENT == innerToken.getId() ? j + 1 : j);
-					this.fTokens.add(idx, new CoffeeSymbol(Terminals.CALL_END, innerToken.getEnd(),
-							innerToken.getEnd(), ")"));
+					this.fTokens.add(idx, new CoffeeSymbol(Terminals.CALL_END, innerToken.getStart(),
+							innerToken.getStart(), ")"));
 					break;
 				}
 				if (innerToken == null || levels < 0)
 				{
 					int idx = (Terminals.OUTDENT == innerToken.getId() ? j + 1 : j);
-					this.fTokens.add(idx, new CoffeeSymbol(Terminals.CALL_END, innerToken.getEnd(),
-							innerToken.getEnd(), ")"));
+					this.fTokens.add(idx, new CoffeeSymbol(Terminals.CALL_END, innerToken.getStart(),
+							innerToken.getStart(), ")"));
 					break;
 				}
 				if (EXPRESSION_START.contains(innerToken.getId()))
