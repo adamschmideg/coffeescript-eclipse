@@ -428,10 +428,9 @@ public class CoffeeScanner extends Scanner {
 				continue;
 			}
 		}
-		if (rewrite) checkTokenStarts("scanner");
 		this.closeIndentation();
 		this.fTokens = new CoffeeRewriter().rewrite(this.fTokens);
-		//checkTokenStarts("rewriter");
+		if (rewrite) checkTokenStarts(fTokens);
 		this.insertComments();
 
 		// Let GC reclaim the memory from the last chunk and the underlying
@@ -443,15 +442,19 @@ public class CoffeeScanner extends Scanner {
 		return this.fTokens;
 	}
 
-	private void checkTokenStarts(String msg) {
-		for (int i = 1; i < fTokens.size(); i++) {
-			CoffeeSymbol prev = fTokens.get(i-1);
-			CoffeeSymbol current = fTokens.get(i);
+	public static int checkTokenStarts(List<CoffeeSymbol> tokens) {
+		int problemIndex = -1;
+		for (int i = 1; i < tokens.size(); i++) {
+			CoffeeSymbol prev = tokens.get(i-1);
+			CoffeeSymbol current = tokens.get(i);
 			//System.out.println(current.debugString());
-			if (prev.getStart() > current.getStart())
-				//throw new RuntimeException(msg);
-				System.out.println("\t\t!!! " + msg + " at " + prev + ", " + current);
+			if (prev.getStart() > current.getStart()) {
+				problemIndex = i;
+				System.out.println("\t\t!!! at " + prev + ", " + current);
+				//throw new RuntimeException("bad " + tokens);				
+			}
 		}
+		return problemIndex;
 		//System.out.println("---\n");
 	}
 	/**
