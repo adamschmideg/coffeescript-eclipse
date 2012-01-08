@@ -986,9 +986,10 @@ public class CoffeeScanner extends Scanner {
 				this.assignmentError();
 			}
 			if (prev.getValue().equals("||") || prev.getValue().equals("&&")) {
-				this.fTokens.remove(this.fTokens.size() - 1);
-				prev = new CoffeeSymbol(Terminals.COMPOUND_ASSIGN, ""
-						+ prev.getValue() + '=');
+				CoffeeSymbol removed = this.fTokens.remove(this.fTokens.size() - 1);
+				prev = new CoffeeSymbol(Terminals.COMPOUND_ASSIGN,
+						removed.getStart(), removed.getEnd() + 1,
+						"" + prev.getValue() + '=');
 				this.fTokens.add(prev);
 				return value.length();
 			}
