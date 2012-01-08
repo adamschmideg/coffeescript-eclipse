@@ -462,8 +462,8 @@ public class CoffeeRewriter
 	private List<CoffeeSymbol> indentation(CoffeeSymbol token)
 	{
 		List<CoffeeSymbol> symbols = new ArrayList<CoffeeSymbol>();
-		symbols.add(new CoffeeSymbol(Terminals.INDENT, token.getEnd(), token.getEnd(), 2));
-		symbols.add(new CoffeeSymbol(Terminals.OUTDENT, token.getEnd(), token.getEnd(), 2));
+		symbols.add(new CoffeeSymbol(Terminals.INDENT, token.getStart(), token.getStart(), 2));
+		symbols.add(new CoffeeSymbol(Terminals.OUTDENT, token.getStart(), token.getStart(), 2));
 		return symbols;
 	}
 
