@@ -14,6 +14,7 @@ import org.antlr.runtime.Token;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.xtext.parsetree.reconstr.Serializer;
 
+import com.aptana.editor.coffee.parsing.lexer.CoffeeSymbol;
 import com.google.inject.Guice;
 
 import csep.CoffeeScriptRuntimeModule;
@@ -187,4 +188,24 @@ public class Helper {
 		return false;
 	}
 
+	/**
+	 * Check if the start location of successive tokens are increasing
+	 * @param tokens
+	 * @return the index where the assumption fails, or -1 when start locations are increasing
+	 */
+	public static int checkTokenStarts(List<CoffeeSymbol> tokens) {
+		int problemIndex = -1;
+		for (int i = 1; i < tokens.size(); i++) {
+			CoffeeSymbol prev = tokens.get(i-1);
+			CoffeeSymbol current = tokens.get(i);
+			//System.out.println(current.debugString());
+			if (prev.getStart() > current.getStart()) {
+				problemIndex = i;
+				System.out.println("\t\t!!! at " + prev + ", " + current);
+				//throw new RuntimeException("bad " + tokens);				
+			}
+		}
+		return problemIndex;
+		//System.out.println("---\n");
+	}
 }

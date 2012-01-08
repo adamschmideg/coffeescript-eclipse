@@ -297,11 +297,23 @@ public class CoffeeScanner extends Scanner {
 	private List<CoffeeCommentNode> fComments;
 	private int fOffset;
 	private SyntaxError fSyntaxError = null;
+	private boolean fIncludeHiddenTokens;
 
+	public CoffeeScanner()
+	{
+		super();
+	}
+	
+	public CoffeeScanner(boolean includeHiddenTokens)
+	{
+		this();
+		this.fIncludeHiddenTokens = includeHiddenTokens;
+	}
+	
 	/**
 	 * Get next token even if it's hidden
 	 */
-	public synchronized CoffeeSymbol nextAnyToken() throws IOException,
+	private CoffeeSymbol  internalNextToken() throws IOException,
 			Exception {
 		if (this.fTokens == null) {
 			try {
@@ -330,8 +342,8 @@ public class CoffeeScanner extends Scanner {
 	 */
 	public synchronized CoffeeSymbol nextToken() throws IOException, Exception {
 		while (true) {
-			CoffeeSymbol token = nextAnyToken();
-			if (!token.hidden) {
+			CoffeeSymbol token = internalNextToken();
+			if (this.fIncludeHiddenTokens || !token.hidden) {
 				return token;
 			}
 		}
@@ -361,6 +373,7 @@ public class CoffeeScanner extends Scanner {
 				}
 			}
 		}
+		@SuppressWarnings("unused")
 		boolean rewrite = true;
 		Object rewriteOpt = opts.get("rewrite");
 		if (rewriteOpt != null && rewriteOpt instanceof Boolean)
@@ -430,7 +443,6 @@ public class CoffeeScanner extends Scanner {
 		}
 		this.closeIndentation();
 		this.fTokens = new CoffeeRewriter().rewrite(this.fTokens);
-		if (rewrite) checkTokenStarts(fTokens);
 		this.insertComments();
 
 		// Let GC reclaim the memory from the last chunk and the underlying
@@ -442,21 +454,6 @@ public class CoffeeScanner extends Scanner {
 		return this.fTokens;
 	}
 
-	public static int checkTokenStarts(List<CoffeeSymbol> tokens) {
-		int problemIndex = -1;
-		for (int i = 1; i < tokens.size(); i++) {
-			CoffeeSymbol prev = tokens.get(i-1);
-			CoffeeSymbol current = tokens.get(i);
-			//System.out.println(current.debugString());
-			if (prev.getStart() > current.getStart()) {
-				problemIndex = i;
-				System.out.println("\t\t!!! at " + prev + ", " + current);
-				//throw new RuntimeException("bad " + tokens);				
-			}
-		}
-		return problemIndex;
-		//System.out.println("---\n");
-	}
 	/**
 	 * Insert comments as hidden tokens
 	 */
