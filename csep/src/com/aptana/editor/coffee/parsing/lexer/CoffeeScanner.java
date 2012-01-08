@@ -1182,8 +1182,8 @@ public class CoffeeScanner extends Scanner {
 				}
 				if (!nested.isEmpty()) {
 					if (nested.size() > 1) {
-						nested.add(0, new CoffeeSymbol(Terminals.LPAREN, exprOffset, exprOffset, "((("));
-						nested.add(new CoffeeSymbol(Terminals.RPAREN, exprOffset + expr.length(), exprOffset + expr.length() , "))"));
+						nested.add(0, new CoffeeSymbol(Terminals.LPAREN, exprOffset, exprOffset, "("));
+						nested.add(new CoffeeSymbol(Terminals.RPAREN, exprOffset + expr.length(), exprOffset + expr.length() , ")"));
 					}
 					tmpTokens.push(new CoffeeSymbol(TOKENS, exprOffset, exprOffset, nested));
 				}

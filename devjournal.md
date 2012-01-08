@@ -317,6 +317,16 @@
   the context is an IdRef, but it can't find any referee named `Math`.
   So we have no name for the lookup.
 
+* String interpolation mystery.
+  The right-hand side of `first` and `second` in the following snippet should be parsed the same,
+  because the same tokens are generated.
+
+    name = "Joe"
+    first = ("I am " + name)
+    second = "I am #{name}"
+
+  But in the second case, a warning is given that the reference cannot be found.
+  There is also an offset problem here, the warning message is `Couldn't resolve reference to Id '#{na'`
 
   [1]: http://jevopisdeveloperblog.blogspot.com/2011/03/implement-tostring-with-xtexts.html
   [2]: http://www.eclipse.org/Xtext/documentation/2_1_0/100-serialization.php#serializationcontract 

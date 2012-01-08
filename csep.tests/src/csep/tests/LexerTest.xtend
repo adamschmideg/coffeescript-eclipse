@@ -147,6 +147,20 @@ TERMINATOR:
     		''')    		
     }
     
+    @Test
+    def void testStringInterpolation() {
+    	check('me = "I am #{name}"','''
+IDENTIFIER:me
+EQUAL:=
+LPAREN:(
+STRING:"I am "
+PLUS:+
+IDENTIFIER:name
+RPAREN:)
+TERMINATOR:
+    	''')	
+    }
+    
 	def void check(CharSequence input, CharSequence expectedStr) {
 		val lexer = new Lexer(input)
 		val tokens = lexer.tokenizeToStrings()
