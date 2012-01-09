@@ -39,11 +39,6 @@ class ScopeTest extends ParserTestBase {
 		  fun = (x) ->
 		    2 * x
 		''')		
-		expect('''
-		  fun = (x) ->
-		    2 * x
-		  x
-		''', 0, 1)		
 	}
 	
 	@Test

@@ -5,8 +5,11 @@ import org.junit.Test
 
 class NodesCoffeeTest extends ParserTestBase {
 
+  /**
+   * Even the original coffee has problems parsing it
+   */
   @Test def void testClosure() {
-    ok('''#### Closure
+    shouldBeOk('''#### Closure
 
 # A faux-node used to wrap an expressions body in a closure.
 METHOD_DEF = ///
@@ -27,6 +30,9 @@ METHOD_DEF = ///
     ''')
   }
 
+  /**
+   * @see {MissingFeaturesTest.testKeywordAsFeatureName}
+   */
   @Test def void testOp() {
     ok('''#### Op
 
@@ -37,7 +43,8 @@ exports.Op = class Op extends Base
     return new In first, second if op is 'in'
     if op is 'do'
       call = new Call first, first.params or []
-      call.do = yes
+      ## workaround for: call.do = yes
+      call['do'] = yes
       return call
     if op is 'new'
       return first.newInstance() if first instanceof Call and not first.do and not first.isNew
@@ -182,6 +189,9 @@ exports.Arr = class Arr extends Base
 
 ''')}
 	
+  /**
+   * @see {MissingFeaturesTest.testCompoundAssignable}
+   */
   @Test def void testObj() {
     ok('''#### Obj
 
@@ -213,7 +223,9 @@ exports.Obj = class Obj extends Base
       if prop not instanceof Comment
         if prop not instanceof Assign
           prop = new Assign prop, prop, 'object'
-        (prop.variable.base or prop.variable).asKey = yes
+        # Workaround for: (prop.variable.base or prop.variable).asKey = yes
+        vari = prop.variable.base or prop.variable
+        vari.asKey = yes
       indent + prop.compile(o, LEVEL_TOP) + join
     props = props.join ''
     obj   = "{#{ props and '\n' + props + '\n' + @tab }}"
