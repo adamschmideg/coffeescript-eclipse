@@ -70,9 +70,4 @@ class MissingFeaturesTest extends ParserTestBase {
 		// class extends any expression
 		shouldBeOk('class A extends 3')
 	}
-	
-	@Test
-	def void testConditionalReturn() {
-		shouldBeOk('return if finished')
-	}
 }

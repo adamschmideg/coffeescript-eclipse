@@ -181,9 +181,7 @@ class ControlFlowTest extends ParserTestBase {
   
   @Test
   def void testReturnIf() {
-  	shouldBeOk('return if yes')  	
-  	// Statement is not allowed before a post_if, opposed to coffeescript,
-  	// this is a reasonable workaround
+  	ok('return if yes')  	
   	ok('''
   		if yes
   			return 1
@@ -192,9 +190,6 @@ class ControlFlowTest extends ParserTestBase {
   		if yes
   			return
   	''')
-  	// XXX: This is ok, but parses differently than expected
-  	// RETURN
-  	//   1 POSTFIX_IF yes
   	ok('return 1 if yes')  	
   }
 }
