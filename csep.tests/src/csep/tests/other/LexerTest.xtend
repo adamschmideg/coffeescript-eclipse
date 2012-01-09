@@ -1,5 +1,6 @@
-package csep.tests
+package csep.tests.other
 
+import csep.tests.InjectorProviderCustom
 import csep.parser.Lexer
 import org.eclipse.xtext.junit4.InjectWith
 import org.eclipse.xtext.junit4.XtextRunner

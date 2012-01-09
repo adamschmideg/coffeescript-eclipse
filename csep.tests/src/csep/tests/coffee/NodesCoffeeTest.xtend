@@ -1,5 +1,6 @@
-package csep.tests
+package csep.tests.coffee
 
+import csep.tests.ParserTestBase
 import org.junit.Test
 
 class NodesCoffeeTest extends ParserTestBase {

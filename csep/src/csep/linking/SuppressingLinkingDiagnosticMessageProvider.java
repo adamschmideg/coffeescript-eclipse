@@ -1,9 +1,5 @@
 package csep.linking;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
-
 import org.eclipse.xtext.diagnostics.Diagnostic;
 import org.eclipse.xtext.diagnostics.DiagnosticMessage;
 import org.eclipse.xtext.diagnostics.Severity;
@@ -13,7 +9,6 @@ import org.eclipse.xtext.linking.impl.LinkingDiagnosticMessageProvider;
 import com.google.inject.Inject;
 
 import csep.scoping.CoffeescriptBuiltins;
-import csep.scoping.DefaultGlobalScopeProvider;
 
 /**
  * Suppress errors when reassigning a variable, and change errors to warnings when a reference cannot be resolved.

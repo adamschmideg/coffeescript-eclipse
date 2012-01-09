@@ -1,5 +1,6 @@
-package csep.tests
+package csep.tests.coffee
 
+import csep.tests.ParserTestBase
 import org.junit.Test
 /**
  * Files from {@link https://github.com/jashkenas/coffee-script/tree/master/documentation/coffee}

@@ -1,5 +1,6 @@
-package csep.tests
+package csep.tests.other
 
+import csep.tests.ParserTestBase
 import org.junit.Test
 
 class MissingFeaturesTest extends ParserTestBase {
