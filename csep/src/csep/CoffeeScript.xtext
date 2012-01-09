@@ -31,7 +31,7 @@ RequireStmt:
   =>(importedNamespace=Id EQUAL 'require') CALL_START uri=STRING CALL_END;
   
 ReturnStmt:
-	RETURN exp=Expression;
+	{ReturnStmt} RETURN exp=Expression?;
 	
 ThrowStmt:
 	THROW exp=Expression;

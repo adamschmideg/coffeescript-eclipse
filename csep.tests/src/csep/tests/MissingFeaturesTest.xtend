@@ -74,9 +74,5 @@ class MissingFeaturesTest extends ParserTestBase {
 	@Test
 	def void testConditionalReturn() {
 		shouldBeOk('return if finished')
-		shouldBeOk('''
-		  if finished
-		    return
-		''')
 	}
 }
