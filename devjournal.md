@@ -328,6 +328,30 @@
   But in the second case, a warning is given that the reference cannot be found.
   There is also an offset problem here, the warning message is `Couldn't resolve reference to Id '#{na'`
 
+* Annoying editor bug.
+  This is how I could reproduce a problem most of the times (it may
+  depend on typing speed).
+  Enter the following snippet into an empty file
+
+    a=1
+    class C
+       b:3
+
+  (The property `b` after `class C` will be auto-indented).
+  Now, go back and insert a space before `1` in the first line.
+  If it doesn't cause a syntax error, delete the space you just
+  inserted.
+  You are supposed to get a `No viable alternative at input '}'` error.
+  In the meanwhile, the hosting Eclipse instance logs errors every now
+  and then:
+  `PartialParsingHelper  - Invalid replace region`.
+  - One cause is a bad coincidence: the scanner adds OUTDENT and
+    TERMINATOR tokens with a wrong offset.
+    The antlr stream doesn't check the upper bound.
+    The result is: when the underlying parser gets the whole stream as
+    string, it reads a substring after the end of the stream, resulting
+    in trailing zero bytes.
+
   [1]: http://jevopisdeveloperblog.blogspot.com/2011/03/implement-tostring-with-xtexts.html
   [2]: http://www.eclipse.org/Xtext/documentation/2_1_0/100-serialization.php#serializationcontract 
   [3]: http://stackoverflow.com/questions/8154790/visualize-lalr-grammar

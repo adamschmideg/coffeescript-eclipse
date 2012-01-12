@@ -21,11 +21,15 @@ public class Lexer extends csep.parser.antlr.internal.InternalCoffeeScriptLexer 
 	 * We have to keep a track of it, because the aptana scanner doesn't do that
 	 */
 	private int tokenIndex = 0;
+	private CharStream debugInput;
+	private String debugContent;
 
 	public Lexer(CharStream in) {
 		super(in);
+		debugInput = in;
 		aptanaScanner = new CoffeeScanner(true);
 		String content = removeTrailingZeroBytes(in.substring(0, in.size() - 1));
+		debugContent = content;
 		aptanaScanner.setSource(content);
 	}
 
@@ -69,6 +73,8 @@ public class Lexer extends csep.parser.antlr.internal.InternalCoffeeScriptLexer 
 			}
 			else {
 				token = new BeaverToken(symbol);
+				if (((CommonToken) token).getStopIndex() > input.size())
+					logger.error("Token stop index overflows " + symbol + " in:\n<<<" + debugContent + ">>>");
 			}
 		}
 		catch (Exception e) {
@@ -95,7 +101,7 @@ public class Lexer extends csep.parser.antlr.internal.InternalCoffeeScriptLexer 
 			if (prevToken != null && token.getType() > 0) {
 				if (((CommonToken)token).getStartIndex() < prevToken.getStartIndex())
 					logger.warn("Position not follows, prevToken: " + prevToken + ", token: " + token);
-			}
+			}			
 			prevToken = (CommonToken)token;
 		}
 		logger.debug("token: " + token);
