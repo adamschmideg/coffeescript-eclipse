@@ -112,7 +112,7 @@ public class BeaverToken extends CommonToken {
 		int end = -1;
 		if (symbol.getStart() == symbol.getEnd()) {
 			// Tokens inserted by the rewriter may have zero length
-			end = symbol.getEnd();
+			end = symbol.getEnd() - 1;
 		}
 		else {
 			// XXX: AbstractInternalAntlrParser.createLeafNode will add 1 to length

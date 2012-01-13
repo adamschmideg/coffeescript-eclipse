@@ -208,4 +208,8 @@ public class Helper {
 		return problemIndex;
 		//System.out.println("---\n");
 	}
+	
+	public static boolean checkTokenOverflow(List<CoffeeSymbol> tokens, int maxOffset) {
+		return tokens.get(tokens.size() - 1).getEnd() < maxOffset;
+	}
 }

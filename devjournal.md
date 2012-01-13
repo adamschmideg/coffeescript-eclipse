@@ -351,6 +351,9 @@
     The result is: when the underlying parser gets the whole stream as
     string, it reads a substring after the end of the stream, resulting
     in trailing zero bytes.
+  - A related problem is that the scanner added and removed some
+    whitespaces to make its job easier, but it didn't fix the offsets
+    accordingly.
 
   [1]: http://jevopisdeveloperblog.blogspot.com/2011/03/implement-tostring-with-xtexts.html
   [2]: http://www.eclipse.org/Xtext/documentation/2_1_0/100-serialization.php#serializationcontract 

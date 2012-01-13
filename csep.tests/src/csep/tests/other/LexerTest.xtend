@@ -1,15 +1,11 @@
 package csep.tests.other
 
-import csep.tests.InjectorProviderCustom
 import csep.parser.Lexer
-import org.eclipse.xtext.junit4.InjectWith
-import org.eclipse.xtext.junit4.XtextRunner
+import csep.tests.ParserTestBase
 import org.junit.Test
 import junit.framework.Assert
 
-@org.junit.runner.RunWith(typeof(XtextRunner))
-@InjectWith(typeof(InjectorProviderCustom))
-class LexerTest {
+class LexerTest extends ParserTestBase {
 	
 	@Test
 	def void testBasic() {
@@ -160,6 +156,13 @@ IDENTIFIER:name
 RPAREN:)
 TERMINATOR:
     	''')	
+    }
+    
+    @Test
+    def void testFirstLineIndented() {
+    	// Check if token offsets don't fail with any assertions in the Lexer
+    	ok('  a = 3')	
+    	ok('a = 3  ')
     }
     
 	def void check(CharSequence input, CharSequence expectedStr) {
