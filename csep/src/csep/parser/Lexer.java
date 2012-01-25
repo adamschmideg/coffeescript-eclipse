@@ -116,10 +116,10 @@ public class Lexer extends csep.parser.antlr.internal.InternalCoffeeScriptLexer 
 	 * @return a list of tokens
 	 * @throws Exception
 	 */
-	public List<Token> tokenize() throws Exception {
-		List<Token> symbols = new ArrayList<Token>();
+	public List<CommonToken> tokenize() throws Exception {
+		List<CommonToken> symbols = new ArrayList<CommonToken>();
 		while (true) {
-			Token token = nextToken();
+			CommonToken token = (CommonToken)nextToken();
 			if (Token.EOF == token.getType()) {
 				break;
 			} else {

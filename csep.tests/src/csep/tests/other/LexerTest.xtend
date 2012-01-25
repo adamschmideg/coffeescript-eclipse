@@ -165,6 +165,15 @@ TERMINATOR:
     	ok('a = 3  ')
     }
     
+    @Test
+    def void testTokenPositionsInStringInterpolation() {
+    	val input = 'before #{ ref } after'
+    	val lexer = new Lexer(input)
+    	val tokens = lexer.tokenize()
+    	val starts = tokens.map(t | t.startIndex)
+    	Assert::assertEquals([], starts)
+    }
+    
 	def void check(CharSequence input, CharSequence expectedStr) {
 		val lexer = new Lexer(input)
 		val tokens = lexer.tokenizeToStrings()
