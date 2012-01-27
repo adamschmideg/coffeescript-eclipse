@@ -164,15 +164,17 @@ TERMINATOR:
     	ok('  a = 3')	
     	ok('a = 3  ')
     }
-    
+
     @Test
     def void testTokenPositionsInStringInterpolation() {
     	val input = 'before #{ ref } after'
     	val lexer = new Lexer(input)
     	val tokens = lexer.tokenize()
+    	// The following line silently fails and no java file gets generated in xtend-gen
     	val starts = tokens.map(t | t.startIndex)
     	Assert::assertEquals([], starts)
     }
+
     
 	def void check(CharSequence input, CharSequence expectedStr) {
 		val lexer = new Lexer(input)
