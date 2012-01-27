@@ -1,5 +1,6 @@
-package csep.tests
+package csep.tests.basic
 
+import csep.tests.ParserTestBase
 import org.junit.Test
 
 class LiteralTest extends ParserTestBase {

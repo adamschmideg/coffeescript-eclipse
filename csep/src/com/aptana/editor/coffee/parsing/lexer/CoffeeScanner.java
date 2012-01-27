@@ -298,6 +298,7 @@ public class CoffeeScanner extends Scanner {
 	private int fOffset;
 	private SyntaxError fSyntaxError = null;
 	private boolean fIncludeHiddenTokens;
+	private int fOffsetCorrection;
 
 	public CoffeeScanner()
 	{
@@ -356,6 +357,7 @@ public class CoffeeScanner extends Scanner {
 		}
 		if (WHITESPACE.matcher(code).find()) {
 			code = "\n" + code;
+			this.fOffsetCorrection -= 1;
 		}
 		code = code.replaceAll("\r", "").replaceFirst(
 				TRAILING_SPACES.pattern(), "");
@@ -444,6 +446,7 @@ public class CoffeeScanner extends Scanner {
 		this.closeIndentation();
 		this.fTokens = new CoffeeRewriter().rewrite(this.fTokens);
 		this.insertComments();
+		this.fixOffsets();
 
 		// Let GC reclaim the memory from the last chunk and the underlying
 		// source code.
@@ -471,6 +474,21 @@ public class CoffeeScanner extends Scanner {
 		}
 	}
 
+	private void fixOffsets() {
+		if (this.fOffsetCorrection != 0 && !this.fTokens.isEmpty())
+		{
+			for (CoffeeSymbol token: this.fTokens)
+			{
+				int start = token.getStart();
+				if (start > 0)
+				{
+					int end = token.getEnd();
+					token.setLocation(start + this.fOffsetCorrection, end + this.fOffsetCorrection);
+				}
+			}
+		}
+	}
+	
 	private int identifierToken() throws SyntaxError {
 		// PERF fix, check first char to be sure it's letter, $, _ or unicode
 		// points defined in regexp
@@ -919,7 +937,7 @@ public class CoffeeScanner extends Scanner {
 			this.fOutdebt -= moveOut;
 		}
 		if (!(this.tag() == Terminals.TERMINATOR || noNewlines)) {
-			this.token(Terminals.TERMINATOR, "\n", 1);
+			this.token(Terminals.TERMINATOR, "\n", 0);
 		}
 		// return this;
 	}
@@ -1182,8 +1200,8 @@ public class CoffeeScanner extends Scanner {
 				}
 				if (!nested.isEmpty()) {
 					if (nested.size() > 1) {
-						nested.add(0, new CoffeeSymbol(Terminals.LPAREN, exprOffset, exprOffset, "((("));
-						nested.add(new CoffeeSymbol(Terminals.RPAREN, exprOffset + expr.length(), exprOffset + expr.length() , "))"));
+						nested.add(0, new CoffeeSymbol(Terminals.LPAREN, exprOffset, exprOffset, "("));
+						nested.add(new CoffeeSymbol(Terminals.RPAREN, exprOffset + expr.length(), exprOffset + expr.length() , ")"));
 					}
 					tmpTokens.push(new CoffeeSymbol(TOKENS, exprOffset, exprOffset, nested));
 				}

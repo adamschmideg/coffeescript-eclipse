@@ -21,11 +21,13 @@ public class Lexer extends csep.parser.antlr.internal.InternalCoffeeScriptLexer 
 	 * We have to keep a track of it, because the aptana scanner doesn't do that
 	 */
 	private int tokenIndex = 0;
+	private String content;
 
 	public Lexer(CharStream in) {
 		super(in);
 		aptanaScanner = new CoffeeScanner(true);
-		String content = removeTrailingZeroBytes(in.substring(0, in.size() - 1));
+		content = in.substring(0,  in.size() - 1);
+		checkTrailingZeroBytes(content);
 		aptanaScanner.setSource(content);
 	}
 
@@ -45,9 +47,11 @@ public class Lexer extends csep.parser.antlr.internal.InternalCoffeeScriptLexer 
 	 * Workaround for a probable bug somewhere in the xtext-aptana toolchain:
 	 * we may get a string with trailing zero bytes
 	 */
-	protected String removeTrailingZeroBytes(String buggyString) {
+	protected void checkTrailingZeroBytes(String buggyString) {
 		int startZeroes = buggyString.indexOf(0);
-		return startZeroes == -1 ? buggyString : buggyString.substring(0, startZeroes - 1);
+		if (startZeroes >= 0) {
+			logger.error("Trailing zeroes in " + buggyString, new Exception());
+		}
 	}
 
 	/**
@@ -69,6 +73,9 @@ public class Lexer extends csep.parser.antlr.internal.InternalCoffeeScriptLexer 
 			}
 			else {
 				token = new BeaverToken(symbol);
+				if (((CommonToken) token).getStopIndex() >= input.size()) {
+					assert false: "Token stop index overflows " + symbol + " in:\n<<<" + content + ">>>";
+				}
 			}
 		}
 		catch (Exception e) {
@@ -93,9 +100,10 @@ public class Lexer extends csep.parser.antlr.internal.InternalCoffeeScriptLexer 
 		tokenIndex++;
 		if (token instanceof CommonToken) {
 			if (prevToken != null && token.getType() > 0) {
-				if (((CommonToken)token).getStartIndex() < prevToken.getStartIndex())
-					logger.warn("Position not follows, prevToken: " + prevToken + ", token: " + token);
-			}
+				if (((CommonToken)token).getStartIndex() < prevToken.getStartIndex()) {
+					assert false: "Position not follows, prevToken: " + prevToken + ", token: " + token;
+				}
+			}			
 			prevToken = (CommonToken)token;
 		}
 		logger.debug("token: " + token);
@@ -108,10 +116,10 @@ public class Lexer extends csep.parser.antlr.internal.InternalCoffeeScriptLexer 
 	 * @return a list of tokens
 	 * @throws Exception
 	 */
-	public List<Token> tokenize() throws Exception {
-		List<Token> symbols = new ArrayList<Token>();
+	public List<CommonToken> tokenize() throws Exception {
+		List<CommonToken> symbols = new ArrayList<CommonToken>();
 		while (true) {
-			Token token = nextToken();
+			CommonToken token = (CommonToken)nextToken();
 			if (Token.EOF == token.getType()) {
 				break;
 			} else {

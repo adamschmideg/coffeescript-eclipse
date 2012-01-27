@@ -128,4 +128,20 @@ public abstract class ParserTestBase extends AbstractXtextTests {
 	 public void okNoWarning(CharSequence input) {
 		 expect(input, 0, 0);
 	 }
+	 
+	 public void shouldBeOkNoWarning(CharSequence input) {
+		 String clazz = this.getClass().getSimpleName();
+		 boolean wasOk = false;
+		 try {
+			 okNoWarning(input);	
+			 wasOk = true;			
+		 }
+		 catch (AssertionError afe) {
+			 logger.warn("Expected to parse without warning " + clazz + " '" + input + "', but " + afe.getMessage());
+		 }
+		 if (wasOk) {
+			 fail("Expected a warning, but parsed successfully '" + input + "'");
+		 }
+
+	 }
 }

@@ -1,5 +1,6 @@
-package csep.tests
+package csep.tests.other
 
+import csep.tests.ParserTestBase
 import org.junit.Test
 
 class MissingFeaturesTest extends ParserTestBase {
@@ -72,11 +73,40 @@ class MissingFeaturesTest extends ParserTestBase {
 	}
 	
 	@Test
-	def void testConditionalReturn() {
-		shouldBeOk('return if finished')
-		shouldBeOk('''
-		  if finished
-		    return
+	def void testStringInterpolationVariableResolution() {
+		shouldBeOkNoWarning('''
+			name = "Joe"
+			me = "I am #{name}"
 		''')
+	}
+	
+	/**
+	 * Lambda variable outside of its scoping shouldn't be resolved,
+	 * thus it should give a warning
+	 */
+	@Test
+	def void testLambdaScoping() {
+		okNoWarning('''
+		  fun = (x) ->
+		    2 * x
+		  x
+		''')		
+	}
+
+	/**
+	 * @see {NodesCoffeeTest.testOp}
+	 */
+	@Test
+	def void testKeywordAsFeatureName() {
+		shouldBeOk('foo.do = 1')
+		shouldBeOk('bar.class = "Anything"')
+	}
+	
+	/**
+	 * @see {NodesCoffeeTest.testObj}
+	 */
+	@Test
+	def void testCompoundAssignable() {
+		shouldBeOk('(a or b).prop = 3')
 	}
 }

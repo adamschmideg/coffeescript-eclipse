@@ -1,5 +1,6 @@
-package csep.tests
+package csep.tests.other
 
+import csep.tests.ParserTestBase
 import org.eclipse.emf.common.util.URI
 import org.junit.Test
 import org.junit.Assert

@@ -1,5 +1,6 @@
-package csep.tests
+package csep.tests.basic
 
+import csep.tests.ParserTestBase
 import org.junit.Test
 
 class ControlFlowTest extends ParserTestBase {
@@ -177,5 +178,19 @@ class ControlFlowTest extends ParserTestBase {
   	  	  continue
   	  	justWait()
   	''')
+  }
+  
+  @Test
+  def void testReturnIf() {
+  	ok('return if yes')  	
+  	ok('''
+  		if yes
+  			return 1
+  	''')
+  	ok('''
+  		if yes
+  			return
+  	''')
+  	ok('return 1 if yes')  	
   }
 }
