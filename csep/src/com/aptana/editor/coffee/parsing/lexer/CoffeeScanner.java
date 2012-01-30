@@ -1179,11 +1179,11 @@ public class CoffeeScanner extends Scanner {
 				String substr = str.substring(pi, i);
 				int exprOffset = this.fOffset + pi;
 				tmpTokens
-						.push(new CoffeeSymbol(NEOSTRING, exprOffset, exprOffset + substr.length(), substr));
+						.push(new CoffeeSymbol(NEOSTRING, exprOffset, exprOffset + substr.length() + 2, substr));
 			}
 			String inner = expr.substring(1, expr.length() - 1);
 			if (inner.length() > 0) {
-				int exprOffset = this.fOffset + i + 1;
+				int exprOffset = this.fOffset + i + 3;
 				Map<String, Object> newOptions = new HashMap<String, Object>();
 				newOptions.put("fLine", this.fLine);
 				newOptions.put("rewrite", false);
@@ -1212,7 +1212,7 @@ public class CoffeeScanner extends Scanner {
 		if ((i > pi && pi < str.length())) {
 			int offset = this.fOffset + pi;
 			String substr = str.substring(pi);
-			tmpTokens.push(new CoffeeSymbol(NEOSTRING, offset, offset + substr.length(), substr));
+			tmpTokens.push(new CoffeeSymbol(NEOSTRING, offset, offset + substr.length() + 2, substr));
 		}
 		if (regex) {
 			return tmpTokens;
