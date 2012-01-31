@@ -1,11 +1,11 @@
-package csep.tests.other
+package csep.tests.lexer
 
 import csep.parser.Lexer
 import csep.tests.ParserTestBase
 import org.junit.Test
 import junit.framework.Assert
 
-class LexerTest extends ParserTestBase {
+class TokenTest extends ParserTestBase {
 	
 	@Test
 	def void testBasic() {
