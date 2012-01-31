@@ -54,6 +54,11 @@ class LiteralTest extends ParserTestBase {
 		  # do something
 		  x + 1
 		''')
+		okNoWarning('''
+			a = 1
+			#remark
+			bb = a
+		''')	
 	}
 	
 	@Test

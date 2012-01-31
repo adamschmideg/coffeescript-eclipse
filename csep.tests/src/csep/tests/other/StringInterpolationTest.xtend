@@ -10,6 +10,18 @@ import org.antlr.runtime.CommonToken
 
 class StringInterpolationTest extends ParserTestBase {
 	
+	@Test
+	def void test_comment() {
+		val input =
+		  //0123456789
+			'''
+			a = 456789
+			#remark   
+			bb = a
+			'''
+		checkTokenPositions(input,'x')
+	}
+	
     @Test
     def void test_simple() {
     	checkTokenPositions(
