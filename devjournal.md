@@ -106,7 +106,7 @@
     gets generated which can be opened and debugged with Antlrworks
     seamlessly
 
-* Warning: "Decision can match input such as "RULE_IF" using multiple alternatives: 1, 2"
+* Warning: "Decision can match input such as RULE\_IF using multiple alternatives: 1, 2"
   * Before the previous commit it almost disappeared, then it came back.
   * The answer to this [Stackoverflow question][9] says, you can set
    `option=greedy` in Antlr, but this is not an option here, because the
@@ -295,7 +295,7 @@
   them properly.
 
 * Probably interdependent issues
-  - Files don't get validated automatically (http://www.eclipse.org/forums/index.php/m/774437/#msg_774437)
+  - Files don't get validated automatically (http://www.eclipse.org/forums/index.php/m/774437/#msg\_774437)
   - Errors are not displayed in the Problems tab
     - Well, maybe a workaround, but you can manually validate the file
       selecting Validate from the context menu.
@@ -356,6 +356,19 @@
     accordingly.
 
 * Respond to bug reports.
+
+* Resolution warning.  The minimal snippet to reproduce it is
+
+     a = 1
+     #remark
+     b = a
+
+  It gives no warning when opening with a new Eclipse instance or when
+  checking in a test case.
+  If you add a trailing space (or if there is one, remove it), you'll
+  get the warning.
+  It seems to trying to resolve `a` as a reference, but with a wrong offset.
+  It may be related to Xtext calculating a ReplaceRegion when parsing.
 
   [1]: http://jevopisdeveloperblog.blogspot.com/2011/03/implement-tostring-with-xtexts.html
   [2]: http://www.eclipse.org/Xtext/documentation/2_1_0/100-serialization.php#serializationcontract 
