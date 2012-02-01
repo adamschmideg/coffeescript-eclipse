@@ -371,6 +371,8 @@
   It may be related to Xtext calculating a ReplaceRegion when parsing.
 
   - Parse element with wrong offsets are produced in `XtextResource.update` after calling `parser.reparse()`
+  - Workaround: don't use partialParser, because it seems to be responsible for the wrong offsets.
+    This may result in some performance penalty for larger files.
 
   [1]: http://jevopisdeveloperblog.blogspot.com/2011/03/implement-tostring-with-xtexts.html
   [2]: http://www.eclipse.org/Xtext/documentation/2_1_0/100-serialization.php#serializationcontract 
