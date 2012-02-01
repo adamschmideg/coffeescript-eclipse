@@ -1,4 +1,4 @@
-package csep.tests.other
+package csep.tests.lexer
 
 import csep.parser.Helper
 import csep.parser.Lexer
@@ -8,10 +8,37 @@ import java.util.ArrayList
 import junit.framework.Assert
 import org.antlr.runtime.CommonToken
 
-class StringInterpolationTest extends ParserTestBase {
+class PositionTest extends ParserTestBase {
+	
+	@Test
+	def void test_comment() {
+		val input =
+		  //0123456789
+			'''
+			value = 0
+			#complete
+			a = value
+			#spaces  
+			b = value
+			'''
+		checkTokenPositions(input,'''
+			IDENTIFIER:value:0:4
+			EQUAL:=:6:6
+			NUMBER:0:8:8
+			TERMINATOR::19:19
+			IDENTIFIER:a:20:20
+			EQUAL:=:22:22
+			IDENTIFIER:value:24:28
+			TERMINATOR::39:39
+			IDENTIFIER:b:40:40
+			EQUAL:=:42:42
+			IDENTIFIER:value:44:48
+			TERMINATOR::49:48
+		''')
+	}
 	
     @Test
-    def void test_simple() {
+    def void test_stringInterpolation_simple() {
     	checkTokenPositions(
     	   //0123456789012345678901234567890
     		'"before #{ref}"', '''
@@ -25,7 +52,7 @@ class StringInterpolationTest extends ParserTestBase {
     }
 
     @Test
-    def void test_simpleWithStringAfter() {
+    def void test_stringInterpolation_simpleWithStringAfter() {
     	checkTokenPositions(
     	   //0123456789012345678901234567890
     		'"before #{ref} after"', '''
@@ -41,7 +68,7 @@ class StringInterpolationTest extends ParserTestBase {
     }
     
     @Test
-    def void test_moreExpressions() {
+    def void test_stringInterpolation_moreExpressions() {
     	checkTokenPositions(
     	   //0123456789012345678901234567890
     		'"before #{ref} and #{other}"', '''
@@ -59,7 +86,7 @@ class StringInterpolationTest extends ParserTestBase {
     }
 
     @Test
-    def void test_offset() {
+    def void test_stringInterpolation_offset() {
     	checkTokenPositions(
     	   //0123456789012345678901234567890
     		'me = "before #{ref}"', '''
@@ -75,7 +102,7 @@ class StringInterpolationTest extends ParserTestBase {
     }
 
     @Test
-    def void test_offsetWithStringAfter() {
+    def void test_stringInterpolation_offsetWithStringAfter() {
     	checkTokenPositions(
     	   //0123456789012345678901234567890
     		'me = "before #{ref} after"', '''
@@ -93,7 +120,8 @@ class StringInterpolationTest extends ParserTestBase {
     }
 
     @Test
-    def void test_spaceAroundExpression() {
+    def void test_stringInterpolation_spaceAroundExpression() {
+    	// FIXME: the two RPAREN tokens should be swapped
     	checkTokenPositions(
     	   //0123456789012345678901234567890
     		'"before #{ ref }"', '''
@@ -104,8 +132,9 @@ class StringInterpolationTest extends ParserTestBase {
 	    	INDENT:1:10:9
 	    	IDENTIFIER:ref:11:13
 	    	OUTDENT:1:14:13
-	    	RPAREN:):13:12
-	    	TERMINATOR::15:14
+	    	RPAREN:):17:16
+	    	RPAREN:):15:14
+	    	TERMINATOR::17:16
     	''')
     }
 

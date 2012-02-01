@@ -17,4 +17,12 @@ public class Parser extends CoffeeScriptParser {
 	protected XtextTokenStream createTokenStream(TokenSource tokenSource) {
 		return new FirstCommentIncludingXtextTokenStream(tokenSource, getTokenDefProvider());
 	}
+	
+	/**
+	 * XXX: true, otherwise a partialParser will be used which generates wrong offsets
+	 */
+	@Override
+	protected boolean isReparseSupported() {
+		return false;
+	}
 }
