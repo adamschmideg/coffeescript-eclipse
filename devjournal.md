@@ -370,6 +370,8 @@
   It seems to trying to resolve `a` as a reference, but with a wrong offset.
   It may be related to Xtext calculating a ReplaceRegion when parsing.
 
+  - Parse element with wrong offsets are produced in `XtextResource.update` after calling `parser.reparse()`
+
   [1]: http://jevopisdeveloperblog.blogspot.com/2011/03/implement-tostring-with-xtexts.html
   [2]: http://www.eclipse.org/Xtext/documentation/2_1_0/100-serialization.php#serializationcontract 
   [3]: http://stackoverflow.com/questions/8154790/visualize-lalr-grammar
