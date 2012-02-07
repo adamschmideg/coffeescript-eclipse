@@ -1,0 +1,10 @@
+grammar csep.example.cake.Cakefile with csep.CoffeeScript
+
+generate cakefile "http://www.example.csep/cake/Cakefile"
+
+Cakefile:
+	tasks+=Task*;
+	
+Task:
+	'task' name=StringLiteral COMMA description=StringLiteral COMMA (options=Id)? FUNC_ARROW
+		body=Body;
