@@ -10,3 +10,4 @@ org.xtext.example.*
 devel
 devel.*
 out
+csep.update/**.jar

@@ -379,6 +379,18 @@
   - [Partial parsing can't resolve some references](http://www.eclipse.org/forums/index.php/m/791944/) 
   - I got some answers -- or clarifying questions rather that I replied to.
 
+* Installable plugin
+  - I followed the instructions on
+   [How to create an update site](http://wiki.eclipse.org/FAQ_How_do_I_create_an_update_site_\(site.xml\)%3F)
+   Now all you have to do is
+   - Open the `csep.update` project
+   - Open `site.xml`
+   - Go to the `Site Map` tab
+   - Click `Build all`
+
+   The `csep.update` directory will be populated with the required artifacts.
+
+
   [1]: http://jevopisdeveloperblog.blogspot.com/2011/03/implement-tostring-with-xtexts.html
   [2]: http://www.eclipse.org/Xtext/documentation/2_1_0/100-serialization.php#serializationcontract 
   [3]: http://stackoverflow.com/questions/8154790/visualize-lalr-grammar
