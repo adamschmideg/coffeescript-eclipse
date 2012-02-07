@@ -377,6 +377,7 @@
 * Asked about issues at Eclipse forum
   - [Debug grammar generation gives error but seems to work](http://www.eclipse.org/forums/index.php/m/791928/)
   - [Partial parsing can't resolve some references](http://www.eclipse.org/forums/index.php/m/791944/) 
+  - I got some answers -- or clarifying questions rather that I replied to.
 
   [1]: http://jevopisdeveloperblog.blogspot.com/2011/03/implement-tostring-with-xtexts.html
   [2]: http://www.eclipse.org/Xtext/documentation/2_1_0/100-serialization.php#serializationcontract 
