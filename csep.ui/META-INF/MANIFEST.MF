@@ -1,8 +1,8 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: csep.ui
-Bundle-Vendor: My Company
-Bundle-Version: 1.0.0
+Bundle-Name: %Bundle-Name
+Bundle-Vendor: %Bundle-Vendor
+Bundle-Version: 0.2.0
 Bundle-SymbolicName: csep.ui; singleton:=true
 Bundle-ActivationPolicy: lazy
 Require-Bundle: csep;visibility:=reexport,
@@ -18,6 +18,15 @@ Require-Bundle: csep;visibility:=reexport,
 Import-Package: org.apache.log4j,
  org.apache.commons.logging
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
-Export-Package: csep.ui.contentassist.antlr,
- csep.ui.internal
+Export-Package: csep.ui,
+ csep.ui.autoedit,
+ csep.ui.contentassist,
+ csep.ui.contentassist.antlr,
+ csep.ui.contentassist.antlr.internal;x-internal:=true,
+ csep.ui.hover,
+ csep.ui.internal;x-internal:=true,
+ csep.ui.labeling,
+ csep.ui.outline,
+ csep.ui.quickfix,
+ csep.ui.syntaxcoloring
 Bundle-Activator: csep.ui.internal.CoffeeScriptActivator

@@ -3,7 +3,7 @@ syntax:glob
 csep*/bin
 csep*/src-gen
 csep*/xtend-gen
-csep*/plugin.xml.*
+csep*/plugin.xml_gen
 org.eclipse.xtext.example.*
 org.xtext.example.*
 *.swp
