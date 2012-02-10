@@ -13,6 +13,8 @@ Workflow {
     bean = StandaloneSetup {
 	    scanClassPath = true
 		platformUri = "${runtimeProject}/.."
+		registerGenModelFile = "platform:/resource/csep/src-gen/csep/CoffeeScript.genmodel"
+		registerGeneratedEPackage = "csep.coffeeScript.CoffeeScriptPackage"	
 	}
 
 	component = DirectoryCleaner {
@@ -111,13 +113,7 @@ Workflow {
 			// 		generatorProjectName = "${projectName}"
 			//		modelFileExtension = file.extensions
 			// }
-
-			// provides the necessary bindings for java types integration
-			fragment = types.TypesGeneratorFragment {}
-
-			// generates the required bindings only if the grammar inherits from Xbase
-			fragment = xbase.XbaseGeneratorFragment {}
-			
+		
 			// provides a preference page for template proposals 
 			fragment = templates.CodetemplatesGeneratorFragment {}
 

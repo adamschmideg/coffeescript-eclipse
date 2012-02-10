@@ -12,10 +12,7 @@ var runtimeProject = "../${projectName}"
 Workflow {
     bean = StandaloneSetup {
         scanClassPath = true
-        platformUri = "${runtimeProject}/.."
-        // The following two lines ca be removed, if Xbase is not used.
-        registerGeneratedEPackage = "org.eclipse.xtext.xbase.XbasePackage"
-        registerGenModelFile = "platform:/resource/org.eclipse.xtext.xbase/model/Xbase.genmodel"
+        platformUri = "${runtimeProject}/.."    
     }
 
     component = DirectoryCleaner {
@@ -40,8 +37,8 @@ Workflow {
             fragment = grammarAccess.GrammarAccessFragment {}
 
             // generates Java API for the generated EPackages
-            fragment = ecore.EcoreGeneratorFragment {
-            // referencedGenModels = "
+            fragment = ecore.EcoreGeneratorFragment {           	
+            referencedGenModels = "platform:/resource/csep/src-gen/csep/CoffeeScript.genmodel"
             //  platform:/resource/org.eclipse.xtext.xbase/model/Xbase.genmodel,
             //  platform:/resource/org.eclipse.xtext.common.types/model/JavaVMTypes.genmodel
             // "

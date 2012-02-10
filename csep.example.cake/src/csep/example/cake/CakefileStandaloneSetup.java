@@ -7,6 +7,11 @@ package csep.example.cake;
  */
 public class CakefileStandaloneSetup extends CakefileStandaloneSetupGenerated{
 
+	public CakefileStandaloneSetup() {
+		super();
+		
+	}
+	
 	public static void doSetup() {
 		new CakefileStandaloneSetup().createInjectorAndDoEMFRegistration();
 	}
