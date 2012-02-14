@@ -2,7 +2,7 @@
 <feature
       id="csep.feature"
       label="Coffeescript Runtime and UI Features"
-      version="0.2.0">
+      version="0.2.1">
 
    <description url="http://www.example.com/description">
       [Enter Feature Description here.]
@@ -20,14 +20,14 @@
          id="csep"
          download-size="0"
          install-size="0"
-         version="0.2.0"
+         version="0.2.1"
          unpack="false"/>
 
    <plugin
          id="csep.ui"
          download-size="0"
          install-size="0"
-         version="0.2.0"
+         version="0.2.1"
          unpack="false"/>
 
 </feature>

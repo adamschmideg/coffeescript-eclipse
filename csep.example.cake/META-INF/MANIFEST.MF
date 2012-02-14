@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: csep.example.cake
 Bundle-Vendor: My Company
-Bundle-Version: 1.0.0
+Bundle-Version: 0.2.1
 Bundle-SymbolicName: csep.example.cake; singleton:=true
 Bundle-ActivationPolicy: lazy
 Require-Bundle: org.eclipse.xtext;bundle-version="2.1.0";visibility:=reexport,
@@ -18,7 +18,7 @@ Require-Bundle: org.eclipse.xtext;bundle-version="2.1.0";visibility:=reexport,
  org.eclipse.emf.common,
  org.antlr.runtime,
  org.eclipse.xtext.common.types,
- csep;bundle-version="0.2.0"
+ csep;bundle-version="0.2.1"
 Import-Package: org.apache.log4j,
  org.apache.commons.logging,
  org.eclipse.xtext.xbase.lib,
