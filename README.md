@@ -3,6 +3,7 @@ This is a project to provide an Eclipse plugin for [CoffeeScript][coffeescript],
 Development uses Xtext 2.1.
 It works as a regular Eclipse plugin (see Installation for details).
 Highlights include
+
  - syntax highlighting
  - variable autocompletion in the current namespace
  - autoindent
