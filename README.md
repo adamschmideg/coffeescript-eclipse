@@ -77,9 +77,8 @@ See [download Xtext 2.1][xtext_download] for details.
 Then perform these steps
 
  1. Download or check out this project to `<someFolder>`.
-   (Note: the most recent version can be found at
-   https://bitbucket.org/adamschmideg/coffeescript-eclipse/downloads
-   The repository gets mirrored at https://github.com/adamschmideg/coffeescript-eclipse with some delay.)
+   (Note: the most recent version can be [downloaded from bitbucket][csep_bitbucket_download].
+   The repository gets mirrored to [github][csep_github] with some delay.)
  1. Import the subprojects into your workspace.
      -  `File -> Import... -> General / Existing Projects into Workspace`
      - `Next`
@@ -106,3 +105,5 @@ Apologies for the inconveniences until then.
   [coffeescript]: http://www.coffeescript.org
   [xtext]: http://www.xtext.org
   [xtext_download]: http://www.eclipse.org/Xtext/download/
+  [csep_bitbucket_download]: https://bitbucket.org/adamschmideg/coffeescript-eclipse/downloads
+  [csep_github]: https://github.com/adamschmideg/coffeescript-eclipse 
