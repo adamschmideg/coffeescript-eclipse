@@ -13,6 +13,8 @@ Workflow {
     bean = StandaloneSetup {
 	    scanClassPath = true
 		platformUri = "${runtimeProject}/.."
+		registerGenModelFile = "platform:/resource/${projectName}/model/CoffeeScript.genmodel"
+		registerGeneratedEPackage = "csep.coffeeScript.CoffeeScriptPackage"
 	}
 
 	component = DirectoryCleaner {
@@ -23,6 +25,16 @@ Workflow {
 		directory = "${runtimeProject}.ui/src-gen"
 	}
 
+    component = org.eclipse.emf.mwe2.ecore.EcoreGenerator {
+    	genModel = "platform:/resource/${projectName}/model/CoffeeScript.genmodel"
+    	srcPath = "platform:/resource/${projectName}/src"
+    }
+	
+	bean = StandaloneSetup {
+		resourceSet = org.eclipse.xtext.resource.XtextResourceSet : xtypeResourceSet {}
+	  	registerEcoreFile = "platform:/resource/${projectName}/model/CoffeeScript.ecore"
+    }
+    
 	component = Generator {
 		pathRtProject = runtimeProject
 		pathUiProject = "${runtimeProject}.ui"
@@ -112,13 +124,7 @@ Workflow {
 			// 		generatorProjectName = "${projectName}"
 			//		modelFileExtension = file.extensions
 			// }
-
-			// provides the necessary bindings for java types integration
-			fragment = types.TypesGeneratorFragment {}
-
-			// generates the required bindings only if the grammar inherits from Xbase
-			fragment = xbase.XbaseGeneratorFragment {}
-			
+		
 			// provides a preference page for template proposals 
 			fragment = templates.CodetemplatesGeneratorFragment {}
 

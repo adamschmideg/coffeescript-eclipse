@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<site>
+   <description name="Coffeescript editor">
+      An editor for Coffeescript, the &quot;unfancy javascript&quot; language.
+   </description>
+   <feature url="features/csep.feature_0.2.1.jar" id="csep.feature" version="0.2.1">
+      <category name="Coffeescript"/>
+   </feature>
+   <category-def name="Coffeescript" label="Coffeescript editor">
+      <description>
+         Coffeescript editor using Xtext
+      </description>
+   </category-def>
+</site>

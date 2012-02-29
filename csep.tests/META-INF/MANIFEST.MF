@@ -1,8 +1,8 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: csep.tests
-Bundle-Vendor: My Company
-Bundle-Version: 1.0.0
+Bundle-Name: %Bundle-Name
+Bundle-Vendor: %Bundle-Vendor
+Bundle-Version: 0.2.1
 Bundle-SymbolicName: csep.tests; singleton:=true
 Bundle-ActivationPolicy: lazy
 Require-Bundle: csep,

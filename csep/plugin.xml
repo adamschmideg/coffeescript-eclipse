@@ -7,7 +7,7 @@
     <package 
        uri = "http://www.coffeescript.org/eclipse" 
        class = "csep.coffeeScript.CoffeeScriptPackage"
-       genModel = "csep/CoffeeScript.genmodel" /> 
+       genModel = "model/CoffeeScript.genmodel" /> 
 	
   </extension>
 

@@ -1,10 +1,9 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: csep
-Bundle-Vendor: My Company
-Bundle-Version: 1.0.0
+Bundle-Name: %Bundle-Name
+Bundle-Vendor: %Bundle-Vendor
+Bundle-Version: 0.2.1
 Bundle-SymbolicName: csep; singleton:=true
-Bundle-ActivationPolicy: lazy
 Require-Bundle: org.apache.log4j;bundle-version="1.2.15";visibility:=reexport,
  org.eclipse.xtext;bundle-version="2.0.0";visibility:=reexport,
  org.eclipse.xtext.generator;bundle-version="2.0.0";resolution:=optional,
@@ -27,16 +26,21 @@ Import-Package: org.apache.log4j,
  org.eclipse.xtext.xbase.lib,
  org.eclipse.xtext.xtend2.lib
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
-Export-Package: csep,
+Export-Package: beaver,
+ com.aptana.editor.coffee.parsing,
+ com.aptana.editor.coffee.parsing.lexer,
+ csep,
  csep.coffeeScript,
  csep.coffeeScript.impl,
  csep.coffeeScript.util,
- csep.parser,
+ csep.formatting,
+ csep.generator,
+ csep.linking,
  csep.parseTreeConstruction,
+ csep.parser,
  csep.parser.antlr,
- csep.parser.antlr.internal,
+ csep.parser.antlr.internal;x-internal:=true,
+ csep.scoping,
  csep.services,
  csep.validation,
- csep.scoping,
- csep.generator,
- csep.formatting
+ xx

@@ -11,7 +11,7 @@
             default="true"
             extensions="coffee"
             id="csep.CoffeeScript"
-            name="CoffeeScript Editor">
+            name="%editor.name">
         </editor>
     </extension>
     <extension
@@ -52,21 +52,21 @@
         <page
             class="csep.ui.CoffeeScriptExecutableExtensionFactory:org.eclipse.xtext.ui.editor.preferences.LanguageRootPreferencePage"
             id="csep.CoffeeScript"
-            name="CoffeeScript">
+            name="%page.name">
             <keywordReference id="csep.ui.keyword_CoffeeScript"/>
         </page>
         <page
             category="csep.CoffeeScript"
             class="csep.ui.CoffeeScriptExecutableExtensionFactory:org.eclipse.xtext.ui.editor.syntaxcoloring.SyntaxColoringPreferencePage"
             id="csep.CoffeeScript.coloring"
-            name="Syntax Coloring">
+            name="%page.name.0">
             <keywordReference id="csep.ui.keyword_CoffeeScript"/>
         </page>
         <page
             category="csep.CoffeeScript"
             class="csep.ui.CoffeeScriptExecutableExtensionFactory:org.eclipse.xtext.ui.editor.templates.XtextTemplatePreferencePage"
             id="csep.CoffeeScript.templates"
-            name="Templates">
+            name="%page.name.1">
             <keywordReference id="csep.ui.keyword_CoffeeScript"/>
         </page>
     </extension>
@@ -75,7 +75,7 @@
         <page
             class="csep.ui.CoffeeScriptExecutableExtensionFactory:org.eclipse.xtext.ui.editor.preferences.LanguageRootPreferencePage"
             id="csep.CoffeeScript"
-            name="CoffeeScript">
+            name="%page.name.2">
             <keywordReference id="csep.ui.keyword_CoffeeScript"/>
             <enabledWhen>
 	            <adapt type="org.eclipse.core.resources.IProject"/>
@@ -87,14 +87,14 @@
         point="org.eclipse.ui.keywords">
         <keyword
             id="csep.ui.keyword_CoffeeScript"
-            label="CoffeeScript"/>
+            label="%keyword.label"/>
     </extension>
     <extension
          point="org.eclipse.ui.commands">
       <command
-            description="Trigger expensive validation"
+            description="%command.description"
             id="csep.CoffeeScript.validate"
-            name="Validate">
+            name="%command.name">
       </command>
     </extension>
     <extension point="org.eclipse.ui.menus">
@@ -103,7 +103,7 @@
              <command
                  commandId="csep.CoffeeScript.validate"
                  style="push"
-                 tooltip="Trigger expensive validation">
+                 tooltip="%command.tooltip">
             <visibleWhen checkEnabled="false">
                 <reference
                     definitionId="csep.CoffeeScript.Editor.opened">
@@ -164,7 +164,7 @@
             category="csep.CoffeeScript"
             class="csep.ui.CoffeeScriptExecutableExtensionFactory:org.eclipse.xtext.builder.preferences.BuilderPreferencePage"
             id="csep.CoffeeScript.compiler.preferencePage"
-            name="Compiler">
+            name="%page.name.3">
             <keywordReference id="csep.ui.keyword_CoffeeScript"/>
         </page>
     </extension>
@@ -174,7 +174,7 @@
             category="csep.CoffeeScript"
             class="csep.ui.CoffeeScriptExecutableExtensionFactory:org.eclipse.xtext.builder.preferences.BuilderPreferencePage"
             id="csep.CoffeeScript.compiler.propertyPage"
-            name="Compiler">
+            name="%page.name.4">
             <keywordReference id="csep.ui.keyword_CoffeeScript"/>
             <enabledWhen>
 	            <adapt type="org.eclipse.core.resources.IProject"/>
@@ -199,9 +199,9 @@
 	<extension
 		point="org.eclipse.ui.commands">
 		<command
-			description="Open the quick outline."
+			description="%command.description.0"
 			id="org.eclipse.xtext.ui.editor.outline.QuickOutline"
-			name="Quick Outline">
+			name="%command.name.0">
 		</command>
 	</extension>
 	<extension point="org.eclipse.ui.menus">
@@ -209,7 +209,7 @@
 			locationURI="popup:#TextEditorContext?after=group.open">
 			<command commandId="org.eclipse.xtext.ui.editor.outline.QuickOutline"
 				style="push"
-				tooltip="Open Quick Outline">
+				tooltip="%command.tooltip.0">
 				<visibleWhen checkEnabled="false">
 					<reference definitionId="csep.CoffeeScript.Editor.opened"/>
 				</visibleWhen>
