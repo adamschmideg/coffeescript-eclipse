@@ -5,8 +5,6 @@ package csep;
 
 import org.eclipse.xtext.linking.ILinkingDiagnosticMessageProvider;
 import org.eclipse.xtext.resource.XtextResource;
-import org.eclipse.xtext.serializer.sequencer.BacktrackingSemanticSequencer;
-import org.eclipse.xtext.serializer.sequencer.ISemanticSequencer;
 
 import csep.scoping.CoffeescriptBuiltins;
 
@@ -47,8 +45,9 @@ public class CoffeeScriptRuntimeModule extends csep.AbstractCoffeeScriptRuntimeM
 								csep.scoping.DefaultGlobalScopeProvider.class);
 	}
 	
+	@SuppressWarnings("restriction")
 	@Override
-	public Class<? extends ISemanticSequencer> bindISemanticSequencer() {
+	public Class<? extends org.eclipse.xtext.serializer.sequencer.ISemanticSequencer> bindISemanticSequencer() {
 		return csep.serializer.CoffeeScriptSemanticSequencer.class;
 	}
 }

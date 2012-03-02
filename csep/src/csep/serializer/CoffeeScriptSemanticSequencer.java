@@ -7,6 +7,7 @@ import org.eclipse.xtext.serializer.sequencer.BacktrackingSemanticSequencer;
  * @author adam
  *
  */
+@SuppressWarnings("restriction")
 public class CoffeeScriptSemanticSequencer extends BacktrackingSemanticSequencer {
 
 }
