@@ -18,15 +18,15 @@
 
    <plugin
          id="csep"
-         download-size="0"
-         install-size="0"
+         download-size="1280"
+         install-size="1280"
          version="0.2.1"
          unpack="false"/>
 
    <plugin
          id="csep.ui"
-         download-size="0"
-         install-size="0"
+         download-size="250"
+         install-size="250"
          version="0.2.1"
          unpack="false"/>
 

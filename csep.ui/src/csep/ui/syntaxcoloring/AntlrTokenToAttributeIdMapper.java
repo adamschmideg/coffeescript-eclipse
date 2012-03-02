@@ -8,6 +8,7 @@ import org.eclipse.xtext.ui.editor.syntaxcoloring.DefaultAntlrTokenToAttributeId
 
 import csep.parser.antlr.internal.InternalCoffeeScriptLexer;
 
+@SuppressWarnings("restriction")
 public class AntlrTokenToAttributeIdMapper extends
 		DefaultAntlrTokenToAttributeIdMapper {
 

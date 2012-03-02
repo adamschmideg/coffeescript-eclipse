@@ -397,6 +397,22 @@
 * This whole plugin development with xtext looks a pile of undocumented, overcomplicated crap.
   My question is http://www.eclipse.org/forums/index.php/m/795597/
 
+* Eclipse plugin versioning.
+ - I want to append date to version number automatically.
+   It would make plugin development easier:
+   no need to remove and reinstall it, just update it.
+ - Mercurial keyword substitution wouldn't solve this.
+   It would need a special marker which would conflict with the syntax of the manifest file.
+   It would be also difficult to put the most recent tag or current date into it.
+ - Asked http://stackoverflow.com/questions/9535064/
+
+* Problem with generated folders again.
+  Eclipse gives a warning "the resource is a duplicate of ..."
+  I added some comment to the `.csvignore` files causing the problem -- no change.
+  I followed the advice of http://www.stevenmarkford.com/solution-to-eclipse-warning-with-svn-the-resource-is-a-duplicate-of-and-was-not-copied-to-the-output-folder/
+   -- no change.
+  Leaving it as is, for now.
+ 
 
   [1]: http://jevopisdeveloperblog.blogspot.com/2011/03/implement-tostring-with-xtexts.html
   [2]: http://www.eclipse.org/Xtext/documentation/2_1_0/100-serialization.php#serializationcontract 

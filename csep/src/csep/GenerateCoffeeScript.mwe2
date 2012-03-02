@@ -31,7 +31,7 @@ Workflow {
     }
 	
 	bean = StandaloneSetup {
-		resourceSet = org.eclipse.xtext.resource.XtextResourceSet : xtypeResourceSet {}
+		//resourceSet = org.eclipse.xtext.resource.XtextResourceSet : xtypeResourceSet {}
 	  	registerEcoreFile = "platform:/resource/${projectName}/model/CoffeeScript.ecore"
     }
     
