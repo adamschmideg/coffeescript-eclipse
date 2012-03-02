@@ -404,6 +404,7 @@
  - Mercurial keyword substitution wouldn't solve this.
    It would need a special marker which would conflict with the syntax of the manifest file.
    It would be also difficult to put the most recent tag or current date into it.
+ - Asked http://stackoverflow.com/questions/9535064/
 
 
   [1]: http://jevopisdeveloperblog.blogspot.com/2011/03/implement-tostring-with-xtexts.html
