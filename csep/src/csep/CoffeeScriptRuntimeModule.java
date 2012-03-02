@@ -50,4 +50,9 @@ public class CoffeeScriptRuntimeModule extends csep.AbstractCoffeeScriptRuntimeM
 	public Class<? extends org.eclipse.xtext.serializer.sequencer.ISemanticSequencer> bindISemanticSequencer() {
 		return csep.serializer.CoffeeScriptSemanticSequencer.class;
 	}
+
+	public ClassLoader bindClassLoaderToInstance() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

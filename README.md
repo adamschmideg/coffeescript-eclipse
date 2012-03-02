@@ -65,6 +65,7 @@ Getting the value of a deeply nested property is OK.
 ## Planned features
 I have a few in my mind, you can add more at issues.
 Current plans include
+
  - integrated build: conversion to javascript
  - extensible plugin: use CoffeeScript as a core language for your DSL
 
@@ -74,33 +75,17 @@ You can either install a complete Indigo distribution with Xtext,
  or install the required plugins into your existing workspace.
 See [download Xtext 2.1][xtext_download] for details.
 
-Then perform these steps
+The update site is: **`http://coffeescript-editor.eclipselabs.org.codespot.com/hg/`**
+So in Eclipse, perform these steps
 
- 1. Download or check out this project to `<someFolder>`.
-   (Note: the most recent version can be [downloaded from bitbucket][csep_bitbucket_download].
-   The repository gets mirrored to [github][csep_github] with some delay.)
- 1. Import the subprojects into your workspace.
-     -  `File -> Import... -> General / Existing Projects into Workspace`
-     - `Next`
-     - `Select root directory`: select the folder where you downloaded the whole stuff
-     - Select all projects starting with `csep.` under `Projects:` 
-     - `Finish`
- 1. Create plugin locally
-     - Open the `csep.update` project in the package explorer
-     - Open `site.xml` in it (it will open a custom editor)
-     - Click `Synchronize...` (all features)
-     - Click `Build all`.
-   This will populate the `csep.update` directory with all the artifacts.
- 1. Install plugin
-     - `Help -> Install New Software...`
-     - `Add...` location: select the `csep.update` directory
-     - Select `Coffeescript editor`
-     - `Next` and `Finish`
+ - `Help -> Install New Software...` 
+ - `Add...`, then use this url as Location
+ - `Work with...`, and choose the location you just added
+ - Select `Coffeescript editor`
+ - `Next` and `Finish`
 
-
-I'm going to set up a proper update site to make installation easier.
-Apologies for the inconveniences until then.
-
+You may be [given a warning](https://bitbucket.org/adamschmideg/coffeescript-eclipse/issue/6/),
+ but that won't affect the plugin.
 
   [coffeescript]: http://www.coffeescript.org
   [xtext]: http://www.xtext.org

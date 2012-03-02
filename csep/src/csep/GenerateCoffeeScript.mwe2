@@ -13,7 +13,7 @@ Workflow {
     bean = StandaloneSetup {
 	    scanClassPath = true
 		platformUri = "${runtimeProject}/.."
-		registerGenModelFile = "platform:/resource/${projectName}/model/CoffeeScript.genmodel"
+		//registerGenModelFile = "platform:/resource/${projectName}/model/CoffeeScript.genmodel"
 		registerGeneratedEPackage = "csep.coffeeScript.CoffeeScriptPackage"
 	}
 
@@ -25,15 +25,17 @@ Workflow {
 		directory = "${runtimeProject}.ui/src-gen"
 	}
 
+    /*
     component = org.eclipse.emf.mwe2.ecore.EcoreGenerator {
     	genModel = "platform:/resource/${projectName}/model/CoffeeScript.genmodel"
     	srcPath = "platform:/resource/${projectName}/src"
     }
 	
 	bean = StandaloneSetup {
-		//resourceSet = org.eclipse.xtext.resource.XtextResourceSet : xtypeResourceSet {}
+		resourceSet = org.eclipse.xtext.resource.XtextResourceSet : xtypeResourceSet {}
 	  	registerEcoreFile = "platform:/resource/${projectName}/model/CoffeeScript.ecore"
     }
+    */
     
 	component = Generator {
 		pathRtProject = runtimeProject
