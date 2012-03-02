@@ -412,6 +412,16 @@
   I followed the advice of http://www.stevenmarkford.com/solution-to-eclipse-warning-with-svn-the-resource-is-a-duplicate-of-and-was-not-copied-to-the-output-folder/
    -- no change.
   Leaving it as is, for now.
+
+* Update site.
+  It's difficult to find a hosting site, because download folders are required.
+  Most open source hosting sites don't provide this.
+  The only exception may be Sourceforge, but I haven't checked it, I don't want to register.
+  I tried to have an update site with a flat file structure, but I couldn't make it work.
+
+  I'm going to host it at eclipselabs at googlecode, it seems an appropriate place.
+  It has no ability to create download directories, either, so I'll have to put it into a mercurial repository,
+   but 2GB should be enough -- well, it still feels a bit awkward to use a repository to store a few binary files.
  
 
   [1]: http://jevopisdeveloperblog.blogspot.com/2011/03/implement-tostring-with-xtexts.html
