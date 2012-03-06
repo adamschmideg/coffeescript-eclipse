@@ -481,6 +481,12 @@ Checking the xbase jar, I found that the genmodel file is actually in the `model
  but I don't know how it got there.
 Browsing the [xbase source][xbase] sheds no light on it.
 
+I debugged how registered genmodel files are resolved:
+ `org.eclipse.emf.ecore.plugin.EcorePlugin.resolvePlatformResourcePath` thinks
+ its root location is the `csep` project directory in the file system.
+The reason may be that the `csep` project is in the same workspace as the `cakefile` project.
+Moving the latter into its own workspace may solve the problem.
+
   [mwe2]: http://www.eclipse.org/Xtext/documentation/2_0_0/118-mwe-in-depth.php
   [emf]: http://www.vogella.de/articles/EclipseEMF/article.html
   [xbase]: http://dev.eclipse.org/viewcvs/viewvc.cgi/org.eclipse.tmf/org.eclipse.xtext/plugins/org.eclipse.xtext.xbase/?root=Modeling_Project

@@ -13,6 +13,8 @@ Workflow {
     bean = StandaloneSetup {
         scanClassPath = true
         platformUri = "${runtimeProject}/.."    
+        registerGenModelFile = "platform:/resource/org.eclipse.xtext.xbase/model/Xbase.genmodel"
+        registerGenModelFile = "platform:/resource/csep/csep/CoffeeScript.genmodel"
     }
 
     component = DirectoryCleaner {
