@@ -487,7 +487,14 @@ I debugged how registered genmodel files are resolved:
 The reason may be that the `csep` project is in the same workspace as the `cakefile` project.
 Moving the latter into its own workspace may solve the problem.
 
+Moving to a separate workspace doesn't solve the problem.
+`EcorePlugin.platformResourceMap` gets populated with an entry pointing to the `csep` directory,
+ and this happens in a strange way before reaching any debugger break point.
+
+I also bumped into a related question in the [Xtext FAQ][xtext_faq].
+
   [mwe2]: http://www.eclipse.org/Xtext/documentation/2_0_0/118-mwe-in-depth.php
   [emf]: http://www.vogella.de/articles/EclipseEMF/article.html
   [xbase]: http://dev.eclipse.org/viewcvs/viewvc.cgi/org.eclipse.tmf/org.eclipse.xtext/plugins/org.eclipse.xtext.xbase/?root=Modeling_Project
+  [xtext_faq]: http://wiki.eclipse.org/Xtext/FAQ#How_do_I_load_my_model_in_a_standalone_Java_application.C2.A0.3F
 
