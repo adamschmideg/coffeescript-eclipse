@@ -490,6 +490,8 @@ Moving the latter into its own workspace may solve the problem.
 Moving to a separate workspace doesn't solve the problem.
 `EcorePlugin.platformResourceMap` gets populated with an entry pointing to the `csep` directory,
  and this happens in a strange way before reaching any debugger break point.
+The `platformResourceMap` seems to get populated while executing
+ `org.eclipse.emf.mwe2.language.factory.SettingProviderImpl.getSettings`.
 
 I also bumped into a related question in the [Xtext FAQ][xtext_faq].
 
