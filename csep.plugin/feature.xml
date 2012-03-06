@@ -2,7 +2,7 @@
 <feature
       id="csep.feature"
       label="Coffeescript Runtime and UI Features"
-      version="0.2.1">
+      version="0.2.1.qualifier">
 
    <description url="https://bitbucket.org/adamschmideg/coffeescript-eclipse">
       Editor for Coffeescript code.
@@ -106,14 +106,14 @@ This Agreement is governed by the laws of the State of New York and the intellec
          id="csep"
          download-size="1280"
          install-size="1280"
-         version="0.2.1"
+         version="0.2.1.qualifier"
          unpack="false"/>
 
    <plugin
          id="csep.ui"
          download-size="250"
          install-size="250"
-         version="0.2.1"
+         version="0.2.1.qualifier"
          unpack="false"/>
 
 </feature>
