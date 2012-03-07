@@ -37,4 +37,5 @@ Export-Package: csep.example.cake,
  csep.example.cake.validation,
  csep.example.cake.scoping,
  csep.example.cake.generator,
- csep.example.cake.formatting
+ csep.example.cake.formatting,
+ csep.example.cake.parseTreeConstruction
