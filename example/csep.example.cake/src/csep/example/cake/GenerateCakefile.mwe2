@@ -39,12 +39,7 @@ Workflow {
             fragment = grammarAccess.GrammarAccessFragment {}
 
             // generates Java API for the generated EPackages
-            fragment = ecore.EcoreGeneratorFragment {           	
-            referencedGenModels = "platform:/resource/csep/src-gen/csep/CoffeeScript.genmodel"
-            //  platform:/resource/org.eclipse.xtext.xbase/model/Xbase.genmodel,
-            //  platform:/resource/org.eclipse.xtext.common.types/model/JavaVMTypes.genmodel
-            // "
-            }
+            fragment = ecore.EcoreGeneratorFragment {}
 
             // Serializer 2.0
             fragment = serializer.SerializerFragment {

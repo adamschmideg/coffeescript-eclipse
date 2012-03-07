@@ -507,6 +507,8 @@ Then it calls `StandaloneSetup.setPlatformUri` which scans the folders for `.pro
 It works based on the location of the project files, not on the workspace.
 Moving the whole example source tree to a separate directory may help.
 
+It seems to fix the problem, the coffeescript genmodel is now registered correctly.
+
   [mwe2]: http://www.eclipse.org/Xtext/documentation/2_0_0/118-mwe-in-depth.php
   [emf]: http://www.vogella.de/articles/EclipseEMF/article.html
   [xbase]: http://dev.eclipse.org/viewcvs/viewvc.cgi/org.eclipse.tmf/org.eclipse.xtext/plugins/org.eclipse.xtext.xbase/?root=Modeling_Project
