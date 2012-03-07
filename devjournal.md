@@ -425,6 +425,12 @@ It would be also difficult to put the most recent tag or current date into it.
 Note: `site.xml` gets rewritten when building if the version number ends with "qualifier".
 It's a bit awkward, but never mind, the generated timestamp will be appended, and commited to the repo.
 
+A better (but only local) solution is to have this in your `.hgrc` file.
+It will keep the commited site.xml file intact from timestamps.
+
+    [encode]
+    csep.update/site.xml = sed -e '/feature url/ s/[0-9]\{12\}/qualifier/g'
+
 Asked http://stackoverflow.com/questions/9535064/
 
 # Problem with generated folders again
