@@ -45,9 +45,8 @@ public class CoffeeScriptRuntimeModule extends csep.AbstractCoffeeScriptRuntimeM
 								csep.scoping.DefaultGlobalScopeProvider.class);
 	}
 	
-	@SuppressWarnings("restriction")
-	@Override
-	public Class<? extends org.eclipse.xtext.serializer.sequencer.ISemanticSequencer> bindISemanticSequencer() {
-		return csep.serializer.CoffeeScriptSemanticSequencer.class;
+	public ClassLoader bindClassLoaderToInstance() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

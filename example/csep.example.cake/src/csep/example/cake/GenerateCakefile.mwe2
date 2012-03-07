@@ -13,6 +13,8 @@ Workflow {
     bean = StandaloneSetup {
         scanClassPath = true
         platformUri = "${runtimeProject}/.."    
+        //registerGenModelFile = "platform:/resource/org.eclipse.xtext.xbase/model/Xbase.genmodel"
+        registerGenModelFile = "platform:/resource/csep/csep/CoffeeScript.genmodel"
     }
 
     component = DirectoryCleaner {
@@ -37,17 +39,12 @@ Workflow {
             fragment = grammarAccess.GrammarAccessFragment {}
 
             // generates Java API for the generated EPackages
-            fragment = ecore.EcoreGeneratorFragment {           	
-            referencedGenModels = "platform:/resource/csep/src-gen/csep/CoffeeScript.genmodel"
-            //  platform:/resource/org.eclipse.xtext.xbase/model/Xbase.genmodel,
-            //  platform:/resource/org.eclipse.xtext.common.types/model/JavaVMTypes.genmodel
-            // "
-            }
+            fragment = ecore.EcoreGeneratorFragment {}
 
-            // Serializer 2.0
-            fragment = serializer.SerializerFragment {
-            	generateStub = false
-            }
+            // Serializer 2.0            
+            // fragment = serializer.SerializerFragment {
+            //	generateStub = false
+            //}
             
             // the serialization component (1.0)
             // fragment = parseTreeConstructor.ParseTreeConstructorFragment {}
