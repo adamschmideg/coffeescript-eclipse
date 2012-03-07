@@ -500,6 +500,13 @@ Reexporting the required `csep` and `csep.ui` bundles in the manifest fixes the 
  so `StandaloneSetup.setScanClassPath` registers the correct jar file.
 But the final exception thrown remains the same.
 
+`SettingProviderImpl.getSettings` calls `StandaloneSetup.setScanClassPath`
+ which registers the package correctly.
+Then it calls `StandaloneSetup.setPlatformUri` which scans the folders for `.project` file,
+ so re-registers the `csep` package incorrectly.
+It works based on the location of the project files, not on the workspace.
+Moving the whole example source tree to a separate directory may help.
+
   [mwe2]: http://www.eclipse.org/Xtext/documentation/2_0_0/118-mwe-in-depth.php
   [emf]: http://www.vogella.de/articles/EclipseEMF/article.html
   [xbase]: http://dev.eclipse.org/viewcvs/viewvc.cgi/org.eclipse.tmf/org.eclipse.xtext/plugins/org.eclipse.xtext.xbase/?root=Modeling_Project
