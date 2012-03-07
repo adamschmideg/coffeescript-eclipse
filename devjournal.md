@@ -422,6 +422,9 @@ Mercurial keyword substitution wouldn't solve this.
 It would need a special marker which would conflict with the syntax of the manifest file.
 It would be also difficult to put the most recent tag or current date into it.
 
+Note: `site.xml` gets rewritten when building if the version number ends with "qualifier".
+It's a bit awkward, but never mind, the generated timestamp will be appended, and commited to the repo.
+
 Asked http://stackoverflow.com/questions/9535064/
 
 # Problem with generated folders again
