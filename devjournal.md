@@ -492,8 +492,13 @@ Moving to a separate workspace doesn't solve the problem.
  and this happens in a strange way before reaching any debugger break point.
 The `platformResourceMap` seems to get populated while executing
  `org.eclipse.emf.mwe2.language.factory.SettingProviderImpl.getSettings`.
+More precisely, while executing `org.eclipse.emf.mwe.utils.StandaloneSetup.setScanClassPath`.
 
 I also bumped into a related question in the [Xtext FAQ][xtext_faq].
+
+Reexporting the required `csep` and `csep.ui` bundles in the manifest fixes the classpath,
+ so `StandaloneSetup.setScanClassPath` registers the correct jar file.
+But the final exception thrown remains the same.
 
   [mwe2]: http://www.eclipse.org/Xtext/documentation/2_0_0/118-mwe-in-depth.php
   [emf]: http://www.vogella.de/articles/EclipseEMF/article.html
