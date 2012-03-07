@@ -41,10 +41,10 @@ Workflow {
             // generates Java API for the generated EPackages
             fragment = ecore.EcoreGeneratorFragment {}
 
-            // Serializer 2.0
-            fragment = serializer.SerializerFragment {
-            	generateStub = false
-            }
+            // Serializer 2.0            
+            // fragment = serializer.SerializerFragment {
+            //	generateStub = false
+            //}
             
             // the serialization component (1.0)
             // fragment = parseTreeConstructor.ParseTreeConstructorFragment {}

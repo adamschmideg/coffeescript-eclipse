@@ -3,7 +3,7 @@
    <description name="Coffeescript editor">
       An editor for Coffeescript, the &quot;unfancy javascript&quot; language.
    </description>
-   <feature url="features/csep.feature_0.2.1.201203061520.jar" id="csep.feature" version="0.2.1.201203061520">
+   <feature url="features/csep.feature_0.2.1.qualifier.jar" id="csep.feature" version="0.2.1.qualifier">
       <category name="Coffeescript"/>
    </feature>
    <category-def name="Coffeescript" label="Coffeescript editor">

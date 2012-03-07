@@ -41,7 +41,6 @@ Export-Package: beaver,
  csep.parser.antlr,
  csep.parser.antlr.internal;x-internal:=true,
  csep.scoping,
- csep.serializer,
  csep.services,
  csep.validation,
  xx
