@@ -422,6 +422,9 @@ Mercurial keyword substitution wouldn't solve this.
 It would need a special marker which would conflict with the syntax of the manifest file.
 It would be also difficult to put the most recent tag or current date into it.
 
+Note: `site.xml` gets rewritten when building if the version number ends with "qualifier".
+It's a bit awkward, but never mind, the generated timestamp will be appended, and commited to the repo.
+
 Asked http://stackoverflow.com/questions/9535064/
 
 # Problem with generated folders again
@@ -454,3 +457,63 @@ It has no ability to create download directories, either, so I'll have to put it
   [10]: http://stackoverflow.com/questions/8387818/handle-dynamic-variable-with-xtext-grammar
   [11]: http://stackoverflow.com/questions/8438755/stripping-actions-from-antlr-grammar-changes-its-parsing-algorithm
   [12]: http://antlrv3ide.sourceforge.net/
+
+# Create a coffee plugin so the language can be extended
+Cakefile language is almost the same as coffee with a single addition: it has `task` as a predefined function.
+It requires two steps to make it work
+
+  1. Do magic in coffeescript plugin so its extensions will know about the language
+  2. Do magic in cakefile application to know about coffeescript
+
+How other projects make use of the Xbase language?
+I created a new example project `Xtext -> Domainmodel`.
+Its `mwe2` file contains this
+
+    bean = StandaloneSetup {
+      // ...
+      registerGeneratedEPackage = "org.eclipse.xtext.xbase.XbasePackage"
+      registerGenModelFile = "platform:/resource/org.eclipse.xtext.xbase/model/Xbase.genmodel"
+    }
+
+I had to understand how the [mwe2 workflow][mwe2] works.
+After that I realized that magic 1 puts a genmodel file to a strange URL,
+ then magic 2 can find it there.
+The concepts of genmodel and ecore which are part of the magic are part of the [EMF infrastructure][emf].
+
+Checking the xbase jar, I found that the genmodel file is actually in the `model` directory,
+ but I don't know how it got there.
+Browsing the [xbase source][xbase] sheds no light on it.
+
+I debugged how registered genmodel files are resolved:
+ `org.eclipse.emf.ecore.plugin.EcorePlugin.resolvePlatformResourcePath` thinks
+ its root location is the `csep` project directory in the file system.
+The reason may be that the `csep` project is in the same workspace as the `cakefile` project.
+Moving the latter into its own workspace may solve the problem.
+
+Moving to a separate workspace doesn't solve the problem.
+`EcorePlugin.platformResourceMap` gets populated with an entry pointing to the `csep` directory,
+ and this happens in a strange way before reaching any debugger break point.
+The `platformResourceMap` seems to get populated while executing
+ `org.eclipse.emf.mwe2.language.factory.SettingProviderImpl.getSettings`.
+More precisely, while executing `org.eclipse.emf.mwe.utils.StandaloneSetup.setScanClassPath`.
+
+I also bumped into a related question in the [Xtext FAQ][xtext_faq].
+
+Reexporting the required `csep` and `csep.ui` bundles in the manifest fixes the classpath,
+ so `StandaloneSetup.setScanClassPath` registers the correct jar file.
+But the final exception thrown remains the same.
+
+`SettingProviderImpl.getSettings` calls `StandaloneSetup.setScanClassPath`
+ which registers the package correctly.
+Then it calls `StandaloneSetup.setPlatformUri` which scans the folders for `.project` file,
+ so re-registers the `csep` package incorrectly.
+It works based on the location of the project files, not on the workspace.
+Moving the whole example source tree to a separate directory may help.
+
+It seems to fix the problem, the coffeescript genmodel is now registered correctly.
+
+  [mwe2]: http://www.eclipse.org/Xtext/documentation/2_0_0/118-mwe-in-depth.php
+  [emf]: http://www.vogella.de/articles/EclipseEMF/article.html
+  [xbase]: http://dev.eclipse.org/viewcvs/viewvc.cgi/org.eclipse.tmf/org.eclipse.xtext/plugins/org.eclipse.xtext.xbase/?root=Modeling_Project
+  [xtext_faq]: http://wiki.eclipse.org/Xtext/FAQ#How_do_I_load_my_model_in_a_standalone_Java_application.C2.A0.3F
+
