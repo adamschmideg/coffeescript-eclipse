@@ -523,3 +523,26 @@ It seems to fix the problem, the coffeescript genmodel is now registered correct
   [xbase]: http://dev.eclipse.org/viewcvs/viewvc.cgi/org.eclipse.tmf/org.eclipse.xtext/plugins/org.eclipse.xtext.xbase/?root=Modeling_Project
   [xtext_faq]: http://wiki.eclipse.org/Xtext/FAQ#How_do_I_load_my_model_in_a_standalone_Java_application.C2.A0.3F
 
+# Some warnings probably not to be fixed
+"Discouraged access: The type CoffeeScriptActivator is not accessible due to restriction on required project csep.ui" in
+in `csep.tests/src-gen/csep/CoffeeScriptUiInjectorProvider.java`
+It's generated code, I don't know how to fix it.
+
+"The resource is a duplicate of src-gen/.cvsignore and was not copied to the output folder".
+A possible solution would be to remove all `.cvsignore` files, create a `DirectoryCreator` component,
+ and add it to the mwe2 workflow:
+
+    component = DirectoryCreator {
+      directory = "${runtimeProject}/src-gen"
+    }
+    // do the same for xtend-gen for ui and tests directories
+
+"Version '0.2.1.qualifier' of plug-in 'csep.ui' is not available".
+It seems to work exactly this way.
+I may come back to it later when fine-tuning the update site.
+
+One warning I fixed: Java execution environment warning.
+
+  - Right click on `JRE System Library` in the package explorer
+  - Select `JavaSE-1.6` from the options
+

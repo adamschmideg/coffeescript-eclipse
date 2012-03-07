@@ -18,7 +18,7 @@ Require-Bundle: csep.example.cake;visibility:=reexport,
  org.eclipse.compare
 Import-Package: org.apache.log4j,
  org.apache.commons.logging
-Bundle-RequiredExecutionEnvironment: J2SE-1.5
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Export-Package: csep.example.cake.ui.contentassist.antlr,
  csep.example.cake.ui.internal
 Bundle-Activator: csep.example.cake.ui.internal.CakefileActivator
