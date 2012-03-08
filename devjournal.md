@@ -546,3 +546,10 @@ One warning I fixed: Java execution environment warning.
   - Right click on `JRE System Library` in the package explorer
   - Select `JavaSE-1.6` from the options
 
+# Serialization
+My hunch is that the issue https://bitbucket.org/adamschmideg/coffeescript-eclipse/issue/7 is related to serialization.
+Partly, because a NPE is involved.
+If I omit serialization from the mwe2 workflow, the generation works fine, but the above issue is present.
+If I I have serialization in the workflow, it writes an error: "constraint is INVALID for context Block and type Body"
+ (it's written by `org.eclipse.xtext.serializer.analysis.GrammarConstraintProvider.getConstraints`).
+If I even set `generateDebugData` in it, a NPE is thrown.
