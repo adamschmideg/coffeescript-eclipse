@@ -7,6 +7,6 @@ Cakefile:
 	
 TaskDeclaration:
 	TASK CALL_START name=StringLiteral COMMA description=StringLiteral COMMA (options=Id)? FUNC_ARROW
-		body=Body CALL_END;
+		body=Block CALL_END TERMINATOR;
 
 terminal TASK: 'task';

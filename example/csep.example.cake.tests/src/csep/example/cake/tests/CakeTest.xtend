@@ -23,9 +23,18 @@ public class CakeTest extends AbstractXtextTests {
 			throw new AssertionError("Errors: " + errors)
 	}
 	  
-	@Test
-	def void testValidate() {
+	@Test def testSingle() {
 		check('''task 'name', 'desc', ->
 				   answer = 42''')			
+	}
+	
+	@Test def testMultiple() {
+		check('''
+		  task "first", "Do this first", ->
+		    count = 1
+		    
+		  task "second", "Do it next", ->
+		    count = 2
+		''')
 	}
 }
