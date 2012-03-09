@@ -38,4 +38,5 @@ Export-Package: csep.example.cake,
  csep.example.cake.scoping,
  csep.example.cake.generator,
  csep.example.cake.formatting,
+ csep.example.cake.parser,
  csep.example.cake.parseTreeConstruction

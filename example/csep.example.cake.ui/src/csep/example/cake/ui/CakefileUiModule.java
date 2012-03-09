@@ -4,6 +4,11 @@
 package csep.example.cake.ui;
 
 import org.eclipse.ui.plugin.AbstractUIPlugin;
+import org.eclipse.xtext.ui.editor.autoedit.AbstractEditStrategyProvider;
+import org.eclipse.xtext.ui.editor.syntaxcoloring.AbstractAntlrTokenToAttributeIdMapper;
+
+import csep.example.cake.ui.syntaxcoloring.CustomAntlrTokenToAttributeIdMapper;
+import csep.ui.autoedit.AutoEditStrategyProvider;
 
 /**
  * Use this class to register components to be used within the IDE.
@@ -12,4 +17,20 @@ public class CakefileUiModule extends csep.example.cake.ui.AbstractCakefileUiMod
 	public CakefileUiModule(AbstractUIPlugin plugin) {
 		super(plugin);
 	}
+	
+	/**
+	 * Highlight syntax elements already known to eclipse.
+	 */
+	public Class<? extends AbstractAntlrTokenToAttributeIdMapper> bindAbstractAntlrTokenToAttributeIdMapper() {
+		return CustomAntlrTokenToAttributeIdMapper.class;
+	}
+
+	/**
+	 * Takes care of auto-indent
+	 */
+	@Override
+	public Class<? extends AbstractEditStrategyProvider> bindAbstractEditStrategyProvider() {
+		return AutoEditStrategyProvider.class;
+	}
+	
 }

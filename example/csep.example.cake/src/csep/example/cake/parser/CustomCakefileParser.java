@@ -6,7 +6,6 @@ import org.eclipse.xtext.parser.antlr.XtextTokenStream;
 
 import csep.example.cake.parser.antlr.CakefileParser;
 import csep.parser.FirstCommentIncludingXtextTokenStream;
-import csep.parser.Lexer;
 
 public class CustomCakefileParser extends CakefileParser {
 	  @Override
