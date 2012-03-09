@@ -7,5 +7,8 @@ package csep.example.cake;
  * Use this class to register components to be used at runtime / without the Equinox extension registry.
  */
 public class CakefileRuntimeModule extends csep.example.cake.AbstractCakefileRuntimeModule {
-
+    @Override
+    public Class<? extends org.eclipse.xtext.parser.IParser> bindIParser() {
+         return csep.example.cake.parser.CustomCakefileParser.class ;
+    }
 }

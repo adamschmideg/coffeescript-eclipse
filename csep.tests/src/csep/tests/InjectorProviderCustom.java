@@ -13,10 +13,6 @@ public class InjectorProviderCustom extends CoffeeScriptInjectorProvider {
 			@Override
 			public Injector createInjector() {
 				return Guice.createInjector(new CoffeeScriptRuntimeModule() {
-					@Override
-					public ClassLoader bindClassLoaderToInstance() {
-						return InjectorProviderCustom.class.getClassLoader();
-					}
 				});
 			}
 		}.createInjectorAndDoEMFRegistration();;
