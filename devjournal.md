@@ -556,3 +556,10 @@ If I even set `generateDebugData` in it, a NPE is thrown.
 
 # Use coffee lexer for cakefile
 The generated tokens seem to have a different integer value for coffee and cakefile.
+I implemented a mindless mapping, see `csep.example.cake.parser.CustomLexer.mapTokenType`.
+It does two things
+
+  - Map InternalCoffeeScriptLexer.RULE\_FOO to InternalCakefileLexer.RULE\_FOO for all rules
+  - Map grammar-specific identifiers ('task' in this case) to an appropriate terminal rule.
+    It's needed, because the underlying lexer emits an IDENTIFIER token for them,
+     no matter what terminals you have in your grammar.
