@@ -44,9 +44,5 @@ public class CoffeeScriptRuntimeModule extends csep.AbstractCoffeeScriptRuntimeM
 						org.eclipse.xtext.scoping.impl.AbstractDeclarativeScopeProvider.NAMED_DELEGATE)).to(
 								csep.scoping.DefaultGlobalScopeProvider.class);
 	}
-	
-	public ClassLoader bindClassLoaderToInstance() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+
 }
