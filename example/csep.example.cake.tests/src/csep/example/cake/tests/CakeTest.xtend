@@ -26,6 +26,6 @@ public class CakeTest extends AbstractXtextTests {
 	@Test
 	def void testValidate() {
 		check('''task 'name', 'desc', ->
-				   42''')			
+				   answer = 42''')			
 	}
 }

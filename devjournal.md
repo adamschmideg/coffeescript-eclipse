@@ -553,3 +553,6 @@ If I omit serialization from the mwe2 workflow, the generation works fine, but t
 If I I have serialization in the workflow, it writes an error: "constraint is INVALID for context Block and type Body"
  (it's written by `org.eclipse.xtext.serializer.analysis.GrammarConstraintProvider.getConstraints`).
 If I even set `generateDebugData` in it, a NPE is thrown.
+
+# Use coffee lexer for cakefile
+The generated tokens seem to have a different integer value for coffee and cakefile.

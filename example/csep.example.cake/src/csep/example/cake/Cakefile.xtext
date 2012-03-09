@@ -3,8 +3,10 @@ grammar csep.example.cake.Cakefile with csep.CoffeeScript
 generate cakefile "http://www.example.csep/cake/Cakefile"
 
 Cakefile:
-	tasks+=Task*;
+	tasks+=TaskDeclaration*;
 	
-Task:
-	'task' name=StringLiteral COMMA description=StringLiteral COMMA (options=Id)? FUNC_ARROW
-		body=Body;
+TaskDeclaration:
+	TASK CALL_START name=StringLiteral COMMA description=StringLiteral COMMA (options=Id)? FUNC_ARROW
+		body=Body CALL_END;
+
+terminal TASK: 'task';
