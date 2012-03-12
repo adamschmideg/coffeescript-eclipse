@@ -562,3 +562,24 @@ It maps between coffee and cakefile tokens (both used in different cases).
 Map grammar-specific identifiers ('task' in this case) are mapped to an appropriate terminal rule by
  `csep.example.cake.parser.CustomLexer.nextToken`
 
+# Implicit parameter
+I want to use options either explicitly, or implicitly:
+
+    # Implicit
+    task "foo", "desc", ->
+      # OK, implicit variable
+      options.foo
+      # Invalid, reference to unknown variable
+      opts.foo
+
+    # Explicit
+    task "foo", "desc", (opts) ->
+      # OK
+      opts.foo
+      # Invalid when options provided explicitly
+      options.foo
+
+I'm not even sure if these links are relevant
+
+  - https://bugs.eclipse.org/bugs/show\_bug.cgi?id=326298
+  - http://www.eclipse.org/Xtext/documentation/2\_0\_0/020-grammar-language.php#customPostProcessing

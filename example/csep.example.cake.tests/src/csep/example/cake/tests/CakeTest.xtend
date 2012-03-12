@@ -44,4 +44,15 @@ public class CakeTest extends AbstractXtextTests {
 				count = opts.count
 		''')
 	}
+	
+	/**
+	 * This is not valid in the original cakefiles,
+	 * but we want to be able to use the variable "options" implicitly
+	 */
+	@Test def testImplicitOptions() {
+		check('''
+			task "doit", "Do it", ->
+				count = options.count
+		''')
+	}
 }
