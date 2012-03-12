@@ -5,8 +5,20 @@ generate cakefile "http://www.example.csep/cake/Cakefile"
 Cakefile:
 	tasks+=TaskDeclaration*;
 	
+/**
+ * This grammar may look a bit weird.  It accepts two kinds of task declaration:
+ *  - task "foo", "Just foo", -> ...
+ *  - task "foo", "Just foo", (opts) -> ...
+ * 
+ * They are actually calls of the "task" function with a lambda as its last argument.
+ * The lambda has no parameter in the first case, and a single parameter ("opts") in the second case.
+ * So the lexer inserts extra parens
+ * (CALL_START and CALL_END tokens) to make it a function call.
+ */
 TaskDeclaration:
-	TASK CALL_START name=StringLiteral COMMA description=StringLiteral COMMA (options=Id)? FUNC_ARROW
-		body=Block CALL_END TERMINATOR;
+	TASK CALL_START name=StringLiteral COMMA description=StringLiteral COMMA 
+		(PARAM_START options=Id PARAM_END)?
+		FUNC_ARROW body=Block
+		CALL_END TERMINATOR;
 
 terminal TASK: 'task';

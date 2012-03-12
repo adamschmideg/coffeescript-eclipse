@@ -37,4 +37,11 @@ public class CakeTest extends AbstractXtextTests {
 		    count = 2
 		''')
 	}
+	
+	@Test def testExplicitOptions() {
+		check('''
+			task "doit", "Do it", (opts) ->
+				count = opts.count
+		''')
+	}
 }
