@@ -583,3 +583,11 @@ I'm not even sure if these links are relevant
 
   - https://bugs.eclipse.org/bugs/show\_bug.cgi?id=326298
   - http://www.eclipse.org/Xtext/documentation/2\_0\_0/020-grammar-language.php#customPostProcessing
+
+## Change generated constructor in postprocessing
+Not sure if it works, this phase may come later than scoping/linking.
+Anyway, I'm trying to change the constructor of `TaskDeclaration` to give a default value to `options`.
+Some examples
+
+  - http://jevopisdeveloperblog.blogspot.com/2011/03/implement-tostring-with-xtexts.html
+  - http://christiandietrich.wordpress.com/tag/postprocessor/

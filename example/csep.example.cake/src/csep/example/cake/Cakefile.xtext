@@ -17,11 +17,8 @@ Cakefile:
  */
 TaskDeclaration:
 	TASK CALL_START name=StringLiteral COMMA description=StringLiteral COMMA 
-		Options?
+		(PARAM_START options=Id PARAM_END)?
 		FUNC_ARROW body=Block
 		CALL_END TERMINATOR;
 
-Options:
-	(PARAM_START name=Id PARAM_END);
-	
 terminal TASK: 'task';
