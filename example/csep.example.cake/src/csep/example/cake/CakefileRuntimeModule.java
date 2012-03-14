@@ -3,12 +3,41 @@
  */
 package csep.example.cake;
 
+import org.eclipse.xtext.linking.ILinkingDiagnosticMessageProvider;
+import org.eclipse.xtext.resource.XtextResource;
+
+import csep.scoping.CoffeescriptBuiltins;
+
 /**
- * Use this class to register components to be used at runtime / without the Equinox extension registry.
+ * Use this class to register components to be used at runtime / without the
+ * Equinox extension registry.
  */
-public class CakefileRuntimeModule extends csep.example.cake.AbstractCakefileRuntimeModule {
-    @Override
-    public Class<? extends org.eclipse.xtext.parser.IParser> bindIParser() {
-         return csep.example.cake.parser.CustomCakefileParser.class ;
-    }
+public class CakefileRuntimeModule extends
+		csep.example.cake.AbstractCakefileRuntimeModule {
+	@Override
+	public Class<? extends org.eclipse.xtext.parser.IParser> bindIParser() {
+		return csep.example.cake.parser.CustomCakefileParser.class;
+	}
+
+	@Override
+	public Class<? extends XtextResource> bindXtextResource() {
+		return csep.scoping.SuppressingLinkingResource.class;
+	}
+
+	public Class<? extends ILinkingDiagnosticMessageProvider> bindILinkingDiagnosticMessageProvider() {
+		return csep.linking.SuppressingLinkingDiagnosticMessageProvider.class;
+	}
+
+	public Class<? extends CoffeescriptBuiltins> bindCoffeescriptBuiltins() {
+		return CoffeescriptBuiltins.class;
+	}
+
+	@Override
+	public void configureIScopeProviderDelegate(com.google.inject.Binder binder) {
+		binder.bind(org.eclipse.xtext.scoping.IScopeProvider.class)
+				.annotatedWith(
+						com.google.inject.name.Names
+								.named(org.eclipse.xtext.scoping.impl.AbstractDeclarativeScopeProvider.NAMED_DELEGATE))
+				.to(csep.scoping.DefaultGlobalScopeProvider.class);
+	}
 }

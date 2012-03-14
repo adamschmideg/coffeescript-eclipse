@@ -13,23 +13,32 @@ public class CakeTest extends AbstractXtextTests {
 	    with(new CakefileStandaloneSetup())
 	}
 	
-	def void check(CharSequence input) {
+	def void check(CharSequence input, boolean expectError, boolean expectWarning) {
 	   	val in = getAsStream("" + input)
 	  	val uri = URI::createURI("mytestmodel." + getCurrentFileExtension())
 		val resource = doGetResource(in, uri)
 		val parseResult = getModel(resource)
-		val errors = resource.errors
-		if (errors.size() > 0)
-			throw new AssertionError("Errors: " + errors)
+		if (!expectError && !resource.errors.empty)
+			throw new AssertionError("Errors: " + resource.errors)
+		if (!expectWarning && !resource.warnings.empty)
+			throw new AssertionError("Warnings: " + resource.warnings)
 	}
 	  
+	def void ok(CharSequence input) {
+		check(input, false, false)
+	}
+	
+	def void warning(CharSequence input) {
+		check(input, false, true)
+	}
+	
 	@Test def testSingle() {
-		check('''task 'name', 'desc', ->
+		ok('''task 'name', 'desc', ->
 				   answer = 42''')			
 	}
 	
 	@Test def testMultiple() {
-		check('''
+		ok('''
 		  task "first", "Do this first", ->
 		    count = 1
 		    
@@ -39,9 +48,16 @@ public class CakeTest extends AbstractXtextTests {
 	}
 	
 	@Test def testExplicitOptions() {
-		check('''
+		ok('''
 			task "doit", "Do it", (opts) ->
 				count = opts.count
+		''')
+	}
+	
+	@Test def testResolution() {
+		warning('''
+			task "doit", "Do it", ->
+				count = unresolved
 		''')
 	}
 	
@@ -50,7 +66,7 @@ public class CakeTest extends AbstractXtextTests {
 	 * but we want to be able to use the variable "options" implicitly
 	 */
 	@Test def testImplicitOptions() {
-		check('''
+		ok('''
 			task "doit", "Do it", ->
 				count = options.count
 		''')
