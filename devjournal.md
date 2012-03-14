@@ -602,3 +602,4 @@ I have two problems with it
     But I don't know how to get the variable name from an `EReference`.
     I may need a custom linking service that would pass the `Node` when calling `getScope`
   - What scope should I return for an implicit variable?
+    My question at the Eclipse forum: http://www.eclipse.org/forums/index.php/mv/msg/309869/821018/#msg_821018
