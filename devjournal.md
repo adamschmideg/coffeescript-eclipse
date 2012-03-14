@@ -591,3 +591,14 @@ Some examples
 
   - http://jevopisdeveloperblog.blogspot.com/2011/03/implement-tostring-with-xtexts.html
   - http://christiandietrich.wordpress.com/tag/postprocessor/
+
+Well, the postprocessing approach probably wouldn't work, because it doesn't take care of scoping.
+
+## Custom scoping
+I added custom declarative scoping.
+I have two problems with it
+
+  - If the variable in question is not an implicit one, I just want to fall back on normal scoping.
+    But I don't know how to get the variable name from an `EReference`.
+    I may need a custom linking service that would pass the `Node` when calling `getScope`
+  - What scope should I return for an implicit variable?

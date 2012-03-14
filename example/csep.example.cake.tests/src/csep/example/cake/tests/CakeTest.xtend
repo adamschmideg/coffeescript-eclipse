@@ -68,7 +68,8 @@ public class CakeTest extends AbstractXtextTests {
 	@Test def testImplicitOptions() {
 		ok('''
 			task "doit", "Do it", ->
-				count = options.count
+				n = 1
+				count = n + options
 		''')
 	}
 }

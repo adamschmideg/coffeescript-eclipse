@@ -3,7 +3,13 @@
  */
 package csep.example.cake.scoping;
 
+import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.EReference;
+import org.eclipse.xtext.scoping.IScope;
 import org.eclipse.xtext.scoping.impl.AbstractDeclarativeScopeProvider;
+
+import csep.coffeeScript.Block;
+import csep.example.cake.cakefile.TaskDeclaration;
 
 /**
  * This class contains custom scoping description.
@@ -14,4 +20,7 @@ import org.eclipse.xtext.scoping.impl.AbstractDeclarativeScopeProvider;
  */
 public class CakefileScopeProvider extends AbstractDeclarativeScopeProvider {
 
+	public IScope scope_Id(TaskDeclaration owner, EReference ref) {
+		return null;//IScope.NULLSCOPE;
+	}
 }
