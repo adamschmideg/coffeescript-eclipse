@@ -4,8 +4,11 @@
 package csep.example.cake;
 
 import org.eclipse.xtext.linking.ILinkingDiagnosticMessageProvider;
+import org.eclipse.xtext.linking.ILinkingService;
+import org.eclipse.xtext.linking.impl.DefaultLinkingService;
 import org.eclipse.xtext.resource.XtextResource;
 
+import csep.example.cake.scoping.LinkingServiceWithNode;
 import csep.scoping.CoffeescriptBuiltins;
 
 /**
@@ -40,4 +43,9 @@ public class CakefileRuntimeModule extends
 								.named(org.eclipse.xtext.scoping.impl.AbstractDeclarativeScopeProvider.NAMED_DELEGATE))
 				.to(csep.scoping.DefaultGlobalScopeProvider.class);
 	}
+	
+	@Override
+	public Class<? extends ILinkingService> bindILinkingService() {
+		return LinkingServiceWithNode.class;
+	}	
 }

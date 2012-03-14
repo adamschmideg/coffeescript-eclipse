@@ -5,8 +5,12 @@ package csep.example.cake.scoping;
 
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
+import org.eclipse.xtext.linking.impl.LinkingHelper;
+import org.eclipse.xtext.nodemodel.INode;
 import org.eclipse.xtext.scoping.IScope;
 import org.eclipse.xtext.scoping.impl.AbstractDeclarativeScopeProvider;
+
+import com.google.inject.Inject;
 
 import csep.coffeeScript.Block;
 import csep.example.cake.cakefile.TaskDeclaration;
@@ -18,9 +22,26 @@ import csep.example.cake.cakefile.TaskDeclaration;
  * on how and when to use it 
  *
  */
-public class CakefileScopeProvider extends AbstractDeclarativeScopeProvider {
-
+public class CakefileScopeProvider extends AbstractDeclarativeScopeProvider implements IScopeProviderWithNode {
+	@Inject 
+	private LinkingHelper linkingHelper;
+	
+	INode node;
+	
 	public IScope scope_Id(TaskDeclaration owner, EReference ref) {
-		return null;//IScope.NULLSCOPE;
+		String crossrefName = linkingHelper.getCrossRefNodeAsString(node, true);
+		if ("options".equals(crossrefName)) {
+			// TODO: create a scope with it
+			return IScope.NULLSCOPE;
+		}
+		else {
+			// Let superclass handle it
+			return null;
+		}
+	}
+
+	@Override
+	public void setNode(INode node) {
+		this.node = node;		
 	}
 }
