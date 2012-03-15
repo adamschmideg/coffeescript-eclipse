@@ -604,6 +604,15 @@ I have two problems with it
   - What scope should I return for an implicit variable?
     My question at the Eclipse forum: http://www.eclipse.org/forums/index.php/mv/msg/309869/821018/#msg_821018
 
+## Consecutive assignments as nested scopes
+This would handle re-assignment correctly.
+
+    a = 1         # scope 1
+    b = 2         # scope 2
+    doSomething() # same scope as before
+    a = a + 1     # new scope shadowing variable `a`
+    useVar(a)     # same scope as before, using re-assigned `a`
+
 # Include source in plugin bundle
 There seems to be two ways to do it, but none of them works for me:
 
