@@ -603,3 +603,9 @@ I have two problems with it
     I may need a custom linking service that would pass the `Node` when calling `getScope`
   - What scope should I return for an implicit variable?
     My question at the Eclipse forum: http://www.eclipse.org/forums/index.php/mv/msg/309869/821018/#msg_821018
+
+# Include source in plugin bundle
+There seems to be two ways to do it, but none of them works for me:
+
+  - http://help.eclipse.org/indigo/index.jsp?topic=%2Forg.eclipse.pde.doc.user%2Ftasks%2Fpde\_individual\_source.htm
+  - http://wiki.eclipse.org/PDEBuild/Individual\_Source\_Bundles
