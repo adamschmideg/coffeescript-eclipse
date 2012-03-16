@@ -613,6 +613,24 @@ This would handle re-assignment correctly.
     a = a + 1     # new scope shadowing variable `a`
     useVar(a)     # same scope as before, using re-assigned `a`
 
+This may more elegant than the way it's currently implemented,
+ but it can wait.
+
+## Error in editor: \<some uri\> contains a dangling reference
+I implemented custom scoping.
+Now the above error is shown only in the editor, but the test case with implicit variable runs without any problem.
+I realized that `scope\_Id` method doesn't have to know the name of the id.
+It's enough to return a scope which
+
+  - has a single `options` entry
+  - has a reference to its parent scope -- not accessible in the method context
+
+This wouldn't solve the dangling reference problem, anyway,
+ which may be related to this forum entry: http://www.eclipse.org/forums/index.php/m/756325/
+The problem is that I just create an `Id` object with `options` as name,
+ but I don't register it into... I don't know what, maybe a resource.
+Part of this registration may create an uri for it.
+
 # Include source in plugin bundle
 There seems to be two ways to do it, but none of them works for me:
 
