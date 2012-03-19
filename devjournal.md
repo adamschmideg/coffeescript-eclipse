@@ -640,6 +640,12 @@ The cause is that these conditions exist for the referenced `IdImpl` (which is t
   - `IdImpl.eResource() == null`
   - `IdImpl.eIsProxy() == false`
 
+Now the question is: how are these properties set for ids?
+It's done in `org.eclipse.xtext.resource.XtextResource.updateInternalState(IParseResult)` 
+ when calling `getContents().add(..., parseResult...)`
+It calls indirectly `org.eclipse.emf.ecore.impl.BasicEObjectImpl.eSetResource`.
+So I choose to override `updateInternalState` and add implicit variables to the resource.
+
 # Include source in plugin bundle
 There seems to be two ways to do it, but none of them works for me:
 
