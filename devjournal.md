@@ -631,6 +631,15 @@ The problem is that I just create an `Id` object with `options` as name,
  but I don't register it into... I don't know what, maybe a resource.
 Part of this registration may create an uri for it.
 
+I found the line that puts in the error message
+ (I don't why `zgrep` didn't find it any jar file in the eclipse plugins directory).
+It's `org.eclipse.emf.ecore.util.EObjectValidator.validate\_EveryReferenceIsContained`
+ when its `eObject` paramater is an `IdRefImpl`.
+The cause is that these conditions exist for the referenced `IdImpl` (which is the `Id` object named `options`)
+
+  - `IdImpl.eResource() == null`
+  - `IdImpl.eIsProxy() == false`
+
 # Include source in plugin bundle
 There seems to be two ways to do it, but none of them works for me:
 
