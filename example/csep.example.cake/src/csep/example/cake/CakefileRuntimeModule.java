@@ -24,7 +24,7 @@ public class CakefileRuntimeModule extends
 
 	@Override
 	public Class<? extends XtextResource> bindXtextResource() {
-		return csep.scoping.SuppressingLinkingResource.class;
+		return csep.example.cake.scoping.CakefileLinkingResource.class;
 	}
 
 	public Class<? extends ILinkingDiagnosticMessageProvider> bindILinkingDiagnosticMessageProvider() {

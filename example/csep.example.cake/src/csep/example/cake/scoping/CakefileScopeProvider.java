@@ -9,6 +9,7 @@ import org.eclipse.xtext.linking.impl.LinkingHelper;
 import org.eclipse.xtext.nodemodel.INode;
 import org.eclipse.xtext.resource.EObjectDescription;
 import org.eclipse.xtext.resource.IEObjectDescription;
+import org.eclipse.xtext.resource.XtextResource;
 import org.eclipse.xtext.scoping.IScope;
 import org.eclipse.xtext.scoping.impl.AbstractDeclarativeScopeProvider;
 import org.eclipse.xtext.scoping.impl.SingletonScope;
@@ -31,19 +32,23 @@ public class CakefileScopeProvider extends AbstractDeclarativeScopeProvider impl
 	@Inject 
 	private LinkingHelper linkingHelper;
 	
-	INode node;
-	Id options;
+	@Inject
+	private XtextResource resource;
 	
-	public CakefileScopeProvider() {
-		super();
-		options = CoffeeScriptFactory.eINSTANCE.createId();
-		options.setName("options");
+	INode node;
+	EObject options;
+	
+	protected EObject getOptions() {
+		if (options == null) {
+			options = ((CakefileLinkingResource)resource).getImplicitVariables().get("options");
+		}
+		return options;
 	}
 	
 	public IScope scope_Id(TaskDeclaration owner, EReference ref) {
 		String crossrefName = linkingHelper.getCrossRefNodeAsString(node, true);
 		if ("options".equals(crossrefName)) {
-			IEObjectDescription description = EObjectDescription.create(options.getName(), options);
+			IEObjectDescription description = EObjectDescription.create("options", getOptions());
 			return new SingletonScope(description, IScope.NULLSCOPE);
 		}
 		else {

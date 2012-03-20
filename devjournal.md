@@ -646,6 +646,8 @@ It's done in `org.eclipse.xtext.resource.XtextResource.updateInternalState(IPars
 It calls indirectly `org.eclipse.emf.ecore.impl.BasicEObjectImpl.eSetResource`.
 So I choose to override `updateInternalState` and add implicit variables to the resource.
 
+This last approach seems to work.
+
 # Include source in plugin bundle
 There seems to be two ways to do it, but none of them works for me:
 

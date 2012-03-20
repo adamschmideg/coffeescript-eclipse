@@ -1,4 +1,4 @@
-package csep.scoping;
+package csep.example.cake.scoping;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -12,16 +12,11 @@ import org.eclipse.xtext.parser.IParseResult;
 import csep.coffeeScript.CoffeeScriptFactory;
 import csep.coffeeScript.Id;
 
-/**
- * To shup up linking problems for now
- * @author adam
- *
- */
-public class SuppressingLinkingResource extends LazyLinkingResource {
+public class CakefileLinkingResource extends LazyLinkingResource {
+
 	protected Map<String,EObject> implicitVariables = null;
 	
 	/**
-	 * Override @{link #getImplicitVariableNames} instead of this method
 	 * @return a mapping, assuming that the key equals to the name of the value
 	 */
 	public Map<String,EObject> getImplicitVariables() {
@@ -41,7 +36,7 @@ public class SuppressingLinkingResource extends LazyLinkingResource {
 	 * @return names of all implicit variable names in any context
 	 */
 	public Set<String> getImplicitVariableNames() {
-		return Collections.emptySet();
+		return Collections.singleton("options");
 	}
 	
 	@Override
@@ -49,5 +44,4 @@ public class SuppressingLinkingResource extends LazyLinkingResource {
 		getContents().addAll(getImplicitVariables().values());
 		super.updateInternalState(newParseResult);
 	}
-
 }
