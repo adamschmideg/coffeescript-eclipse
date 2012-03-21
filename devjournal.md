@@ -591,3 +591,65 @@ Some examples
 
   - http://jevopisdeveloperblog.blogspot.com/2011/03/implement-tostring-with-xtexts.html
   - http://christiandietrich.wordpress.com/tag/postprocessor/
+
+Well, the postprocessing approach probably wouldn't work, because it doesn't take care of scoping.
+
+## Custom scoping
+I added custom declarative scoping.
+I have two problems with it
+
+  - If the variable in question is not an implicit one, I just want to fall back on normal scoping.
+    But I don't know how to get the variable name from an `EReference`.
+    I may need a custom linking service that would pass the `Node` when calling `getScope`
+  - What scope should I return for an implicit variable?
+    My question at the Eclipse forum: http://www.eclipse.org/forums/index.php/mv/msg/309869/821018/#msg_821018
+
+## Consecutive assignments as nested scopes
+This would handle re-assignment correctly.
+
+    a = 1         # scope 1
+    b = 2         # scope 2
+    doSomething() # same scope as before
+    a = a + 1     # new scope shadowing variable `a`
+    useVar(a)     # same scope as before, using re-assigned `a`
+
+This may more elegant than the way it's currently implemented,
+ but it can wait.
+
+## Error in editor: \<some uri\> contains a dangling reference
+I implemented custom scoping.
+Now the above error is shown only in the editor, but the test case with implicit variable runs without any problem.
+I realized that `scope\_Id` method doesn't have to know the name of the id.
+It's enough to return a scope which
+
+  - has a single `options` entry
+  - has a reference to its parent scope -- not accessible in the method context
+
+This wouldn't solve the dangling reference problem, anyway,
+ which may be related to this forum entry: http://www.eclipse.org/forums/index.php/m/756325/
+The problem is that I just create an `Id` object with `options` as name,
+ but I don't register it into... I don't know what, maybe a resource.
+Part of this registration may create an uri for it.
+
+I found the line that puts in the error message
+ (I don't why `zgrep` didn't find it any jar file in the eclipse plugins directory).
+It's `org.eclipse.emf.ecore.util.EObjectValidator.validate\_EveryReferenceIsContained`
+ when its `eObject` paramater is an `IdRefImpl`.
+The cause is that these conditions exist for the referenced `IdImpl` (which is the `Id` object named `options`)
+
+  - `IdImpl.eResource() == null`
+  - `IdImpl.eIsProxy() == false`
+
+Now the question is: how are these properties set for ids?
+It's done in `org.eclipse.xtext.resource.XtextResource.updateInternalState(IParseResult)` 
+ when calling `getContents().add(..., parseResult...)`
+It calls indirectly `org.eclipse.emf.ecore.impl.BasicEObjectImpl.eSetResource`.
+So I choose to override `updateInternalState` and add implicit variables to the resource.
+
+This last approach seems to work.
+
+# Include source in plugin bundle
+There seems to be two ways to do it, but none of them works for me:
+
+  - http://help.eclipse.org/indigo/index.jsp?topic=%2Forg.eclipse.pde.doc.user%2Ftasks%2Fpde\_individual\_source.htm
+  - http://wiki.eclipse.org/PDEBuild/Individual\_Source\_Bundles
