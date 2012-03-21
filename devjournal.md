@@ -658,3 +658,8 @@ There seems to be two ways to do it, but none of them works for me:
 See https://bitbucket.org/adamschmideg/coffeescript-eclipse/issue/6
 It's caused by the missing `last-modified` entry in the http header returned by the googlecode mercurial front-end.
 Set to `wontfix`.
+
+# Use branches on github
+I don't see an easy way to convert hg branches to git branches.
+It would involve creating a hg bookmark for each hg branch which is otherwise discouraged.
+So I'm going to use a single master branch on github until a better solution is found.
