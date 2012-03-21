@@ -72,14 +72,6 @@ class MissingFeaturesTest extends ParserTestBase {
 		shouldBeOk('class A extends 3')
 	}
 	
-	@Test
-	def void testStringInterpolationVariableResolution() {
-		shouldBeOkNoWarning('''
-			name = "Joe"
-			me = "I am #{name}"
-		''')
-	}
-	
 	/**
 	 * Lambda variable outside of its scoping shouldn't be resolved,
 	 * thus it should give a warning
