@@ -653,3 +653,8 @@ There seems to be two ways to do it, but none of them works for me:
 
   - http://help.eclipse.org/indigo/index.jsp?topic=%2Forg.eclipse.pde.doc.user%2Ftasks%2Fpde\_individual\_source.htm
   - http://wiki.eclipse.org/PDEBuild/Individual\_Source\_Bundles
+
+# Timestamp issue
+See https://bitbucket.org/adamschmideg/coffeescript-eclipse/issue/6
+It's caused by the missing `last-modified` entry in the http header returned by the googlecode mercurial front-end.
+Set to `wontfix`.
