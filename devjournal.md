@@ -663,3 +663,7 @@ Set to `wontfix`.
 I don't see an easy way to convert hg branches to git branches.
 It would involve creating a hg bookmark for each hg branch which is otherwise discouraged.
 So I'm going to use a single master branch on github until a better solution is found.
+
+# Markdown in README
+Bitbucket uses `python-markdown` and doesn't support inline html or extensions of python-markdown.
+So I can see no way to have proper definition lists in the README file.
