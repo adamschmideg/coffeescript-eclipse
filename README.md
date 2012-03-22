@@ -63,6 +63,7 @@ Getting the value of a deeply nested property is OK.
     borrowed = my.secret.money
 
 ## Changelog
+
 <dl>
   <dt>0.2.2</dt>
   <dd>Embed coffeescript in a DSL (see the `example` directory)</dd>
