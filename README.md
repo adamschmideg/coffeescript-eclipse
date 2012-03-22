@@ -62,12 +62,13 @@ Getting the value of a deeply nested property is OK.
     borrow(my.secret.money)
     borrowed = my.secret.money
 
-## Planned features
-I have a few in my mind, you can add more at issues.
-Current plans include
-
- - integrated build: conversion to javascript
- - extensible plugin: use CoffeeScript as a core language for your DSL
+## Changelog
+<dl>
+  <dt>0.2.2</dt>
+  <dd>Embed coffeescript in a DSL (see the `example` directory)</dd>
+  <dt>Planned next release</dt>
+  <dd>Integrated build: convert coffee code to javascript, and run it</dd>
+</dl>
 
 # Installation
 You will need an Eclipse instance with Xtext plugins.
