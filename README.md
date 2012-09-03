@@ -91,6 +91,6 @@ You may be [given a warning](https://bitbucket.org/adamschmideg/coffeescript-ecl
 
   [coffeescript]: http://www.coffeescript.org
   [xtext]: http://www.xtext.org
-  [xtext_download]: http://www.eclipse.org/Xtext/download/
+  [xtext_download]: http://www.eclipse.org/Xtext/download.html
   [csep_bitbucket_download]: https://bitbucket.org/adamschmideg/coffeescript-eclipse/downloads
   [csep_github]: https://github.com/adamschmideg/coffeescript-eclipse 
