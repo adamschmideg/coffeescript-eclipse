@@ -1,3 +1,8 @@
+# New home!
+I am happy to announce that this project is becoming a part of something bigger 
+and has a new home at [https://github.com/Nodeclipse/coffeescript-eclipse](https://github.com/Nodeclipse/coffeescript-eclipse).
+
+# Intro
 
 This is a project to provide an Eclipse plugin for [CoffeeScript][coffeescript], using [Xtext][xtext].
 Development uses Xtext 2.1.
