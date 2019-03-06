@@ -20,7 +20,7 @@ There are some extra features and some missing,
  but you probably (and hopefully) won't notice the difference in everyday use.
 
 ## Extra features
-CoffeeScript is a dyanmic language,
+CoffeeScript is a dynamic language,
  the parser doesn't check the types or even the existence of variables,
  such mismatches are detected at runtime.
 This plugin is based on Xtext which is geared to static languages,
